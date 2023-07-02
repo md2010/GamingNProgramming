@@ -1,0 +1,19 @@
+<div class="container">
+
+    <div class="row">
+      <div class="col-sm" *ngFor="let w of womanAvatars">
+          <button class="avatar-button" (click)="onAvatarSelected(w.id)">
+              <c-avatar src={{w.path}} shape="rounded"></c-avatar>
+          </button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-sm" *ngFor="let w of manAvatars">
+          <button class="avatar-button" (click)="onAvatarSelected(w.id)">
+              <c-avatar src={{w.path}} shape="rounded"></c-avatar>
+          </button>
+      </div>   
+  </div>
+
+</div>

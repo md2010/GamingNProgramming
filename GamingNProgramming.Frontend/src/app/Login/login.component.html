@@ -1,0 +1,20 @@
+<body>
+    <main>
+        <form id="login_form" class="form_class">
+            <div class="form_div">
+                <label>Email:</label>
+                <input class="field_class" name="login_txt" type="text" [(ngModel)]="username" autofocus>
+                <label>Lozinka:</label>
+                <input id="pass" class="field_class" name="password_txt" type="password" [(ngModel)]="password">
+                <button class="submit_class" type="submit" form="login_form" (click)="validateLogin()">Prijavi se</button>
+            </div>
+            <div class="info_div">
+                <p>Nemaš račun? <a href="register">Regirstriraj se!</a></p>
+            </div>
+        </form>
+
+        <div *ngIf="showToast">
+            <app-toast-component [message]="message" (timeElapsedEvent)="onToastMessageElapsed()"></app-toast-component>
+        </div>
+    </main>
+</body>

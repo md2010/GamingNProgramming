@@ -1,0 +1,38 @@
+
+<div class="registerContainer">
+    <form id="login_form">
+    <div class="row">
+        <div class="form_div col-3 form_class">
+            <label>Korisničko ime:</label>
+            <input class="field_class" name="login_txt" type="text" [(ngModel)]="username" autofocus>
+            <label>Ja sam:</label>
+            <select class="form-select" [(ngModel)]="selectedRole" name="role">
+                <option *ngFor="let c of roles" [ngValue]="c">{{c.name}}</option>
+            </select>
+            <br>
+            <label>Email:</label>
+            <input class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="email">
+            <label>Lozinka:</label>
+            <input id="pass" class="field_class" name="password_txt" type="password" [(ngModel)]="password">              
+ 
+            <button class="submit_class" type="submit" [disabled]="!this.username.length || !this.email.length || this.selectedRole.id == undefined || (selectedRole.name == 'Student' ? !this.avatarId.length : '') || !this.password.length" (click)="onRegisterClick()">Registriraj se</button>
+            <div class="info_div">
+                <p>Imaš račun? <a href="login">Prijavi se!</a></p>
+            </div>
+        </div>
+        <div class="col-8" *ngIf="selectedRole.name == 'Student'">
+            <app-select-avatar (avatarSelectedEvent)="onAvatarSelect($event)"></app-select-avatar>
+        </div>
+
+        <div *ngIf="loading">
+            <app-spinner-component></app-spinner-component>
+        </div>
+
+        <div *ngIf="showToast">
+            <app-toast-component [message]="message" (timeElapsedEvent)="onToastMessageElapsed()"></app-toast-component>
+        </div>
+
+    </div>          
+</form>
+</div>
+
