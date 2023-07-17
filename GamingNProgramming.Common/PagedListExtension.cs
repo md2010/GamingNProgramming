@@ -26,5 +26,22 @@ namespace GamingNProgramming.Common
 
             return new(Enumerable.Empty<T>(), 0, 0, 0);
         }
+
+        public static async Task<PagedList<T>> ToPagedListAsync<T>(
+            this List<T> list,
+            int page,
+            int pageSize)
+        {
+            var count = list.Count();
+            if (count > 0)
+            {
+                var items = list
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+                return new PagedList<T>(items, count, page, pageSize);
+            }
+
+            return new(Enumerable.Empty<T>(), 0, 0, 0);
+        }
     }
 }
