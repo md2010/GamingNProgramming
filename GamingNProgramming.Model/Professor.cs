@@ -18,5 +18,7 @@ namespace GamingNProgramming.Model
         public string Username { get; set; }
 
         public virtual ICollection<Player> Students { get; set; }
+
+        public virtual ICollection<Map> Maps { get; set; }
     }
 }

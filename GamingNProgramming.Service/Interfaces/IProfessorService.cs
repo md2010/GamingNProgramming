@@ -1,4 +1,5 @@
-﻿using GamingNProgramming.Model;
+﻿using GamingNProgramming.Common;
+using GamingNProgramming.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace GamingNProgramming.Service
     public interface IProfessorService
     {
         Task<IEnumerable<Professor>> GetAllAsync();
+
+        Task<PagedList<Professor>> FindAsync(
+           List<Expression<Func<Professor, bool>>> filter = null,
+           string includeProperties = "");
 
         Task<Professor> GetAsync(Guid id);
 

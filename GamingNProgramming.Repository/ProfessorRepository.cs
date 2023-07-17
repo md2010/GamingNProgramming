@@ -2,12 +2,8 @@
 using GamingNProgramming.DAL.Context;
 using GamingNProgramming.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GamingNProgramming.Repository
 {
@@ -33,23 +29,26 @@ namespace GamingNProgramming.Repository
         }
 
         public async Task<PagedList<Professor>> FindAsync(
-           Expression<Func<Professor, bool>> filter = null,
-           Func<IQueryable<Professor>, IOrderedQueryable<Professor>> orderBy = null,
+           List<Expression<Func<Professor, bool>>> filter = null,
            string includeProperties = "")
         {
-            IQueryable<Professor> query = Entities;
+            IQueryable<Professor> query = Entities; 
 
             if (filter != null)
             {
-                query = query.Where(filter);
+                foreach (var f in filter)
+                {
+                    query = query.Where(f);
+                }
             }
+
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
+            {               
                 query = query.Include(includeProperty);
             }
 
-            return await query.ToPagedListAsync(1, 10);
+            return await query.ToPagedListAsync(1, 10);      
         }
 
         private void ApplyFilter()

@@ -1,4 +1,5 @@
-﻿using GamingNProgramming.Model;
+﻿using GamingNProgramming.Common;
+using GamingNProgramming.Model;
 using GamingNProgramming.Repository;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,13 @@ namespace GamingNProgramming.Service
         public async Task<IEnumerable<Professor>> GetAllAsync()
         {
             return await Repository.GetAllAsync();
+        }
+
+        public async Task<PagedList<Professor>> FindAsync(
+           List<Expression<Func<Professor, bool>>> filter = null,
+           string includeProperties = "")
+        {
+            return await Repository.FindAsync(filter, includeProperties);
         }
 
         public async Task<Professor> GetAsync(Guid id)

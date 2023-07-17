@@ -16,13 +16,12 @@ namespace GamingNProgramming.Model
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
         public string Username { get; set; }
+        public int DefultPoints { get; set; }
         public int Points { get; set; }
         public int XPs { get; set; }
 
         [ForeignKey("Professor")]
         public Guid? ProfessorId { get; set; }
-        public virtual Professor Professor { get; set; }
-
         public virtual CoreUser CoreUser { get; set; }
 
         [ForeignKey("Avatar")]

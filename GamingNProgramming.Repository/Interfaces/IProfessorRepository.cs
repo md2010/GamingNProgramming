@@ -16,8 +16,7 @@ namespace GamingNProgramming.Repository
         Task<Professor> GetAsync(Guid id);
 
         Task<PagedList<Professor>> FindAsync(
-           Expression<Func<Professor, bool>> filter = null,
-           Func<IQueryable<Professor>, IOrderedQueryable<Professor>> orderBy = null,
+           List<Expression<Func<Professor, bool>>> filter = null,
            string includeProperties = "");
 
         Task AddAsync(Professor entity);
