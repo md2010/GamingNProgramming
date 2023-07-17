@@ -1,0 +1,34 @@
+
+<div class="col-md-8 align-items-center spc-bottom spc-top">
+    <button class="btn btn-primary spc-right" [disabled]="!allPlayers" (click)="getAllFriends()">Prikaži prijatelje</button>
+    <button class="btn btn-primary" [disabled]="allPlayers" (click)="getAllPlayers()">Prikaži sve igrače</button>
+</div>
+      
+<div class="col-md-8 align-items-center spc-top">
+<table class="table table-striped" *ngIf="loaded">
+    <thead>
+      <tr *ngIf="players.length == 0">Nema rezultata</tr>
+      <tr *ngIf="players.length > 0">
+        <th scope="col"></th>
+        <th scope="col">Rang</th>
+        <th scope="col">Korisničko ime</th>
+        <th scope="col">Bodovi</th>
+        <th scope="col">Značke</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="players.length > 0">
+      <tr *ngFor="let p of players; let i = index;">
+        <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
+        <td>{{i + 1}}</td>
+        <td>{{p?.username}}</td>
+        <td class="points">120 
+            <img *ngIf="i == 0" class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+        </td>
+        <td>značka</td>
+      </tr>     
+    </tbody>
+  </table>
+  </div>
+
+
+

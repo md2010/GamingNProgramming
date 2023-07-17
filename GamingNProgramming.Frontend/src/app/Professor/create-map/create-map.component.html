@@ -1,0 +1,47 @@
+<div class="col-md-8 align-items-center spc-top">
+    <form>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput2">Naziv mape</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2">
+        </div>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput2">Opis (što će se naučiti)</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2">
+        </div>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput">Unesi broj razina (1-10)</label>
+            <input type="number" class="form-control" min="1" max="10" id="formGroupExampleInput" [(ngModel)]="levels" name="levels">
+        </div>       
+        <div>
+            <div class="row">
+                <p>Odaberi mapu:</p>
+                <div class="col-sm spc-bottom spc-top">
+                    <button class="image-button spc-right" (click)="onMapSelected('../assets/images/defaultMap.jpg')">
+                        <img src="../assets/images/defaultMap.jpg" width="400" height="300">
+                    </button>
+                </div>
+                <div class="col-sm spc-bottom spc-top">
+                    <button class="image-button" (click)="onMapSelected('../assets/images/map-1.jpg')" >
+                        <img src="../assets/images/map-1.jpg" width="400" height="300">
+                    </button>                
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary">Spremi mapu</button>               
+    </form>
+    <form>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput2">Naziv razine</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2">
+        </div>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput2">Opis razine (što će se naučiti)</label>
+            <input type="text" class="form-control" id="formGroupExampleInput2">
+        </div>
+        <div class="form-group spc-bottom">
+            <label for="formGroupExampleInput">Unesi broj zadataka (1-12)</label>
+            <input type="number" class="form-control" min="1" max="12" id="formGroupExampleInput" [(ngModel)]="tasks" name="tasks">
+        </div>  
+        </form>
+    <app-draw-map *ngIf="mapPath.length > 2" [imgSrc]="mapPath"></app-draw-map>
+</div>

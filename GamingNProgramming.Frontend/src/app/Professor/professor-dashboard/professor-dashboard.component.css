@@ -1,0 +1,18 @@
+.image-box {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.text-center {
+    text-align: center;
+}
+.mt-100{
+    margin-top: 200px;
+  }
+
+  .nav-item{
+    background-color: rgb(108, 119, 119);
+    margin-bottom: 15px;
+  }
+  .nav-item :hover{
+    background-color: rgb(83, 144, 165)
+  }

@@ -9,7 +9,7 @@
                 <button class="submit_class" type="submit" form="login_form" (click)="validateLogin()">Prijavi se</button>
             </div>
             <div class="info_div">
-                <p>Nemaš račun? <a href="register">Regirstriraj se!</a></p>
+                <p>Nemaš račun? <a href="javascript:void(0);" (click)="goToRegister()">Regirstriraj se!</a></p>
             </div>
         </form>
 
@@ -17,4 +17,7 @@
             <app-toast-component [message]="message" (timeElapsedEvent)="onToastMessageElapsed()"></app-toast-component>
         </div>
     </main>
+    <div *ngIf="loading">
+        <app-spinner-component></app-spinner-component>
+    </div>
 </body>

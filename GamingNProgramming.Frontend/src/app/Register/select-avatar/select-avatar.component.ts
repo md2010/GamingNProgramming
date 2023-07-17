@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { AvatarModule } from '@coreui/angular';
 import { Output, EventEmitter } from '@angular/core';
 import { LookupService } from 'src/app/services/LookupService';
-import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({

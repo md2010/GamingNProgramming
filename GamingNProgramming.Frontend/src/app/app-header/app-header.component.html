@@ -9,14 +9,14 @@
       <div class=" collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto ">
           <li class="nav-item">
-            <a class="nav-link mx-2 active" aria-current="page" href="#">Home</a>
+            <a class="nav-link mx-2 active" [class.active]="route == '/student-dashboard'" *ngIf="authorized && role === 'Student'" [routerLink]="['/student-dashboard']">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-2" href="#">Products</a>
+            <a class="nav-link mx-2" [routerLink]="['/leaderboard']" *ngIf="authorized && role === 'Student'" [class.active]="route == '/leaderboard'">Ljestvica sa vodećim rezultatima</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-2" href="#" *ngIf="authorized" (click)="logout()">Log Out</a>
-            <a class="nav-link mx-2" href="#" *ngIf="!authorized">Login</a>
+            <a class="nav-link mx-2" [routerLink]="['/logout']" *ngIf="authorized"  [class.active]="route == '/logout'" (click)="logout()">Odjavi se</a>
+            <a class="nav-link mx-2" [routerLink]="['/login']" *ngIf="!authorized"  [class.active]="route == '/login'">Prijavi se</a>
           </li>         
         </ul>
       </div>

@@ -1,0 +1,34 @@
+<div class="row">
+        <div class="col-md-4">
+                <h3>Task</h3>
+        </div>
+        <div class="col-md-8">
+                <nu-monaco-editor 
+                [(ngModel)]="value" 
+                [options]="editorOptions" 
+                [model]="model"
+                [height]="'500'">
+                </nu-monaco-editor>
+        </div>
+        <hr>
+</div>
+
+<div *ngIf="loading">
+        <app-spinner-component></app-spinner-component>
+</div>
+
+<div class="row">
+        <div>
+                <div>
+                        <label class="spc-button">Unesi ulazne podatke (ako ih je više, odvoji ih razmakom, npr: 1 5 3): </label>
+                        <input class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="args">
+                </div>
+                <button type="button" class="btn btn-primary spc-button" (click)="compile()">Pokreni</button>
+                <button type="button" class="btn btn-success" (click)="compile()" [disabled]=error>Predaj</button>
+                <hr>
+                <div class="spc-button">
+                        <p>Rezultat:</p><br>
+                        <p>{{compileResult}}</p>
+                </div>
+        </div>
+</div>

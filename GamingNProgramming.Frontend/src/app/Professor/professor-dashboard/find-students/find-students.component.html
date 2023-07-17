@@ -1,0 +1,31 @@
+<div class="col-md-8 align-items-center spc-bottom spc-top">
+    <div class="search">
+        <i class="fa fa-search"></i>
+        <input type="text" class="form-control" placeholder="Korisničko ime studenta..." name="searchName" [(ngModel)]="searchName">
+        <button class="btn btn-primary" (click)="findStudents()">Pretraži</button>
+    </div>
+</div>
+      
+<div class="col-md-8 align-items-center spc-top">
+<table class="table table-striped" *ngIf="loaded">
+    <thead>
+      <tr *ngIf="players.length == 0">Nema rezultata</tr>
+      <tr *ngIf="players.length > 0">
+        <th scope="col"></th>
+        <th scope="col">Korisničko ime</th>
+        <th scope="col">Bodovi</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="players.length > 0">
+      <tr *ngFor="let p of players">
+        <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
+        <td>{{p?.username}}</td>
+        <td>120</td>
+        <td><button class="btn btn-primary" (click)="addStudent(p.userId)">Dodaj studenta</button></td>
+      </tr>     
+    </tbody>
+  </table>
+  </div>
+
+

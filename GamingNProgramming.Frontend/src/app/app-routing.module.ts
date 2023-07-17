@@ -2,16 +2,26 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './Login/login.component';
 import { RegisterComponent } from './Register/register.component';
-import { StudentModuleComponent } from './student-dashboard/student-module/student-module.component';
+import { StudentDashboardComponent } from './Student/student-dashboard/student-dashboard.component';
+import { LeaderboardComponent } from './Student/leaderboard/leaderboard.component';
+import { MapInfoComponent } from './Student/map-info/map-info.component';
+import { TaskPlayComponent } from './Student/task-play/task-play.component';
+
+import { ProfessorDashboardComponent } from './Professor/professor-dashboard/professor-dashboard.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
   {path: 'register', component: RegisterComponent},
-  {path: 'student-dashboard', component: StudentModuleComponent}
+  {path: 'student-dashboard', component: StudentDashboardComponent}, 
+  {path: 'leaderboard', component: LeaderboardComponent},
+  {path: 'map-info/:id', component: MapInfoComponent},
+  {path: 'task-play/:id', component: TaskPlayComponent},
+  {path: 'professor-dashboard', component: ProfessorDashboardComponent}
+  
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled', useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

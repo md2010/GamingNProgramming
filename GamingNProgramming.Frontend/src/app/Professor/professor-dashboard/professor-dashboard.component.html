@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-3" *ngIf="loaded">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 300px; height: 900px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"></a>
+        <div class="image-box">
+            <img src="assets/images/professor-avatar.png" class="rounded-circle center" width="150px" height="130px">
+        </div>
+        <p class="text-white text-center">{{user.username}}</p>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">                
+          <li class="nav-item">  
+            <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyStudents === true" (click)="myStudents()">
+                <svg class="bi me-2" width="16" height="16"></svg>
+                Moji studenti
+            </a>        
+          </li>    
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showFindStudents === true" (click)="findStudents()">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Pronađi studente
+            </a>
+          </li>        
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showCreateMap === true" (click)="createMap()">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Kreiraj mapu
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyMaps === true" (click)="myMaps()">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Moje mape
+            </a>
+          </li> 
+        </ul>
+    </div>
+    </div>
+    <div class="col-9">
+        <app-find-students *ngIf="showFindStudents"></app-find-students>
+        <app-my-students *ngIf="showMyStudents && loaded"></app-my-students>
+        <app-create-map *ngIf="showCreateMap"></app-create-map>
+        <app-my-maps *ngIf="showMyMaps"></app-my-maps>
+    </div>
+    </div>
+    
+    
+    

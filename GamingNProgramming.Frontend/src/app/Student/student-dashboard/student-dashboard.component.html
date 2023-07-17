@@ -1,0 +1,56 @@
+<div class="row">
+<div class="col-3" *ngIf="loaded">
+<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 300px; height: 900px;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"></a>
+    <div class="image-box">
+        <img src={{user.avatar.path}} class="rounded-circle center" width="150px" height="130px">
+    </div>
+    <p class="text-white text-center">{{user.username}}</p>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">      
+      <li class="progress-circle">
+        <div class="progress yellow">
+            <span class="progress-left">
+                            <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+                            <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">37.5%</div>
+          </div>
+      </li> 
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showHome === true" (click)="home()">
+          <svg class="bi me-2" width="16" height="16"></svg>
+          Home
+        </a>
+      </li>    
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showFindFriends === true" (click)="findFriends()">
+          <svg class="bi me-2" width="16" height="16"></svg>
+          Pronađi prijatelje
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyFriends === true" (click)="myFriends()">
+          <svg class="bi me-2" width="16" height="16"></svg>
+          Moji prijatelji
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link text-white">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+          Moja postignuća
+        </a>
+      </li> 
+    </ul>
+</div>
+</div>
+<div class="col-9">
+    <app-home *ngIf="showHome"></app-home>
+    <app-find-friends-component *ngIf="showFindFriends"></app-find-friends-component>
+    <app-my-friends *ngIf="showMyFriends"></app-my-friends>
+</div>
+</div>
+
+

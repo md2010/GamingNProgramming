@@ -4,8 +4,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {Router} from "@angular/router"
 import { CommonModule } from "@angular/common";
-import { UserService } from "../services/UserService";
+import { AuthService } from "../services/AuthService";
 import {LookupService} from "../services/LookupService";
+import { ActivatedRoute } from "@angular/router";
 
 import { SelectAvatarComponent } from "./select-avatar/select-avatar.component";
 import { SpinnerComponentComponent } from "../spinner-component/spinner-component.component";
@@ -16,11 +17,17 @@ import { ToastComponentComponent } from "../toast-component/toast-component.comp
     templateUrl: 'register.component.html',
     styleUrls: ['register.component.css'],
     imports: [
-        MatSelectModule, MatFormFieldModule, FormsModule, SelectAvatarComponent, CommonModule, SpinnerComponentComponent,ToastComponentComponent
+        MatSelectModule, 
+        MatFormFieldModule, 
+        FormsModule, 
+        SelectAvatarComponent, 
+        CommonModule, 
+        SpinnerComponentComponent,
+        ToastComponentComponent
     ],
     standalone: true,
     providers: [
-        UserService,
+        AuthService,
         LookupService
     ]
 })
@@ -38,12 +45,16 @@ export class RegisterComponent {
     showToast = false;
     message = '';
 
-    constructor(private router: Router, private userService: UserService, private lookupService: LookupService) { }
+    constructor(private router: Router, private authService: AuthService, private lookupService: LookupService, private activeRoute: ActivatedRoute) { }
 
     ngOnInit() {
         this.lookupService.getRoles().subscribe(response => {
             this.roles = response;
         })
+    }
+
+    goToLogin() {
+        this.router.navigate(['login']);
     }
 
     onAvatarSelect(value: string) {
@@ -64,7 +75,7 @@ export class RegisterComponent {
             roleName: this.selectedRole.name,
             avatarId: this.avatarId
         }
-        this.userService.register(this.newUser)
+        this.authService.register(this.newUser)
         .subscribe(
             (Response) => {
                 if(Response.status == 200) {

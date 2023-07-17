@@ -1,24 +1,53 @@
 import { Component } from '@angular/core';
-import { UserService } from '../services/UserService';
-import { Router } from '@angular/router';
+import { AuthService } from '../services/AuthService';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-app-header',
   templateUrl: './app-header.component.html',
   styleUrls: ['./app-header.component.css'],
-  providers: [UserService]
+  providers: [AuthService]
 })
 
 export class AppHeaderComponent {
 
-  authorized = localStorage.getItem('token') != null;
-  role = localStorage.getItem('role');
+  authorized! : boolean | null;
+  authorizedSub! : Subscription;
 
-  constructor(private userService: UserService, private router: Router) {}
+  role : string | null= "";
+  route = "";
 
-  logout() {
-    this.userService.logout();
-    this.router.navigate(['/']);
+  constructor(private authService: AuthService, private activeRoute: ActivatedRoute, private router: Router) {}
+
+  ngOnInit() {  
+    this.authorizedSub = this.authService.authorized.subscribe(data => {
+      this.authorized = data.isAuth
+      this.role = data.roleName
+    });
+    this.activeRoute.url.subscribe((event) => {
+      console.log(event[0].path); 
+      this.route = event[0].path;
+    });
   }
 
+  home() {
+    if(this.authorized && this.role === 'Student') {
+      return '/student-dashboard';
+    }
+    return '/professor-dashboard';
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['login']);;
+  }
+
+  ngOnDestory(): void {
+    this.authorizedSub.unsubscribe(); 
+  }
+
+}
+interface Authorized {
+  isAuth : boolean
 }
