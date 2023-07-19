@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AvatarModule } from '@coreui/angular';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { DrawMapComponent } from './draw-map/draw-map.component';
 import { CreateTaskDialogComponent } from './create-task-dialog/create-task-dialog.component';
@@ -14,12 +14,14 @@ import { Assignment, Level, Map } from 'src/app/classes/Classes';
   templateUrl: './create-map.component.html',
   styleUrls: ['./create-map.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, DrawMapComponent, AvatarModule, CreateTaskDialogComponent]
+  imports: [CommonModule, FormsModule, DrawMapComponent, AvatarModule, CreateTaskDialogComponent, MatDialogModule]
 })
 export class CreateMapComponent {
 
   levels : Level[] = []
   mapPath : string = ''
+
+  @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
   constructor(private router: Router, public dialog: MatDialog) {
     this.levels = new Array<Level>();
@@ -63,7 +65,12 @@ export class CreateMapComponent {
 
   save() {
     var map = new Map(this.levels);
+    map.isVisible = true;
     //call api
+  }
+
+  saveAndContinueEditing() {
+    this.dialog.open(this.notification);
   }
 }
 

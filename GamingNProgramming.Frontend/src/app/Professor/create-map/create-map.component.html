@@ -53,10 +53,20 @@
         <hr>
         <div class="row spc-top spc-bottom">
             <div class="col-sm">
-                <button class="btn btn-primary spc-right">Spremi mapu</button>
-                <button class="btn btn-primary">Spremi i nastavi sa uređivanjem kasnije</button>
+                <button class="btn btn-primary spc-right" (click)="save()">Spremi mapu</button>
+                <button class="btn btn-primary" (click)="saveAndContinueEditing()">Spremi i nastavi sa uređivanjem kasnije</button>
             </div>
         </div>
         <app-draw-map *ngIf="mapPath.length > 2" [imgSrc]="mapPath"></app-draw-map>
     </form>
 </div>
+
+<ng-template #notification>
+    <h2 matDialogTitle>Obavijest</h2>
+    <mat-dialog-content>
+       <p>Mapu možete nastaviti uređivati odlaskom na 'Kreiraj mapu' u izborniku</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+    </mat-dialog-actions>
+  </ng-template>
