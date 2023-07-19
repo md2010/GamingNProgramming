@@ -8,6 +8,14 @@ namespace GamingNProgramming.WebAPI.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
+        /*[Authorize]
+        [HttpPost]
+        [Route("save-map")]
+        public async Task<IActionResult> SaveMap([FromBody] RunCodeModel model)
+        { 
+
+        }*/
+
         [Authorize]
         [HttpPost]
         [Route("submit-code")]

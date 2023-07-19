@@ -14,10 +14,11 @@ namespace GamingNProgramming.Model
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool IsVisible { get; set; } = false;
         public string Title { get; set; }
         public string Description { get; set; }
         public string Path { get; set; }
-        public int NumberOfLevels { get; set; }
+        public int Points { get; set; }
 
         [ForeignKey("ProfessorId")]
         public Guid? ProfessorId { get; set; }
