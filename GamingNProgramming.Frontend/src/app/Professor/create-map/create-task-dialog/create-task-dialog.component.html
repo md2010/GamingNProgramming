@@ -62,11 +62,13 @@
             </div> 
         </div> 
         <div *ngIf="task.isMultiSelect">
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="correctAnswer" name="correctAnswer">
-                <mat-radio-button *ngFor="let c of task.answers; let ind = index;" [value]="c.offeredAnswer">
-                    <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="c.offeredAnswer" name="offeredAnswer{{ind}}">
-                </mat-radio-button>                
-            </mat-radio-group>
+            <ul>
+                <li *ngFor="let c of task.answers; let ind = index;">
+                    <mat-checkbox (ngModelChange)="answerChanged(ind)" [value]="c.offeredAnswer" [(ngModel)]="c.isCorrect" name="checkbox{{ind}}">
+                        <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="c.offeredAnswer" name="offeredAnswer{{ind}}">
+                    </mat-checkbox> 
+                </li> 
+            </ul>              
             <div class="form-group spc-bottom spc-top">
                 <button class="btn btn-primary" (click)="addAnswer()">Dodaj radio gumb</button>
             </div> 

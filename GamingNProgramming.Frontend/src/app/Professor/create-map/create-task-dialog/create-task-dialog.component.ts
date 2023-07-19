@@ -47,6 +47,7 @@ export class CreateTaskDialogComponent {
   @ViewChild('selectBadge', { static: true }) selectBadgeDialog!: TemplateRef<any>;
 
   correctAnswer! : string
+  correctAnswers : Array<string> = []
   task!: Assignment
 
   editorOptions = { theme: 'vs-dark', language: 'c' };
@@ -83,12 +84,18 @@ export class CreateTaskDialogComponent {
     this.task.badgeId = id;
   }
 
+  answerChanged(index: number) {
+    this.task.answers[index].isCorrect = !this.task.answers[index].isCorrect
+  }
+
   save() {
-    this.task.answers.forEach(answer => {
-      if(answer.offeredAnswer === this.correctAnswer) {
-        answer.isCorrect = true;
-      }
-    }); 
+    if(!this.task.isMultiSelect) {
+      this.task.answers.forEach(answer => {
+        if(answer.offeredAnswer === this.correctAnswer) {
+          answer.isCorrect = true;
+        }
+      }); 
+    }
     this.dialogRef.close({task: this.task});
   }
 }
