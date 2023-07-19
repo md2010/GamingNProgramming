@@ -25,6 +25,7 @@ import { FindStudentsComponent } from './Professor/professor-dashboard/find-stud
 import { MyStudentsComponent } from './Professor/professor-dashboard/my-students/my-students.component';
 import { MyMapsComponent } from './Professor/my-maps/my-maps.component';
 import { DrawMapComponent } from './Professor/create-map/draw-map/draw-map.component';
+import { CreateTaskDialogComponent } from './Professor/create-map/create-task-dialog/create-task-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { DrawMapComponent } from './Professor/create-map/draw-map/draw-map.compo
     LeaderboardComponent,
     TaskPlayComponent,
     HttpClientModule,
+    CreateTaskDialogComponent,
     JwtModule,
     HomeComponent,
     RouterModule,

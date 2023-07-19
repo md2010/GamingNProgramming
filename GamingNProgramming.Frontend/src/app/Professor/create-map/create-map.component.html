@@ -1,16 +1,14 @@
 <div class="col-md-8 align-items-center spc-top">
     <form>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput2">Naziv mape</label>
-            <input type="text" class="form-control" id="formGroupExampleInput2">
-        </div>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput2">Opis (što će se naučiti)</label>
-            <input type="text" class="form-control" id="formGroupExampleInput2">
-        </div>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput">Unesi broj razina (1-10)</label>
-            <input type="number" class="form-control" min="1" max="10" id="formGroupExampleInput" [(ngModel)]="levels" name="levels">
+        <div class="col-6">
+            <div class="form-group spc-bottom">
+                <label for="formGroupExampleInput2">Naziv mape</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2">
+            </div>
+            <div class="form-group spc-bottom">
+                <label for="formGroupExampleInput2">Opis (što će se naučiti)</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2">
+            </div>           
         </div>       
         <div>
             <div class="row">
@@ -26,22 +24,39 @@
                     </button>                
                 </div>
             </div>
+        </div>              
+        <div class="row">
+            <div class="form-group spc-bottom">
+                <button class="btn btn-primary spc-right" (click)="addLevel()">Dodaj razinu</button>
+            </div>
+            <div class="col-sm" *ngFor="let l of levels; let i = index;">
+                <div class="card spc-top" style="width: 18rem; text-align: center;"> 
+                    <div style="text-align: right;" class="spc-right" *ngIf="i !== 0">
+                        <button type="button" class="btn-close" aria-label="Close"  (click)="deleteLevel(i)"></button>  
+                    </div>           
+                    <div class="card-body">
+                    <h5 class="card-title">Razina {{i+1}}</h5>
+                    <input type="text" class="form-control spc-bt" id="formGroupExampleInput2" placeholder="Naslov" [(ngModel)]="l.title" name="levelTitle{{i}}">
+                    <input type="text" class="form-control spc-bt" id="formGroupExampleInput2" placeholder="Opis" [(ngModel)]="l.description" name="levelDescription{{i}}">
+                    <button class="btn btn-primary spc-right" (click)="addTask(i)">Dodaj zadatak</button>                
+                    </div>
+                    <ul class="list-group list-group-flush spc-tp spc-bt" *ngFor="let t of l.tasks; let ind = index;" style="text-align: left;">
+                        <li class="list-group-item">
+                            Zadatak {{ind+1}}
+                            <button class="btn btn-primary" style="margin-left: 10px; margin-right: 10px;" (click)="openDialog(ind, i)">Postavi zadatak</button>
+                            <button type="button" class="btn-close" (click)="deleteTask(ind, i)" aria-label="Close" *ngIf="ind !== 0"></button>  
+                        </li>                    
+                    </ul>             
+                </div>
+            </div>
         </div>
-        <button class="btn btn-primary">Spremi mapu</button>               
+        <hr>
+        <div class="row spc-top spc-bottom">
+            <div class="col-sm">
+                <button class="btn btn-primary spc-right">Spremi mapu</button>
+                <button class="btn btn-primary">Spremi i nastavi sa uređivanjem kasnije</button>
+            </div>
+        </div>
+        <app-draw-map *ngIf="mapPath.length > 2" [imgSrc]="mapPath"></app-draw-map>
     </form>
-    <form>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput2">Naziv razine</label>
-            <input type="text" class="form-control" id="formGroupExampleInput2">
-        </div>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput2">Opis razine (što će se naučiti)</label>
-            <input type="text" class="form-control" id="formGroupExampleInput2">
-        </div>
-        <div class="form-group spc-bottom">
-            <label for="formGroupExampleInput">Unesi broj zadataka (1-12)</label>
-            <input type="number" class="form-control" min="1" max="12" id="formGroupExampleInput" [(ngModel)]="tasks" name="tasks">
-        </div>  
-        </form>
-    <app-draw-map *ngIf="mapPath.length > 2" [imgSrc]="mapPath"></app-draw-map>
 </div>

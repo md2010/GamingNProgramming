@@ -97,6 +97,7 @@ export class AuthService {
     });
     this.token = null;
     sessionStorage.clear();
+    this.router.navigate(['login']);;
   }
 
   register(newUser: any) {
