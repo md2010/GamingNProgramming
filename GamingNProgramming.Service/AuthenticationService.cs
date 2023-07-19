@@ -14,7 +14,7 @@ namespace GamingNProgramming.Service
 {
     public class AuthenticationService
     {
-        private const int ExpirationMinutes = 30;
+        private const int ExpirationMinutes = 120;
         public string CreateToken(CoreUser user)
         {
             var expiration = DateTime.UtcNow.AddMinutes(ExpirationMinutes);
