@@ -14,6 +14,7 @@ namespace GamingNProgramming.Model
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
+        public int Number { get; set; }
         public bool IsCoding { get; set; }
         public bool IsTimeMeasured { get; set; }
         public int Seconds { get; set; } = 0;

@@ -9,13 +9,6 @@ namespace GamingNProgramming.DAL.Context
     {
         private readonly IConfiguration _configuration;
 
-        public DbSet<CoreUser> CoreUsers { get; set; }
-        public DbSet<Player> Players { get; set; }
-        public DbSet<Professor> Professors { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Friend> Friends { get; set; }
-        public DbSet<Avatar> Avatars { get; set; }
-
         public AppDbContext() {}
         public AppDbContext(IConfiguration configuration, DbContextOptions<AppDbContext> options) : base(options)
         {

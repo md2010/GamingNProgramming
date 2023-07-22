@@ -32,12 +32,14 @@ namespace GamingNProgramming.Service
             map.DateUpdated = DateTime.Now;
             map.Id = Guid.NewGuid();
 
+            int i = 1; int j = 1; 
             foreach (var level in map.Levels)
             {
                 level.DateCreated = DateTime.Now;
                 level.DateUpdated = DateTime.Now;
                 level.Id = Guid.NewGuid();
                 level.MapId = map.Id;
+                level.Number = i;
 
                 foreach (var task in level.Assignments)
                 {
@@ -45,6 +47,7 @@ namespace GamingNProgramming.Service
                     task.DateUpdated = DateTime.Now;
                     task.Id = Guid.NewGuid();
                     task.LevelId = level.Id;
+                    task.Number = j;
 
                     foreach (var testCase in task.TestCases)
                     {
@@ -61,7 +64,9 @@ namespace GamingNProgramming.Service
                         answer.Id = Guid.NewGuid();
                         answer.AssignmentId = task.Id;
                     }
+                    j++;
                 }
+                i++;
             }
         }
     }

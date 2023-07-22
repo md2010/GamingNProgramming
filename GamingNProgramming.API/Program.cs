@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using GamingNProgramming.DAL.Context;
 using GamingNProgramming.Repository;
 using GamingNProgramming.Service;
+using GamingNProgramming.Service.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -108,5 +109,9 @@ public class AutofacModule : Module
 
         builder.RegisterType<ProfessorService>().As<IProfessorService>();
         builder.RegisterType<ProfessorRepository>().As<IProfessorRepository>();
+
+
+        builder.RegisterType<GameService>().As<IGameService>();
+        builder.RegisterType<MapRepository>().As<IMapRepository>();
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace GamingNProgramming.Model
 {
@@ -14,6 +15,7 @@ namespace GamingNProgramming.Model
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
+        public int Number { get; set; }
         public bool IsVisible { get; set; } = false;
         public string Title { get; set; }
         public string Description { get; set; }

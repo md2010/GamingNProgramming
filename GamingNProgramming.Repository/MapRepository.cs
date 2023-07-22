@@ -13,11 +13,19 @@ namespace GamingNProgramming.Repository
     {
         protected AppDbContext DbContext;
         protected DbSet<Map> Entities;
+        protected DbSet<Level> LevelEntities;
+        protected DbSet<Assignment> AssignmentEntities;
+        protected DbSet<TestCase> TestCaseEntities;
+        protected DbSet<Answer> AnswerEntities;
 
         public MapRepository(AppDbContext context)
         {
             DbContext = context;
             Entities = DbContext.Set<Map>();
+            LevelEntities = DbContext.Set<Level>();
+            AssignmentEntities = DbContext.Set<Assignment>();
+            TestCaseEntities = DbContext.Set<TestCase>();
+            AnswerEntities = DbContext.Set<Answer>();
         }
 
         public async Task<IEnumerable<Map>> GetAllAsync()
@@ -38,6 +46,28 @@ namespace GamingNProgramming.Repository
         public async Task AddAsync(Map entity)
         {
             Entities.Add(entity);
+            foreach(var level in entity.Levels)
+            {
+                LevelEntities.Add(level);
+                foreach(var task in level.Assignments)
+                {
+                    AssignmentEntities.Add(task);
+                    if(task.TestCases != null && task.TestCases.Any())
+                    {
+                        foreach(var testaCase in task.TestCases)
+                        {
+                            TestCaseEntities.Add(testaCase);
+                        }
+                    }
+                    if (task.Answers != null && task.Answers.Any())
+                    {
+                        foreach (var answer in task.Answers)
+                        {
+                            AnswerEntities.Add(answer);
+                        }
+                    }
+                }
+            }
             await DbContext.SaveChangesAsync();
         }
 
