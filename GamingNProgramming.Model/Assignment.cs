@@ -26,12 +26,16 @@ namespace GamingNProgramming.Model
         public string Description { get; set; }
         public int Points { get; set; }
 
-        public bool HasBadge { get; set; }
+        public bool HasBadge { get; set; }       
 
 
         [ForeignKey("LevelId")]
-        public Guid? LevelId { get; set; }
+        public Guid LevelId { get; set; }
         public virtual Level Level { get; set; }
+
+        [ForeignKey("BadgeId")]
+        public Guid? BadgeId { get; set; }
+        public virtual Badge Badge { get; set; }
 
         public virtual ICollection<TestCase> TestCases { get; set; }
 

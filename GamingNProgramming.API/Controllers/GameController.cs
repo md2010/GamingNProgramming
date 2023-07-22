@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using GamingNProgramming.Common;
+using GamingNProgramming.Model;
+using GamingNProgramming.Service;
+using GamingNProgramming.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace GamingNProgramming.WebAPI.Controllers
 {
@@ -8,13 +13,29 @@ namespace GamingNProgramming.WebAPI.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-        /*[Authorize]
+        protected IGameService GameService { get; set; }
+
+        public GameController(IGameService service)
+        {
+            this.GameService = service;
+        }
+
+        [Authorize]
         [HttpPost]
         [Route("save-map")]
-        public async Task<IActionResult> SaveMap([FromBody] RunCodeModel model)
+        public async Task<IActionResult> SaveMap([FromBody] MapModel model)
         { 
+            if(model == null)
+            {
+                return BadRequest();
+            }
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var map = MapMap(model);
+            var result = await this.GameService.AddMapAsync(Helper.TransformGuid(id), map);
 
-        }*/
+            return Ok();
+
+        }
 
         [Authorize]
         [HttpPost]
@@ -182,6 +203,112 @@ namespace GamingNProgramming.WebAPI.Controllers
 
             public string Error { get; set; }
         }
+
+        public class MapModel
+        {
+            public string Title { get; set; }
+            public string Description { get; set; }
+            public string Path { get; set; }
+            public bool IsVisible { get; set; }
+            public List<LevelModel> Levels { get; set; }
+        }
+
+        public class LevelModel
+        {
+            public string Title { get; set; }
+            public string Description { get; set; }
+            public List<AssignmentModel> Assignments { get; set; }
+        }
+
+        public class AssignmentModel
+        {
+            public string Title { get; set; }
+            public string Description { get; set; }
+            public bool IsCoding { get; set; }
+            public bool IsMultiSelect { get; set; } = false;
+            public bool IsTimeMeasured { get; set; } = false;
+            public bool HasBadge { get; set; } = false; 
+            public bool HasArgs { get; set; } = false;
+            public int Points { get; set; }
+            public string InitialCode { get; set; } = "";
+            public int Seconds { get; set; } = 0;
+            public string BadgeId { get; set; } = "";
+            public List<TestCaseModel> TestCases { get; set; } = null;
+            public List<AnswerModel> Answers { get; set; } = null;
+        }
+
+        public class TestCaseModel
+        {
+            public string Input { get; set; }
+            public string Output { get; set; }
+        }
+
+        public class AnswerModel
+        {
+            public string OfferedAnswer { get; set; }
+            public bool IsCorrect { get; set; }
+        }
+
+        #endregion
+
+        #region Mapping
+        public Map MapMap(MapModel model)
+        {
+            var map = new Map();
+            map.Title = model.Title;
+            map.Description = model.Description;
+
+            List<Level> levels = new List<Level>();
+            foreach(var level in model.Levels)
+            {
+                var l = new Level();
+
+                List<Assignment> assignments = new List<Assignment>();
+                foreach (var task in level.Assignments)
+                {
+                    var assignment = new Assignment();
+                    assignment.Points = task.Points;
+                    assignment.Title = task.Title;
+                    assignment.Description = task.Description;
+                    assignment.IsMultiSelect = task.IsMultiSelect;
+                    assignment.HasArgs = task.HasArgs;
+                    assignment.HasBadge = task.HasBadge;
+                    assignment.BadgeId = string.IsNullOrEmpty(task.BadgeId) ? null : Helper.TransformGuid(task.BadgeId);
+                    assignment.IsCoding = task.IsCoding;
+                    assignment.InitialCode = task.InitialCode;
+                    assignment.Seconds = task.Seconds;
+
+                    List<TestCase> testCases = new List<TestCase>();
+                    foreach (var testCase in task.TestCases)
+                    {
+                        var tCase = new TestCase();
+                        tCase.Input = testCase.Input;
+                        tCase.Output = testCase.Output;
+                        testCases.Add(tCase);
+                    }
+
+                    List<Answer> answers = new List<Answer>();
+                    foreach (var answer in task.Answers)
+                    {
+                        var a = new Answer();
+                        a.OfferedAnswer = answer.OfferedAnswer;
+                        a.IsCorrect = answer.IsCorrect;
+                        answers.Add(a);
+                    }
+
+                    assignment.TestCases = testCases;
+                    assignment.Answers = answers;
+                    assignments.Add(assignment);
+                }
+
+                l.Assignments = assignments;
+                levels.Add(l);
+            }
+
+            map.Levels = levels;
+            return map;
+        }
+
         #endregion
     }
 }

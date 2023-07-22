@@ -9,34 +9,39 @@ using System.Threading.Tasks;
 
 namespace GamingNProgramming.Repository
 {
-    public class AvatarRepository : IAvatarRepository
+    public class MapRepository : IMapRepository
     {
         protected AppDbContext DbContext;
-        protected DbSet<Avatar> Entities;
+        protected DbSet<Map> Entities;
 
-        public AvatarRepository(AppDbContext context)
+        public MapRepository(AppDbContext context)
         {
             DbContext = context;
-            Entities = DbContext.Set<Avatar>();
+            Entities = DbContext.Set<Map>();
         }
 
-        public async Task<IEnumerable<Avatar>> GetAllAsync()
+        public async Task<IEnumerable<Map>> GetAllAsync()
         {
             return await Entities.ToListAsync();
         }
 
-        public async Task<Avatar> GetAsync(Guid id)
+        public async Task<Map> GetAsync(Guid id)
         {
             return await Entities.FindAsync(id);
         }
 
-        public async Task AddAsync(Avatar entity)
+        public async Task<Map> GetByProfessorIdAsync(Guid id)
+        {
+            return Entities.FirstOrDefault(a => a.ProfessorId == id) ?? null;
+        }
+
+        public async Task AddAsync(Map entity)
         {
             Entities.Add(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Avatar entity)
+        public async Task RemoveAsync(Map entity)
         {
             Entities.Remove(entity);
             await DbContext.SaveChangesAsync();

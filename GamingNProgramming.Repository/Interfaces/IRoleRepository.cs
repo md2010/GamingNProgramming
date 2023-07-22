@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace GamingNProgramming.Repository
 {
-    public interface IAvatarRepository
+    public interface IRoleRepository
     {
-        Task<IEnumerable<Avatar>> GetAllAsync();
+        Task<IEnumerable<Role>> GetAllAsync();
 
-        Task<Avatar> GetAsync(Guid id);
+        Task<Role> GetAsync(Guid id);
 
-        Task AddAsync(Avatar entity);
+        Task AddAsync(Role entity);
 
-        Task RemoveAsync(Avatar entity);
+        Task RemoveAsync(Role entity);
     }
 }

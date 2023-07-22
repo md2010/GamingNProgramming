@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace GamingNProgramming.Repository
 {
-    public interface IRoleRepository
+    public interface IMapRepository
     {
-        Task<IEnumerable<Role>> GetAllAsync();
+        Task<IEnumerable<Map>> GetAllAsync();
 
-        Task<Role> GetAsync(Guid id);
+        Task<Map> GetAsync(Guid id);
 
-        Task AddAsync(Role entity);
+        Task AddAsync(Map entity);
 
-        Task RemoveAsync(Role entity);
+        Task RemoveAsync(Map entity);
     }
 }
