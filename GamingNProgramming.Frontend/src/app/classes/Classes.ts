@@ -5,7 +5,13 @@ export class Map {
     isVisible: boolean = false
     levels : Array<Level> = []
 
-    constructor(levels: Array<Level>) { this.levels = levels; }
+    constructor(title: string, description: string, path: string, isVisible: boolean, levels: Array<Level>) { 
+        this.levels = levels; 
+        this.title = title;
+        this.description = description;
+        this.path = path;
+        this.isVisible = isVisible;
+    }
 }
 
 

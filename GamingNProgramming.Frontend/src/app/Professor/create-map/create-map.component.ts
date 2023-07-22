@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { DrawMapComponent } from './draw-map/draw-map.component';
 import { CreateTaskDialogComponent } from './create-task-dialog/create-task-dialog.component';
 import { Assignment, Level, Map } from 'src/app/classes/Classes';
+import { GameService } from 'src/app/services/GameService';
 
 @Component({
   selector: 'app-create-map',
@@ -20,10 +21,12 @@ export class CreateMapComponent {
 
   levels : Level[] = []
   mapPath : string = ''
+  title : string = ''
+  description : string = ''
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
-  constructor(private router: Router, public dialog: MatDialog) {
+  constructor(private router: Router, public dialog: MatDialog, private gameService : GameService) {
     this.levels = new Array<Level>();
     var tasks = new Array<Assignment>();
     tasks.push(new Assignment())
@@ -64,12 +67,12 @@ export class CreateMapComponent {
   }
 
   save() {
-    var map = new Map(this.levels);
-    map.isVisible = true;
-    //call api
+    var map = new Map(this.title, this.description, this.mapPath, true, this.levels);
+    this.gameService.
   }
 
   saveAndContinueEditing() {
+    var map = new Map(this.title, this.description, this.mapPath, true, this.levels);
     this.dialog.open(this.notification);
   }
 }
