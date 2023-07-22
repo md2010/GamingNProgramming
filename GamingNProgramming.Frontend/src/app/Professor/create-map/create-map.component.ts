@@ -68,7 +68,18 @@ export class CreateMapComponent {
 
   save() {
     var map = new Map(this.title, this.description, this.mapPath, true, this.levels);
-    this.gameService.
+    this.gameService.saveMap(map)
+    .subscribe(
+      (Response) => {
+        if(Response.body) {
+          
+        }
+      },
+      (error: any) => {
+        console.log(error.error);
+
+      }
+    )
   }
 
   saveAndContinueEditing() {
