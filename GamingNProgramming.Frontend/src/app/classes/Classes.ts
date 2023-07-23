@@ -1,4 +1,5 @@
 export class Map {
+    id: string = ''
     title: string = ''
     description: string = ''
     path: string = ''
@@ -18,9 +19,9 @@ export class Map {
 export class Level {
     title: string = ''
     description: string = ''
-    tasks : Array<Assignment> = []
+    assignments : Array<Assignment> = []
 
-    constructor(tasks: Array<Assignment>) { this.tasks = tasks; }
+    constructor(tasks: Array<Assignment>) { this.assignments = tasks; }
 }
 
 export class Assignment {

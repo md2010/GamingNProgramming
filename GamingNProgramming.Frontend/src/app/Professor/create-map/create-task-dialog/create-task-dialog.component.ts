@@ -1,4 +1,4 @@
-import { Component, Inject, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, TemplateRef, ViewChild, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -33,19 +33,28 @@ export class CreateTaskDialogComponent {
     public dialog: MatDialog
     ){ 
       this.task = data.task
-      this.task.testCases.push(new TestCase());
-      this.task.answers.push(new Answer());
-      this.task.answers.push(new Answer());
+      if(this.task.testCases && this.task.testCases.length === 0)
+      {
+        this.task.testCases = [];
+      }
+      if(this.task.answers && this.task.answers.length === 0)
+      {
+        this.task.answers = [];
+      }
+      this.disableEdit = data.disableEdit;
 
       this.task.initialCode = 
     '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
-    'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
+    'se zadaci pokreću preko komandne \n linije. Ukoliko zadatak zahtjeva ulaz\n'+
+    ' treba koristiti int main(int argc, char *argv[]). Ako su ulazni argumenti brojevi,' + 
     '\n a ne tekstulani (string), potrebno je ' +
-    'ulaze pretvoriti \n u brojeve. Primjer: a = argv[1]; val = atoi(a);\n*/';
+    'ulaze pretvoriti \n u brojeve. Primjer:\n a = argv[1]; val = atoi(a);\n' +
+    '\nint main(int argc, char *argv[])\n{\n}\n\n*/';
   }
 
   @ViewChild('selectBadge', { static: true }) selectBadgeDialog!: TemplateRef<any>;
 
+  disableEdit : boolean = false;
   correctAnswer! : string
   correctAnswers : Array<string> = []
   task!: Assignment
@@ -62,10 +71,16 @@ export class CreateTaskDialogComponent {
   ]
 
   theory() {
+    this.task.initialCode = '';
     this.task.isCoding = false;
   }
 
   coding() {
+    this.task.initialCode = 
+    '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
+    'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
+    '\n a ne tekstulani (string), potrebno je ' +
+    'ulaze pretvoriti \n u brojeve. Primjer: a = argv[1]; val = atoi(a);\n*/';
     this.task.isCoding = true;
   }
 
@@ -102,6 +117,7 @@ export class CreateTaskDialogComponent {
 
 interface Data {
   task: Assignment
+  disableEdit: boolean
 }
 
 

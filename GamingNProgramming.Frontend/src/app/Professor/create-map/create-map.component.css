@@ -22,7 +22,7 @@
     margin-top: 20px;
 }
 
-.image-button:active, .image-button:focus
+.green-border
 {
      border:0.5em solid #198754; /* here configure as your needs */
      color:#198754;

@@ -14,12 +14,12 @@
             <div class="row">
                 <p>Odaberi mapu:</p>
                 <div class="col-sm spc-bottom spc-top">
-                    <button class="image-button spc-right" (click)="onMapSelected('../assets/images/defaultMap.jpg')">
+                    <button class="image-button spc-right" (click)="onMapSelected('../assets/images/defaultMap.jpg')" [ngClass]="{'green-border' : activeDefaultMap}">
                         <img src="../assets/images/defaultMap.jpg" width="400" height="300">
                     </button>
                 </div>
                 <div class="col-sm spc-bottom spc-top">
-                    <button class="image-button" (click)="onMapSelected('../assets/images/map-1.jpg')" >
+                    <button class="image-button" (click)="onMapSelected('../assets/images/map-1.jpg')" [ngClass]="{'green-border' : !activeDefaultMap}">
                         <img src="../assets/images/map-1.jpg" width="400" height="300">
                     </button>                
                 </div>
@@ -27,7 +27,7 @@
         </div>              
         <div class="row">
             <div class="form-group spc-bottom">
-                <button class="btn btn-primary spc-right" (click)="addLevel()">Dodaj razinu</button>
+                <button class="btn btn-primary spc-right" (click)="addLevel()" [disabled]="title.length <= 2 && description.length <= 2  && mapPath.length <= 2 ">Dodaj razinu</button>
             </div>
             <div class="col-sm" *ngFor="let l of levels; let i = index;">
                 <div class="card spc-top" style="width: 18rem; text-align: center;"> 
@@ -40,7 +40,7 @@
                     <input type="text" class="form-control spc-bt" id="formGroupExampleInput2" placeholder="Opis" [(ngModel)]="l.description" name="levelDescription{{i}}">
                     <button class="btn btn-primary spc-right" (click)="addTask(i)">Dodaj zadatak</button>                
                     </div>
-                    <ul class="list-group list-group-flush spc-tp spc-bt" *ngFor="let t of l.tasks; let ind = index;" style="text-align: left;">
+                    <ul class="list-group list-group-flush spc-tp spc-bt" *ngFor="let t of l.assignments; let ind = index;" style="text-align: left;">
                         <li class="list-group-item">
                             Zadatak {{ind+1}}
                             <button class="btn btn-primary" style="margin-left: 10px; margin-right: 10px;" (click)="openDialog(ind, i)">Postavi zadatak</button>
@@ -53,11 +53,14 @@
         <hr>
         <div class="row spc-top spc-bottom">
             <div class="col-sm">
-                <button class="btn btn-primary spc-right" (click)="save()">Spremi mapu</button>
+                <button class="btn btn-primary spc-right" (click)="save()" [disabled]="title.length <= 2 && description.length <= 2  && mapPath.length <= 2 ">Spremi mapu</button>
                 <button class="btn btn-primary" (click)="saveAndContinueEditing()">Spremi i nastavi sa uređivanjem kasnije</button>
             </div>
         </div>
-        <app-draw-map *ngIf="mapPath.length > 2" [imgSrc]="mapPath"></app-draw-map>
+        <hr>
+        <p *ngIf="!showDrawMap">Izgled mape možete vidjeti kada odaberete predložak</p>
+        <p *ngIf="showDrawMap">Izgled mape sa unesenim razinama i zadacima možete vidjeti klikom na gumb Nacrtaj mapu</p>
+        <app-draw-map *ngIf="showDrawMap" [imgSrc]="mapPath" [levels]="levels"></app-draw-map>
     </form>
 </div>
 

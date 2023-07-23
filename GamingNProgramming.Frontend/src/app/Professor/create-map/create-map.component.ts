@@ -9,6 +9,7 @@ import { DrawMapComponent } from './draw-map/draw-map.component';
 import { CreateTaskDialogComponent } from './create-task-dialog/create-task-dialog.component';
 import { Assignment, Level, Map } from 'src/app/classes/Classes';
 import { GameService } from 'src/app/services/GameService';
+import { AuthService } from 'src/app/services/AuthService';
 
 @Component({
   selector: 'app-create-map',
@@ -23,18 +24,53 @@ export class CreateMapComponent {
   mapPath : string = ''
   title : string = ''
   description : string = ''
+  numOfAssignments = 0;
+  showDrawMap = false;
+  activeDefaultMap = false;
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
-  constructor(private router: Router, public dialog: MatDialog, private gameService : GameService) {
-    this.levels = new Array<Level>();
-    var tasks = new Array<Assignment>();
-    tasks.push(new Assignment())
-    this.levels.push(new Level(tasks))
-   }
+  constructor(private router: Router, public dialog: MatDialog, private gameService : GameService, private authService: AuthService) {}
+
+   ngOnInit() {
+    this.gameService.getMapForEditing(this.authService.getAuthorized().userId!) 
+    .subscribe(
+      (Response) => {
+        if(Response) {
+          this.setData(Response.body);          
+        }
+        else {
+          this.levels = new Array<Level>();
+          var tasks : Array<Assignment> = []
+          tasks.push(new Assignment())
+          this.levels.push(new Level(tasks))
+        }
+      },
+      (error: any) => {
+        console.log(error.error);
+      }
+    )} 
+    
+    setData(result: any) {
+      if(result.path.length > 2)
+      {
+        this.onMapSelected(result.path);
+      }
+      this.title = result.title;
+      this.description = result.description;
+      this.levels = result.levels;
+    }
 
   onMapSelected(value: string) {
+    this.showDrawMap = false;
     this.mapPath = value;
+    this.showDrawMap = true;
+    if(value.includes('default')) {
+      this.activeDefaultMap = true;
+    }
+    else {
+      this.activeDefaultMap = false;
+    }
   }
 
   addLevel() {
@@ -43,26 +79,28 @@ export class CreateMapComponent {
     this.levels.push(new Level(tasks))
     console.log(this.levels)
   }
+
   deleteLevel(i : number) {
     this.levels.splice(i, 1);
     console.log(this.levels)
   }
 
   addTask(levelNumber: number) {
-    this.levels[levelNumber].tasks.push(new Assignment())
+    this.numOfAssignments ++;
+    this.levels[levelNumber].assignments.push(new Assignment())
   }
   deleteTask(i : number, levelNumber: number) {
-    this.levels[levelNumber].tasks.splice(i, 1);
+    this.levels[levelNumber].assignments.splice(i, 1);
   }
 
   openDialog(i : number, levelNumber: number) {
     let dialogRef = this.dialog.open(CreateTaskDialogComponent, {
       width: '1500px',
       height: '900px', 
-      data: { task: this.levels[levelNumber].tasks[i], index : i },    
+      data: { task: this.levels[levelNumber].assignments[i], index : i, disableEdit : false },    
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.levels[levelNumber].tasks[i] = result.task;
+      this.levels[levelNumber].assignments[i] = result.task;
       });
   }
 
@@ -80,6 +118,7 @@ export class CreateMapComponent {
 
       }
     )
+
   }
 
   saveAndContinueEditing() {
