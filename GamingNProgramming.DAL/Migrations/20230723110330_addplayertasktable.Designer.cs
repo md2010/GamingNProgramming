@@ -4,6 +4,7 @@ using GamingNProgramming.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamingNProgramming.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230723110330_addplayertasktable")]
+    partial class addplayertasktable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,7 @@ namespace GamingNProgramming.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-          
+
             modelBuilder.Entity("GamingNProgramming.Model.Answer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -44,9 +47,14 @@ namespace GamingNProgramming.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("PlayerTaskId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
+
+                    b.HasIndex("PlayerTaskId");
 
                     b.ToTable("Answers");
                 });
@@ -381,33 +389,6 @@ namespace GamingNProgramming.DAL.Migrations
                     b.ToTable("PlayersTasks");
                 });
 
-            modelBuilder.Entity("GamingNProgramming.Model.PlayerTaskAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AnswerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PlayerTaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("PlayerTaskId");
-
-                    b.ToTable("PlayersTasksAnswers");
-                });
-
             modelBuilder.Entity("GamingNProgramming.Model.Professor", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -485,6 +466,10 @@ namespace GamingNProgramming.DAL.Migrations
                     b.HasOne("GamingNProgramming.Model.Assignment", "Assignment")
                         .WithMany("Answers")
                         .HasForeignKey("AssignmentId");
+
+                    b.HasOne("GamingNProgramming.Model.PlayerTask", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("PlayerTaskId");
 
                     b.Navigation("Assignment");
                 });
@@ -598,25 +583,6 @@ namespace GamingNProgramming.DAL.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("GamingNProgramming.Model.PlayerTaskAnswer", b =>
-                {
-                    b.HasOne("GamingNProgramming.Model.Answer", "Answer")
-                        .WithMany()
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GamingNProgramming.Model.PlayerTask", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerTaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("Player");
-                });
-
             modelBuilder.Entity("GamingNProgramming.Model.TestCase", b =>
                 {
                     b.HasOne("GamingNProgramming.Model.Assignment", "Assignment")
@@ -641,6 +607,11 @@ namespace GamingNProgramming.DAL.Migrations
             modelBuilder.Entity("GamingNProgramming.Model.Map", b =>
                 {
                     b.Navigation("Levels");
+                });
+
+            modelBuilder.Entity("GamingNProgramming.Model.PlayerTask", b =>
+                {
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Professor", b =>

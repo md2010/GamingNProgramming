@@ -17,6 +17,16 @@ namespace GamingNProgramming.Service
         {
             this.Repository = repo;
         }
+
+        public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)
+        {
+            return await this.Repository.GetMapByProfessorIdForEditingAsync(id);
+        }
+
+        public async Task<List<Map>> GetMapByProfessorIdAsync(Guid id)
+        {
+            return await this.Repository.GetMapByProfessorIdAsync(id);
+        }
         public async Task<bool> AddMapAsync(Guid professorId, Map map)
         {
             map.ProfessorId = professorId;

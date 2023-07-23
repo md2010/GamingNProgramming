@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GamingNProgramming.Model
 {
-    public class Answer
+    public class PlayerTaskAnswer
     {
-        [Required, Key]
+        [Key]
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
-        public string OfferedAnswer { get; set; }
-        public bool IsCorrect { get; set; }
 
-        [ForeignKey("AssignmentId")]
-        public Guid? AssignmentId { get; set; }
+        [ForeignKey("Player")]
+        public Guid PlayerTaskId { get; set; }
+        public virtual PlayerTask Player { get; set; }
 
-        public virtual ICollection<PlayerTask> PlayersTasks { get; set; }
-
+        [ForeignKey("Answer")]
+        public Guid AnswerId { get; set; }
+        public virtual Answer Answer { get; set; }
     }
 }

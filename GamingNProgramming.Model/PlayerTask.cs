@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GamingNProgramming.Model
 {
-    public class PlayerTask
+    public class PlayerTask 
     {
         [Required, Key]
         public Guid Id { get; set; }

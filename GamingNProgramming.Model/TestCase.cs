@@ -19,6 +19,5 @@ namespace GamingNProgramming.Model
 
         [ForeignKey("AssignmentId")]
         public Guid? AssignmentId { get; set; }
-        public virtual Assignment Assignment { get; set; }
     }
 }

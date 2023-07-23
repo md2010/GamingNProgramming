@@ -21,6 +21,38 @@ namespace GamingNProgramming.WebAPI.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        [Route("get-map-edit/{professorId}")]
+        public async Task<IActionResult> GetMapForEditing(string professorId)
+        {
+            if (professorId == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.GetMapByProfessorIdForEditingAsync(Helper.TransformGuid(professorId));
+
+            return Ok(result);
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("get-map/{professorId}")]
+        public async Task<IActionResult> GetMaps(string professorId)
+        {
+            if (professorId == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.GetMapByProfessorIdForEditingAsync(Helper.TransformGuid(professorId));
+
+            return Ok(result);
+
+        }
+
+        [Authorize]
         [HttpPost]
         [Route("save-map")]
         public async Task<IActionResult> SaveMap([FromBody] MapModel model)
@@ -252,16 +284,19 @@ namespace GamingNProgramming.WebAPI.Controllers
         #endregion
 
         #region Mapping
-        public Map MapMap(MapModel model)
+        private Map MapMap(MapModel model)
         {
             var map = new Map();
             map.Title = model.Title;
             map.Description = model.Description;
+            map.Path = model.Path;
 
             List<Level> levels = new List<Level>();
             foreach(var level in model.Levels)
             {
                 var l = new Level();
+                l.Title = level.Title;
+                l.Description = level.Description;
 
                 List<Assignment> assignments = new List<Assignment>();
                 foreach (var task in level.Assignments)

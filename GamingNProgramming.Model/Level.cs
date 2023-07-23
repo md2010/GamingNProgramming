@@ -21,7 +21,6 @@ namespace GamingNProgramming.Model
 
         [ForeignKey("MapId")]
         public Guid? MapId { get; set; }
-        public virtual Map Map { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }
     }

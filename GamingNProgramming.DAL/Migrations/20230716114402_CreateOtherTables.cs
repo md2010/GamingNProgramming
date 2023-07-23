@@ -19,7 +19,7 @@ namespace GamingNProgramming.DAL.Migrations
                 defaultValue: 0);
 
             migrationBuilder.CreateTable(
-                name: "Map",
+                name: "Maps",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -42,7 +42,7 @@ namespace GamingNProgramming.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Level",
+                name: "Levels",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -64,7 +64,7 @@ namespace GamingNProgramming.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Assignment",
+                name: "Assignments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -93,7 +93,7 @@ namespace GamingNProgramming.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Answer",
+                name: "Answers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -114,7 +114,7 @@ namespace GamingNProgramming.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestCase",
+                name: "TestCases",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -164,19 +164,19 @@ namespace GamingNProgramming.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Answer");
+                name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "TestCase");
+                name: "TestCases");
 
             migrationBuilder.DropTable(
-                name: "Assignment");
+                name: "Assignments");
 
             migrationBuilder.DropTable(
-                name: "Level");
+                name: "Levels");
 
             migrationBuilder.DropTable(
-                name: "Map");
+                name: "Maps");
 
             migrationBuilder.DropColumn(
                 name: "DefultPoints",

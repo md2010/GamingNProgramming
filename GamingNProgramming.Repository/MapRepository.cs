@@ -1,4 +1,5 @@
-﻿using GamingNProgramming.DAL.Context;
+﻿using GamingNProgramming.Common;
+using GamingNProgramming.DAL.Context;
 using GamingNProgramming.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -38,9 +39,36 @@ namespace GamingNProgramming.Repository
             return await Entities.FindAsync(id);
         }
 
-        public async Task<Map> GetByProfessorIdAsync(Guid id)
+        public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)
         {
-            return Entities.FirstOrDefault(a => a.ProfessorId == id) ?? null;
+            var map = Entities
+                .Where(a => a.ProfessorId == id)
+                .Where(a => a.IsVisible == false)
+                .Include(a => a.Levels)
+                .ThenInclude(b => b.Assignments)
+                    .ThenInclude(c => c.Answers)
+                .Include(a => a.Levels)
+                    .ThenInclude(b => b.Assignments)
+                        .ThenInclude(c => c.TestCases)
+                .ToList().FirstOrDefault();
+
+            return map;
+        }
+
+        public async Task<List<Map>> GetMapByProfessorIdAsync(Guid id)
+        {
+            var maps = await Entities
+                .Where(a => a.ProfessorId == id)
+                .Where(a => a.IsVisible == true)
+                .Include(a => a.Levels)
+                .ThenInclude(b => b.Assignments)
+                    .ThenInclude(c => c.Answers)
+                .Include(a => a.Levels)
+                    .ThenInclude(b => b.Assignments)
+                        .ThenInclude(c => c.TestCases)
+                .ToListAsync();
+
+            return maps;
         }
 
         public async Task AddAsync(Map entity)

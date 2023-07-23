@@ -32,7 +32,6 @@ namespace GamingNProgramming.Model
 
         [ForeignKey("LevelId")]
         public Guid LevelId { get; set; }
-        public virtual Level Level { get; set; }
 
         [ForeignKey("BadgeId")]
         public Guid? BadgeId { get; set; }

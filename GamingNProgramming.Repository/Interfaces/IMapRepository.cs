@@ -15,6 +15,10 @@ namespace GamingNProgramming.Repository
 
         Task<Map> GetAsync(Guid id);
 
+        Task<Map> GetMapByProfessorIdForEditingAsync(Guid id);
+
+        Task<List<Map>> GetMapByProfessorIdAsync(Guid id);
+
         Task AddAsync(Map entity);
 
         Task RemoveAsync(Map entity);
