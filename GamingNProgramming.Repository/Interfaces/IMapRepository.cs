@@ -21,6 +21,8 @@ namespace GamingNProgramming.Repository
 
         Task AddAsync(Map entity);
 
-        Task RemoveAsync(Map entity);
+        void Add(Map entity);
+
+        void Remove(Map entity);
     }
 }

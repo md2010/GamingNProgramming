@@ -14,5 +14,7 @@ namespace GamingNProgramming.Service.Interfaces
         Task<Map> GetMapByProfessorIdForEditingAsync(Guid id);
 
         Task<List<Map>> GetMapByProfessorIdAsync(Guid id);
+
+        Task<bool> UpdateMapAsync(Guid professorId, Map map);
     }
 }

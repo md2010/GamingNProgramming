@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace GamingNProgramming.WebAPI.Controllers
 {
@@ -46,7 +47,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                 return BadRequest();
             }
 
-            var result = await this.GameService.GetMapByProfessorIdForEditingAsync(Helper.TransformGuid(professorId));
+            var result = await this.GameService.GetMapByProfessorIdAsync(Helper.TransformGuid(professorId));
 
             return Ok(result);
 
@@ -64,6 +65,23 @@ namespace GamingNProgramming.WebAPI.Controllers
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var map = MapMap(model);
             var result = await this.GameService.AddMapAsync(Helper.TransformGuid(id), map);
+
+            return Ok();
+
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("update-map")]
+        public async Task<IActionResult> UpdateMap([FromBody] MapModel model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var map = MapMap(model);
+            var result = await this.GameService.UpdateMapAsync(Helper.TransformGuid(id), map);
 
             return Ok();
 
@@ -238,6 +256,7 @@ namespace GamingNProgramming.WebAPI.Controllers
 
         public class MapModel
         {
+            public string Id { get; set; } = "";
             public string Title { get; set; }
             public string Description { get; set; }
             public string Path { get; set; }
@@ -247,6 +266,8 @@ namespace GamingNProgramming.WebAPI.Controllers
 
         public class LevelModel
         {
+            public string Id { get; set; } = "";
+            public string MapId { get; set; } = "";
             public string Title { get; set; }
             public string Description { get; set; }
             public List<AssignmentModel> Assignments { get; set; }
@@ -254,6 +275,8 @@ namespace GamingNProgramming.WebAPI.Controllers
 
         public class AssignmentModel
         {
+            public string Id { get; set; } = "";
+            public string LevelId { get; set; } = "";
             public string Title { get; set; }
             public string Description { get; set; }
             public bool IsCoding { get; set; }
@@ -264,19 +287,23 @@ namespace GamingNProgramming.WebAPI.Controllers
             public int Points { get; set; }
             public string InitialCode { get; set; } = "";
             public int Seconds { get; set; } = 0;
-            public string BadgeId { get; set; } = "";
+            public String? BadgeId { get; set; } = null;
             public List<TestCaseModel> TestCases { get; set; } = null;
             public List<AnswerModel> Answers { get; set; } = null;
         }
 
         public class TestCaseModel
         {
+            public string AssignmentId { get; set; } = "";
+            public string Id { get; set; } = "";
             public string Input { get; set; }
             public string Output { get; set; }
         }
 
         public class AnswerModel
         {
+            public string AssignmentId { get; set; } = "";
+            public string Id { get; set; } = "";
             public string OfferedAnswer { get; set; }
             public bool IsCorrect { get; set; }
         }
@@ -284,17 +311,24 @@ namespace GamingNProgramming.WebAPI.Controllers
         #endregion
 
         #region Mapping
-        private Map MapMap(MapModel model)
+        private Map MapMap(MapModel model, Map map = null)
         {
-            var map = new Map();
+            if (map == null)
+            {
+                map = new Map();
+            }
+            map.Id = string.IsNullOrEmpty(model.Id) ? Guid.Empty : Helper.TransformGuid(model.Id);
             map.Title = model.Title;
             map.Description = model.Description;
             map.Path = model.Path;
+            map.IsVisible = model.IsVisible;
 
             List<Level> levels = new List<Level>();
             foreach(var level in model.Levels)
             {
                 var l = new Level();
+                l.Id = string.IsNullOrEmpty(level.Id) ? Guid.Empty : Helper.TransformGuid(level.Id);
+                l.MapId = string.IsNullOrEmpty(level.MapId) ? Guid.Empty : Helper.TransformGuid(level.MapId);
                 l.Title = level.Title;
                 l.Description = level.Description;
 
@@ -302,13 +336,15 @@ namespace GamingNProgramming.WebAPI.Controllers
                 foreach (var task in level.Assignments)
                 {
                     var assignment = new Assignment();
+                    assignment.Id = string.IsNullOrEmpty(task.Id) ? Guid.Empty : Helper.TransformGuid(task.Id);
+                    assignment.LevelId = string.IsNullOrEmpty(task.LevelId) ? Guid.Empty : Helper.TransformGuid(task.LevelId);
                     assignment.Points = task.Points;
                     assignment.Title = task.Title;
                     assignment.Description = task.Description;
                     assignment.IsMultiSelect = task.IsMultiSelect;
                     assignment.HasArgs = task.HasArgs;
                     assignment.HasBadge = task.HasBadge;
-                    assignment.BadgeId = string.IsNullOrEmpty(task.BadgeId) ? null : Helper.TransformGuid(task.BadgeId);
+                    assignment.BadgeId = (string.IsNullOrEmpty(task.BadgeId) || task.BadgeId == null) ? null : Helper.TransformGuid(task.BadgeId);
                     assignment.IsCoding = task.IsCoding;
                     assignment.InitialCode = task.InitialCode;
                     assignment.Seconds = task.Seconds;
@@ -317,6 +353,8 @@ namespace GamingNProgramming.WebAPI.Controllers
                     foreach (var testCase in task.TestCases)
                     {
                         var tCase = new TestCase();
+                        tCase.Id = string.IsNullOrEmpty(testCase.Id) ? Guid.Empty : Helper.TransformGuid(testCase.Id);
+                        tCase.AssignmentId = string.IsNullOrEmpty(testCase.AssignmentId) ? Guid.Empty : Helper.TransformGuid(testCase.AssignmentId);
                         tCase.Input = testCase.Input;
                         tCase.Output = testCase.Output;
                         testCases.Add(tCase);
@@ -326,6 +364,8 @@ namespace GamingNProgramming.WebAPI.Controllers
                     foreach (var answer in task.Answers)
                     {
                         var a = new Answer();
+                        a.Id = string.IsNullOrEmpty(answer.Id) ? Guid.Empty : Helper.TransformGuid(answer.Id);
+                        a.AssignmentId = string.IsNullOrEmpty(answer.AssignmentId) ? Guid.Empty : Helper.TransformGuid(answer.AssignmentId);
                         a.OfferedAnswer = answer.OfferedAnswer;
                         a.IsCorrect = answer.IsCorrect;
                         answers.Add(a);

@@ -36,11 +36,25 @@ namespace GamingNProgramming.Service
             return true;
         }
 
+        public async Task<bool> UpdateMapAsync(Guid professorId, Map map)
+        {
+            map.ProfessorId = professorId;
+            var oldLevels = map.Levels.Where(l => l.Id != Guid.Empty).ToList();
+            var oldMap = map;
+            oldMap.Levels = oldLevels;
+            this.Repository.Remove(oldMap);
+            CreateMapEntity(map);
+            this.Repository.Add(map);
+
+            return true;
+        }
+
         private void CreateMapEntity(Map map)
         {
             map.DateCreated = DateTime.Now;
             map.DateUpdated = DateTime.Now;
             map.Id = Guid.NewGuid();
+            var points = 0;
 
             int i = 1; int j = 1; 
             foreach (var level in map.Levels)
@@ -58,6 +72,7 @@ namespace GamingNProgramming.Service
                     task.Id = Guid.NewGuid();
                     task.LevelId = level.Id;
                     task.Number = j;
+                    points += task.Points;
 
                     foreach (var testCase in task.TestCases)
                     {
@@ -78,6 +93,7 @@ namespace GamingNProgramming.Service
                 }
                 i++;
             }
+            map.Points = points;
         }
     }
 }

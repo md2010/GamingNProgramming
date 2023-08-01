@@ -102,6 +102,7 @@ public class AutofacModule : Module
         //loookup
         builder.RegisterType<RoleRepository>().As<IRoleRepository>();
         builder.RegisterType<AvatarRepository>().As<IAvatarRepository>();
+        builder.RegisterType<BadgeRepository>().As<IBadgeRepository>();
         //
 
         builder.RegisterType<PlayerService>().As<IPlayerService>();

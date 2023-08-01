@@ -99,10 +99,62 @@ namespace GamingNProgramming.Repository
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Map entity)
+        public void Add(Map entity)
         {
-            Entities.Remove(entity);
-            await DbContext.SaveChangesAsync();
+            Entities.Add(entity);
+            foreach (var level in entity.Levels)
+            {
+                LevelEntities.Add(level);
+                foreach (var task in level.Assignments)
+                {
+                    AssignmentEntities.Add(task);
+                    if (task.TestCases != null && task.TestCases.Any())
+                    {
+                        foreach (var testaCase in task.TestCases)
+                        {
+                            TestCaseEntities.Add(testaCase);
+                        }
+                    }
+                    if (task.Answers != null && task.Answers.Any())
+                    {
+                        foreach (var answer in task.Answers)
+                        {
+                            AnswerEntities.Add(answer);
+                        }
+                    }
+                }
+            }
+            DbContext.SaveChanges();
         }
+
+        public void Remove(Map entity)
+        {
+            foreach (var level in entity.Levels.Where(l => l.Id != Guid.Empty))
+            {
+                foreach (var task in level.Assignments.Where(l => l.Id != Guid.Empty))
+                {
+                    if (task.TestCases != null && task.TestCases.Any())
+                    {
+                        foreach (var testaCase in task.TestCases.Where(l => l.Id != Guid.Empty))
+                        {
+                            TestCaseEntities.Remove(testaCase);
+                        }
+                    }
+                    if (task.Answers != null && task.Answers.Any())
+                    {
+                        foreach (var answer in task.Answers.Where(l => l.Id != Guid.Empty))
+                        {
+                            AnswerEntities.Remove(answer);
+                        }
+                    }
+                    AssignmentEntities.Remove(task);
+                }
+                LevelEntities.Remove(level);
+            }
+            Entities.Remove(entity);
+
+            DbContext.SaveChanges();
+        }
+       
     }
 }

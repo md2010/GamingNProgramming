@@ -11,10 +11,13 @@ namespace GamingNProgramming.WebAPI.Controllers
         protected IRoleRepository Repository { get; set; }
 
         protected IAvatarRepository AvatarRepository { get; set; }
-        public LookupController(IRoleRepository repository, IAvatarRepository repo) 
+
+        protected IBadgeRepository BadgeRepository { get; set; }
+        public LookupController(IRoleRepository repository, IAvatarRepository repo, IBadgeRepository badgeRepo) 
         {
             Repository = repository;   
             AvatarRepository = repo;
+            BadgeRepository = badgeRepo;
         }
 
         [HttpGet]
@@ -46,6 +49,21 @@ namespace GamingNProgramming.WebAPI.Controllers
                 return NoContent();
             }
         }
-        
+
+        [HttpGet]
+        [Route("badges")]
+        public async Task<IActionResult> GetBadges()
+        {
+            var result = await BadgeRepository.GetAllAsync();
+            if (result != null && result.Any())
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
     }
 }
