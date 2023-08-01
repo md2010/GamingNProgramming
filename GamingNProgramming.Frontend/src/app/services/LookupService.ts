@@ -28,4 +28,12 @@ export class LookupService {
     return this.http.get<any>(this.apiUrl +'/avatars', {headers: headersToSend});
   }
 
+  public getBadges() : Observable<any>{
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set('Accept','application/json');
+  
+    return this.http.get<any>(this.apiUrl +'/badges', {headers: headersToSend});
+  }
+
 }

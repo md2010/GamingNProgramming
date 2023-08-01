@@ -1,10 +1,10 @@
 
-<div class="col-md-8 align-items-center spc-bottom spc-top">
+<div class="align-items-center spc-bottom spc-top spc-left">
     <button class="btn btn-primary spc-right" [disabled]="!allPlayers" (click)="getAllFriends()">Prikaži prijatelje</button>
     <button class="btn btn-primary" [disabled]="allPlayers" (click)="getAllPlayers()">Prikaži sve igrače</button>
 </div>
       
-<div class="col-md-8 align-items-center spc-top">
+<div class="align-items-center spc-top spc-left">
 <table class="table table-striped" *ngIf="loaded">
     <thead>
       <tr *ngIf="players.length == 0">Nema rezultata</tr>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody *ngIf="players.length > 0">
-      <tr *ngFor="let p of players; let i = index;">
+      <tr *ngFor="let p of players; let i = index;" [ngClass]="{ 'me' : p.userId === userId}">
         <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{i + 1}}</td>
         <td>{{p?.username}}</td>

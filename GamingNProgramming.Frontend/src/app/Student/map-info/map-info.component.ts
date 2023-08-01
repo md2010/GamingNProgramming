@@ -34,10 +34,6 @@ export class MapInfoComponent {
     this.role = this.authService.getAuthorized().roleName
   }
 
-  play(id : string): void {
-    this.router.navigate(['task-play', 1]);
-  }
-
   openDialog(i : number, levelNumber: number) {
     let dialogRef = this.dialog.open(CreateTaskDialogComponent, {
       width: '1500px',
@@ -46,8 +42,13 @@ export class MapInfoComponent {
     });
   }
 
-  onBack(id : string): void {
-    this.router.navigate(['student-dashboard']);
+  onBack(): void {
+    if(this.role == 'Professor') {
+      this.router.navigate(['professor-dashboard']);
+    }
+    else {
+      this.router.navigate(['student-dashboard']);
+    }
   }
 
   ngOnDestroy() {

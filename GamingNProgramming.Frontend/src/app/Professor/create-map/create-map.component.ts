@@ -20,13 +20,14 @@ import { AuthService } from 'src/app/services/AuthService';
 })
 export class CreateMapComponent {
 
+  id: string = ''
   levels : Level[] = []
   mapPath : string = ''
   title : string = ''
   description : string = ''
   numOfAssignments = 0;
   showDrawMap = false;
-  activeDefaultMap = false;
+  activeDefaultMap : boolean | null = null;
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
@@ -36,7 +37,7 @@ export class CreateMapComponent {
     this.gameService.getMapForEditing(this.authService.getAuthorized().userId!) 
     .subscribe(
       (Response) => {
-        if(Response) {
+        if(Response.body) {
           this.setData(Response.body);          
         }
         else {
@@ -56,6 +57,7 @@ export class CreateMapComponent {
       {
         this.onMapSelected(result.path);
       }
+      this.id = result.id;
       this.title = result.title;
       this.description = result.description;
       this.levels = result.levels;
@@ -104,26 +106,35 @@ export class CreateMapComponent {
       });
   }
 
-  save() {
-    var map = new Map(this.title, this.description, this.mapPath, true, this.levels);
-    this.gameService.saveMap(map)
-    .subscribe(
-      (Response) => {
-        if(Response.body) {
-          
+  save(final : string) {
+    var map = new Map(this.id, this.title, this.description, this.mapPath, final === 'final' ? true : false, this.levels);
+    if(this.id !== '') {
+      this.gameService.updateMap(map)
+      .subscribe(
+        (Response) => {
+          if(Response) {
+            this.dialog.open(this.notification);
+          }
+        },
+        (error: any) => {
+          console.log(error.error);
+          this.dialog.open(error.error);
         }
-      },
-      (error: any) => {
-        console.log(error.error);
+      )
+    } else {
+      this.gameService.saveMap(map)
+      .subscribe(
+        (Response) => {
+          if(Response) {
+            
+          }
+        },
+        (error: any) => {
+          console.log(error.error);
 
-      }
-    )
-
-  }
-
-  saveAndContinueEditing() {
-    var map = new Map(this.title, this.description, this.mapPath, true, this.levels);
-    this.dialog.open(this.notification);
+        }
+      )
+    }
   }
 }
 

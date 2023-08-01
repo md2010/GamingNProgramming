@@ -1,5 +1,12 @@
 <div class="row">
-    <div class="col-md-5" *ngFor="let m of map.levels; let ind = index;">
+  <div class="col-md-1 spc-top">
+    <a href="javascript:void(0);" (click)="onBack()" class="previous">&#8249;</a>
+  </div>
+</div>
+<div class="row">
+<div class="col-4">
+<div class="row row-cols">
+    <div class="col-sm" *ngFor="let m of map.levels; let ind = index;">
         <div class="card spc-top spc-bottom" style="width: 30rem;">           
             <div class="card-body">
               <h5 class="card-title">Razina {{ind+1}}: {{m.title}}</h5>
@@ -9,14 +16,15 @@
               <li class="list-group-item">
                 Zadatak {{i+1}} : {{a.title}}
                 <button class="btn btn-primary" *ngIf="role === 'Professor'" (click)="openDialog(i, ind)" style="margin-left: 10px; margin-right: 10px;">Pogledaj zadatak</button>
-                <button type="button" class="btn-close" *ngIf="role === 'Professor'" aria-label="Close"></button> 
               </li>
             </ul>           
         </div>       
     </div>
-    <div class="col-md-6">
-        <div class="image-box-map">
-          <app-draw-map [imgSrc]="map.path" [levels]="map.levels" [draw]="true"></app-draw-map>
-        </div>       
-    </div>
+</div>
+</div>
+<div class="col-8">
+  <div class="image-box-map">
+    <app-draw-map [imgSrc]="map.path" [levels]="map.levels" [draw]="true"></app-draw-map>
+  </div>  
+</div>     
 </div>

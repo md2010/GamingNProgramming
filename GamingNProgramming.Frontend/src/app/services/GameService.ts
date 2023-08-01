@@ -33,6 +33,16 @@ export class GameService {
       return this.http.post<any>(this.apiUrl + '/save-map', map, {headers: headersToSend, observe : 'response'});
   }
 
+  updateMap(map : any) {
+    JSON.stringify(map);
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+      .set('Accept','application/json');
+  
+      return this.http.post<any>(this.apiUrl + '/update-map', map, {headers: headersToSend, observe : 'response'});
+  }
+
   getMapForEditing(id: string) {
     let headersToSend = new HttpHeaders();
     headersToSend = headersToSend

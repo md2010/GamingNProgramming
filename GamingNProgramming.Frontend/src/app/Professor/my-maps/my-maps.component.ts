@@ -4,6 +4,7 @@ import { GameService } from 'src/app/services/GameService';
 import { AuthService } from 'src/app/services/AuthService';
 import { Map } from 'src/app/classes/Classes';
 import { CommonModule } from '@angular/common';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-my-maps',
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 })
 export class MyMapsComponent {
 
-  map! : Map;
+  maps! : Array<Map>;
   loaded = false;
 
   constructor(private router: Router, private gameService: GameService, private authService: AuthService){}
@@ -24,7 +25,7 @@ export class MyMapsComponent {
     .subscribe(
       (Response) => {
         if(Response) {
-          this.map = Response.body;   
+          this.maps = Response.body;   
           this.loaded = true;      
         }        
       },
@@ -33,7 +34,8 @@ export class MyMapsComponent {
       }
     )} 
 
-  mapInfo() {
-    this.router.navigate(['/map-info',  this.map.id], {state : { map : this.map} });
+  mapInfo(id: string) {
+    let map = this.maps.find(f => f.id === id);
+    this.router.navigate(['/map-info',  map!.id], {state : { map : map} });
   }
 }

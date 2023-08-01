@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/UserService';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from 'src/app/services/AuthService';
 
 @Component({
   selector: 'app-leaderboard',
@@ -13,15 +14,17 @@ import { FormsModule } from '@angular/forms';
 })
 export class LeaderboardComponent {
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private authService: AuthService) {}
 
   friends: Friend[] = [];
   players: Player[] = [];
   loaded = false;
   searchName = '';
   allPlayers = false;
+  userId : string | null = '';
 
-  ngOnInit() {    
+  ngOnInit() { 
+    this.userId = this.authService.getAuthorized().userId;   
     this.getAllFriends();
   }
 

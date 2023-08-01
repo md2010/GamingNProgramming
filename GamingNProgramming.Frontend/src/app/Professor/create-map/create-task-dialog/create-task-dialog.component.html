@@ -1,7 +1,7 @@
 <div class="container align-items-center spc-top">
     <div class="col-sm">
-        <button class="btn btn-primary spc-left" (click)="theory()" [disabled]="!task.isCoding">Teoretski zadatak</button>
-        <button class="btn btn-primary spc-left" (click)="coding()" [disabled]="task.isCoding">Programski zadatak</button>
+        <button class="btn btn-primary spc-left" (click)="theory()" *ngIf="disableEdit === false ? true : (!task.isCoding)" [disabled]="!task.isCoding || disableEdit">Teoretski zadatak</button>
+        <button class="btn btn-primary spc-left" (click)="coding()" *ngIf="disableEdit === false ? true : (task.isCoding)" [disabled]="task.isCoding || disableEdit">Programski zadatak</button>
     </div>
     
     <form *ngIf="!task.isCoding" class="spc-top">
@@ -9,11 +9,11 @@
             <div class="col-md-4">
                 <div class="form-group spc-bottom">
                     <label for="formGroupExampleInput2">Naslov</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.title" name="title">
+                    <input type="text" class="form-control" id="formGroupExampleInput2" [disabled]="disableEdit" [(ngModel)]="task.title" name="title">
                 </div>
                 <div class="form-group spc-bottom">
                     <label for="formGroupExampleInput2">Bodovi</label>
-                    <input type="number" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.points" name="points">
+                    <input type="number" class="form-control" id="formGroupExampleInput2" [disabled]="disableEdit" [(ngModel)]="task.points" name="points">
                 </div>
             </div>
             <div class="col-md-4">
@@ -23,6 +23,7 @@
                             class="example-margin"
                             [checked]="task.isMultiSelect"
                             [(ngModel)]="task.isMultiSelect"
+                            [disabled]="disableEdit"
                             name="isMultiSelect">
                             Ima više točnih odgovora
                         </mat-slide-toggle>
@@ -32,12 +33,14 @@
                             class="example-margin"
                             [checked]="task.hasBadge"
                             [(ngModel)]="task.hasBadge"
+                            (change)="onHasBadgeChanged($event)"
+                            [disabled]="disableEdit"
                             name="hasBadge">
                             Rješavanjem zadatka osvaja se značka
                         </mat-slide-toggle>
                     </div>
                     <div class="form-group spc-bottom" *ngIf="task.hasBadge">
-                        <button class="btn btn-primary" (click)="openDialog()">Odaberi značku</button>
+                        <button class="btn btn-primary" [disabled]="disableEdit" (click)="openDialog()">Odaberi značku</button>
                     </div>
                 </div>                
             </div>
@@ -46,36 +49,36 @@
             <div class="col-6">
                 <div class="form-group spc-bottom">
                     <label for="formGroupExampleInput2">Unesi tekst zadatka</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" [(ngModel)]="task.description" name="description"></textarea>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" [readonly]="disableEdit" rows="4" [(ngModel)]="task.description" name="description"></textarea>
                 </div>
             </div>
         </div>
         <p>Unesi ponuđene odgovore i označi točan/točne</p>
         <div *ngIf="!task.isMultiSelect">
-            <mat-radio-group aria-label="Select an option" [(ngModel)]="correctAnswer" name="correctAnswer">
+            <mat-radio-group aria-label="Select an option" [disabled]="disableEdit" [(ngModel)]="correctAnswer" name="correctAnswer">
                 <mat-radio-button *ngFor="let c of task.answers; let ind = index;" [value]="c.offeredAnswer">
                     <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="c.offeredAnswer" name="offeredAnswer{{ind}}">
                 </mat-radio-button>                
             </mat-radio-group>
             <div class="form-group spc-bottom spc-top">
-                <button class="btn btn-primary" (click)="addAnswer()">Dodaj radio gumb (engl. <i>radio button</i>)</button>
+                <button class="btn btn-primary" (click)="addAnswer()" [disabled]="disableEdit">Dodaj radio gumb (engl. <i>radio button</i>)</button>
             </div> 
         </div> 
         <div *ngIf="task.isMultiSelect">
             <ul>
                 <li *ngFor="let c of task.answers; let ind = index;">
-                    <mat-checkbox (ngModelChange)="answerChanged(ind)" [value]="c.offeredAnswer" [(ngModel)]="c.isCorrect" name="checkbox{{ind}}">
+                    <mat-checkbox [disabled]="disableEdit" (ngModelChange)="answerChanged(ind)" [value]="c.offeredAnswer" [(ngModel)]="c.isCorrect" name="checkbox{{ind}}">
                         <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="c.offeredAnswer" name="offeredAnswer{{ind}}">
                     </mat-checkbox> 
                 </li> 
             </ul>              
             <div class="form-group spc-bottom spc-top">
-                <button class="btn btn-primary" (click)="addAnswer()">Dodaj okvir za izbor (engl. <i>checkbox</i>)</button>
+                <button class="btn btn-primary" [disabled]="disableEdit" (click)="addAnswer()">Dodaj okvir za izbor (engl. <i>checkbox</i>)</button>
             </div> 
         </div> 
         <div class="row">
             <div class="col-sm">
-                <button class="btn btn-primary" (click)="save()">Spremi zadatak</button>
+                <button class="btn btn-primary" [disabled]="disableEdit" (click)="save()">Spremi zadatak</button>
             </div>
         </div>              
     </form>
@@ -85,11 +88,11 @@
             <div class="col-md-4">
                 <div class="form-group spc-bottom">
                     <label for="formGroupExampleInput2">Naslov</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.title" name="title">
+                    <input type="text" [disabled]="disableEdit" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.title" name="title">
                 </div>
                 <div class="form-group spc-bottom">
                     <label for="formGroupExampleInput2">Bodovi</label>
-                    <input type="number" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.points" name="points">
+                    <input type="number" [disabled]="disableEdit" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.points" name="points">
                 </div>
             </div>
             <div class="col-md-4 spc-top">
@@ -98,6 +101,7 @@
                         class="example-margin"
                         [checked]="task.hasArgs"
                         [(ngModel)]="task.hasArgs"
+                        [disabled]="disableEdit"
                         name="hasArgs">
                         Zadatak ima ulazne parametre
                     </mat-slide-toggle>
@@ -105,7 +109,9 @@
                 <div class="form-group spc-bottom">
                     <mat-slide-toggle
                         class="example-margin"
+                        (change)="onHasBadgeChanged($event)"
                         [checked]="task.hasBadge"
+                        [disabled]="disableEdit"
                         [(ngModel)]="task.hasBadge"
                         name="hasBadge">
                         Rješavanjem zadatka osvaja se značka
@@ -116,6 +122,7 @@
                         class="example-margin"
                         [checked]="task.isTimeMeasured"
                         [(ngModel)]="task.isTimeMeasured"
+                        [disabled]="disableEdit"
                         name="isTimeMeasured">
                         Zadatku se mjeri vrijeme izvršavanja
                     </mat-slide-toggle>
@@ -124,10 +131,10 @@
             <div class="col-md-4">
                 <div class="form-group spc-bottom" *ngIf="task.isTimeMeasured">
                     <label for="formGroupExampleInput2">Koliko je vremena dopušteno za rješavanje [s]</label>
-                    <input type="number" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.seconds" name="seconds">
+                    <input [disabled]="disableEdit" type="number" class="form-control" id="formGroupExampleInput2" [(ngModel)]="task.seconds" name="seconds">
                 </div>
                 <div class="form-group spc-bottom" *ngIf="task.hasBadge">
-                    <button class="btn btn-primary" (click)="openDialog()">Odaberi značku</button>
+                    <button class="btn btn-primary" (click)="openDialog()" [disabled]="disableEdit">Odaberi značku</button>
                 </div>
             </div>
         </div>
@@ -135,7 +142,7 @@
             <div class="col-md-6">
                 <h3>Zadatak</h3>
                 <label for="formGroupExampleInput2">Unesi opis zadatka, upute i primjer testnog slučaja</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" [(ngModel)]="task.description" name="description"></textarea>
+                <textarea class="form-control" [readonly]="disableEdit" id="exampleFormControlTextarea1" rows="4" [(ngModel)]="task.description" name="description"></textarea>
             </div>
             <div class="col-md-6">
                     <nu-monaco-editor 
@@ -143,6 +150,7 @@
                     [(ngModel)]="task.initialCode" 
                     [options]="editorOptions" 
                     [model]="model"
+                    [disabled]="disableEdit"
                     [height]="'500'">
                     </nu-monaco-editor>
             </div>
@@ -152,15 +160,15 @@
             <div class="form-group spc-bottom">              
                 <div class="col-4 spc-bottom" *ngFor="let c of task.testCases; let ind = index;">
                     <label for="formGroupExampleInput2">Testni slučaj {{ind+1}}</label>
-                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="ulaz (ako ih je više odvojiti razmakom)" [(ngModel)]="c.input" name="input{{ind}}">
-                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="izlaz" [(ngModel)]="c.output" name="output{{ind}}">
+                    <input type="text" class="form-control" [disabled]="disableEdit" id="formGroupExampleInput2" placeholder="ulaz (ako ih je više odvojiti razmakom)" [(ngModel)]="c.input" name="input{{ind}}">
+                    <input type="text" class="form-control" [disabled]="disableEdit" id="formGroupExampleInput2" placeholder="izlaz" [(ngModel)]="c.output" name="output{{ind}}">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm">
-                <button class="btn btn-primary spc-right" (click)="addTestCase()">Dodaj testni slučaj</button>
-                <button class="btn btn-primary" (click)="save()">Spremi zadatak</button>
+                <button class="btn btn-primary spc-right" [disabled]="disableEdit" (click)="addTestCase()">Dodaj testni slučaj</button>
+                <button class="btn btn-primary" (click)="save()" [disabled]="disableEdit">Spremi zadatak</button>
             </div>
         </div>                   
     </form>
@@ -180,7 +188,7 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button class="btn btn-primary" mat-button matDialogClose>Spremi</button>
+      <button class="btn btn-primary" mat-button matDialogClose [disabled]="disableEdit">Spremi</button>
     </mat-dialog-actions>
   </ng-template>
 

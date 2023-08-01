@@ -6,6 +6,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 import { FindFriendsComponentComponent } from './find-friends-component/find-friends-component.component';
 import { MyFriendsComponent } from './my-friends/my-friends.component';
 import { HomeComponent } from '../home/home.component';
+import { AuthService } from 'src/app/services/AuthService';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -17,9 +18,9 @@ import { HomeComponent } from '../home/home.component';
 })
 export class StudentDashboardComponent {
 
-  constructor (private userService: UserService, private router: Router) {}
+  constructor (private userService: UserService, private router: Router, private authService: AuthService) {}
 
-  user = <User>{};
+  user : User | null = null;
   loaded = false;
   showFindFriends = false;
   showMyFriends = false;
@@ -33,7 +34,7 @@ export class StudentDashboardComponent {
 
   getPlayer() {
     var promise = new Promise((resolve, reject) => {
-      this.userService.getPlayerById(localStorage.getItem('userId'))
+      this.userService.getPlayerById(this.authService.getAuthorized().userId!)
     .subscribe(
       (Response) => {
         if(Response.body) {

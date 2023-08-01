@@ -8,6 +8,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { Answer, Assignment,TestCase, Badge } from 'src/app/classes/Classes';
 import {MatRadioModule} from '@angular/material/radio';
 import { AvatarModule } from '@coreui/angular';
+import { LookupService } from 'src/app/services/LookupService';
 
 @Component({
   selector: 'app-create-task-dialog',
@@ -30,9 +31,11 @@ export class CreateTaskDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<CreateTaskDialogComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: Data,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private lookupService: LookupService
     ){ 
       this.task = data.task
+      this.task.badgeId = this.task.badgeId == null ? '' : this.task.badgeId;
       if(this.task.testCases && this.task.testCases.length === 0)
       {
         this.task.testCases = [];
@@ -64,11 +67,13 @@ export class CreateTaskDialogComponent {
     language: "c"
   }; 
 
-  badges : Array<Badge> = [
-    {path: '../assets/images/badge-1.png', id: '1'}, 
-    {path: '../assets/images/badge-2.png', id: '2'},
-    {path: '../assets/images/badge-3.png', id: '3'}
-  ]
+  badges : Array<Badge> = []
+
+  ngOnInit() {
+    this.lookupService.getBadges().subscribe(response => {
+      this.badges = response;
+  })
+  }
 
   theory() {
     this.task.initialCode = '';
@@ -94,6 +99,11 @@ export class CreateTaskDialogComponent {
 
   openDialog() {
     this.dialog.open(this.selectBadgeDialog);
+  }
+  onHasBadgeChanged(event: any) {
+    if(!event.checked) {
+      this.task.badgeId = ''
+    }
   }
   onBadgeSelected(id : string) {
     this.task.badgeId = id;

@@ -3,9 +3,9 @@
 <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 300px; height: 900px;">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"></a>
     <div class="image-box">
-        <img src={{user.avatar.path}} class="rounded-circle center" width="150px" height="130px">
+        <img src={{user!.avatar.path}} class="rounded-circle center" width="150px" height="130px">
     </div>
-    <p class="text-white text-center">{{user.username}}</p>
+    <p class="text-white text-center">{{user!.username}}</p>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">      
       <li class="progress-circle">
@@ -47,7 +47,7 @@
 </div>
 </div>
 <div class="col-9">
-    <app-home *ngIf="showHome"></app-home>
+    <app-home *ngIf="showHome && user !== null" [user]="user"></app-home>
     <app-find-friends-component *ngIf="showFindFriends"></app-find-friends-component>
     <app-my-friends *ngIf="showMyFriends"></app-my-friends>
 </div>

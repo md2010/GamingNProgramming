@@ -1,21 +1,28 @@
 <div class="row">
 <div class="col-md-4 spc-bottom spc-top">
-    <p>Nauči osnove C programiranja!</p>
     <div class="image-box-map">
-        <a href="javascript:void(0);" (click)="mapInfo()"><img src="../assets/images/defaultMap.jpg" width="300px" height="280px"></a>
+        <a href="javascript:void(0);"><img src="../assets/images/defaultMap.jpg" width="300px" height="280px"></a>
+        <p>Nauči osnove C programiranja!</p>
     </div>
 </div>
 
 <div class="col-md-4 spc-bottom spc-top">
-    <p>Nauči osnove objektnog programiranja!</p>
     <div class="image-box-map">
         <img src="../assets/images/defaultMap.jpg" width="300px" height="280px">
+        <p>Nauči osnove objektnog programiranja!</p>
     </div>
 </div>
+<hr>
 </div>
-<div class="col-md-8 align-items-center spc-bottom spc-top">
-    <p>U nastavku se nalaze mape tvojeg profesora:</p>
-    <div class="image-box-map">
-        <img src="../assets/images/defaultMap.jpg" width="300px" height="280px">
+
+<div class="row">
+    <p>Mape profesora:</p>
+</div>
+<div class="row">
+    <div class="col-md-4 align-items-left" *ngFor="let map of maps">
+        <div class="image-box-map">
+            <a href="javascript:void(0);" (click)="mapInfo(map.id)"><img src="{{map.path}}" width="300px" height="280px"></a>
+            <p>{{map.title}}</p>
+        </div>
     </div>
 </div>

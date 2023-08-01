@@ -1,8 +1,10 @@
-<div class="col-md-8 align-items-center spc-top" *ngIf="loaded">
-    <div>
+<div class="col-md-8 spc-top align-items-center" *ngIf="loaded">
+    <div class="row">
+        <div class="col-sm" *ngFor="let map of maps">
+        <div class="image-box-map">
+            <a href="javascript:void(0);" (click)="mapInfo(map.id)"><img src="{{map.path}}" width="300px" height="280px"></a>
+        </div>
         <p>{{map.title}}</p>
-    <div class="image-box-map">
-        <a href="javascript:void(0);" (click)="mapInfo()"><img src="{{map.path}}" width="300px" height="280px"></a>
-    </div>
+        </div>
     </div>
 </div>

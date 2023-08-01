@@ -19,7 +19,7 @@
                     </button>
                 </div>
                 <div class="col-sm spc-bottom spc-top">
-                    <button class="image-button" (click)="onMapSelected('../assets/images/map-1.jpg')" [ngClass]="{'green-border' : !activeDefaultMap}">
+                    <button class="image-button" (click)="onMapSelected('../assets/images/map-1.jpg')" [ngClass]="{'green-border' : activeDefaultMap !== null && !activeDefaultMap}">
                         <img src="../assets/images/map-1.jpg" width="400" height="300">
                     </button>                
                 </div>
@@ -53,8 +53,8 @@
         <hr>
         <div class="row spc-top spc-bottom">
             <div class="col-sm">
-                <button class="btn btn-primary spc-right" (click)="save()" [disabled]="title.length <= 2 && description.length <= 2  && mapPath.length <= 2 ">Spremi mapu</button>
-                <button class="btn btn-primary" (click)="saveAndContinueEditing()">Spremi i nastavi sa uređivanjem kasnije</button>
+                <button class="btn btn-primary spc-right" (click)="save('final')" [disabled]="title.length <= 2 && description.length <= 2  && mapPath.length <= 2 ">Spremi mapu</button>
+                <button class="btn btn-primary" (click)="save('temp')">Spremi i nastavi sa uređivanjem kasnije</button>
             </div>
         </div>
         <hr>

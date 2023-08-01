@@ -51,8 +51,17 @@
     margin-right: 20px;
 }
 
+.spc-left {
+    margin-left: 20px;
+}
+
 .points {
     font-weight: bold;
     font-size: 1.3rem;
     align-items: center;
+  }
+
+  .me {
+    border: 2px solid !important;
+    border-color:green !important;
   }
