@@ -18,12 +18,14 @@ namespace GamingNProgramming.Repository
         protected AppDbContext DbContext;
         protected DbSet<Player> Entities;
         protected DbSet<Friend> FriendEntities;
+        protected DbSet<PlayerTask> PlayerTaskEntities;
 
         public PlayerRepository(AppDbContext context)
         {
             DbContext = context;
             Entities = DbContext.Set<Player>();
             FriendEntities = DbContext.Set<Friend>();
+            PlayerTaskEntities = DbContext.Set<PlayerTask>();
         }
 
         #region Professor
@@ -94,6 +96,28 @@ namespace GamingNProgramming.Repository
             return Entities.FirstOrDefault(a => a.Username == username) ?? null;
         }
 
+        public async Task<bool> InsertPlayerTask(PlayerTask playerTask)
+        {
+            PlayerTaskEntities.Add(playerTask);
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId)
+        {
+            var list = await PlayerTaskEntities
+                .Where(p => p.PlayerId == playerId)
+                .Include(p => p.Assignment)
+                .OrderByDescending(p => p.DateCreated)           
+                .ToListAsync();
+            return list;
+        }
+        public async Task<bool> UpdatePlayer(Player player)
+        {
+            Entities.Update(player);
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
         public async Task<PagedList<Player>> FindAsync(
            List<Expression<Func<Player, bool>>> filter = null,
            string sortOrder = "",

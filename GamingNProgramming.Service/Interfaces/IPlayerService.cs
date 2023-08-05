@@ -59,6 +59,8 @@ namespace GamingNProgramming.Service
            string includeProperties = ""
         );
 
+        Task<List<PlayerTask>> GetPlayerTask(Guid playerId);
+
         #endregion
     }
 }

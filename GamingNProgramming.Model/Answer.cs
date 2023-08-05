@@ -20,7 +20,6 @@ namespace GamingNProgramming.Model
         [ForeignKey("AssignmentId")]
         public Guid? AssignmentId { get; set; }
 
-        public virtual ICollection<PlayerTask> PlayersTasks { get; set; }
 
     }
 }

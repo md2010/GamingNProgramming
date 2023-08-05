@@ -13,9 +13,44 @@ namespace GamingNProgramming.Service
     public class GameService : IGameService
     {
         private IMapRepository Repository { get; set; }
-        public GameService(IMapRepository repo)
+        private IPlayerRepository PlayerRepository { get; set; }
+        public GameService(IMapRepository repo, IPlayerRepository playerRepository)
         {
             this.Repository = repo;
+            this.PlayerRepository = playerRepository;
+        }
+
+        public async Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap)
+        {
+            playerTask.DateUpdated = DateTime.Now;
+            playerTask.DateCreated = DateTime.Now;
+            playerTask.Id = Guid.NewGuid();
+
+            await this.PlayerRepository.InsertPlayerTask(playerTask);
+
+            var player = await PlayerRepository.GetAsync(playerTask.PlayerId);
+            if(isDefaultMap)
+            {
+                player.DefultPoints += playerTask.ScoredPoints;
+            }
+            else
+            {
+                player.Points += playerTask.ScoredPoints;
+            }
+
+            await PlayerRepository.UpdatePlayer(player);
+
+            return true;
+        }
+
+        public async Task<Map> GetAsync(Guid id)
+        {
+            return await this.Repository.GetAsync(id);
+        }
+
+        public async Task<Map> GetTaskAsync(Guid id)
+        {
+            return await this.Repository.GetAsync(id);
         }
 
         public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)

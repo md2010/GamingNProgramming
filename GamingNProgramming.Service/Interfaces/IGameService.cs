@@ -9,6 +9,8 @@ namespace GamingNProgramming.Service.Interfaces
 {
     public interface IGameService
     {
+        Task<Map> GetAsync(Guid id);
+        Task<Map> GetTaskAsync(Guid id);
         Task<bool> AddMapAsync(Guid professorId, Map map);
 
         Task<Map> GetMapByProfessorIdForEditingAsync(Guid id);
@@ -16,5 +18,7 @@ namespace GamingNProgramming.Service.Interfaces
         Task<List<Map>> GetMapByProfessorIdAsync(Guid id);
 
         Task<bool> UpdateMapAsync(Guid professorId, Map map);
+
+        Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap);
     }
 }

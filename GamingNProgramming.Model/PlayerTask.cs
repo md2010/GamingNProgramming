@@ -23,10 +23,10 @@ namespace GamingNProgramming.Model
         public Guid AssignmentId { get; set; }
         public virtual Assignment Assignment { get; set; }
 
-        public double ScoredPoints { get; set; }
+        public int ScoredPoints { get; set; }
         public double Percentage { get; set; }
 
-        public string PlayersCode { get; set; }
-        public virtual ICollection<Answer> Answers { get; set; }
+        public string PlayersCode { get; set; } = "";
+        public string Answers { get; set; } = null;
     }
 }

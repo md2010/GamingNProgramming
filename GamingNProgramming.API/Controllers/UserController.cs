@@ -12,6 +12,7 @@ using System;
 using MySqlX.XDevAPI.Common;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.AspNetCore.Mvc.Core.Infrastructure;
+using GamingNProgramming.Service.Interfaces;
 
 namespace GamingNProgramming.WebAPI.Controllers
 {
@@ -22,12 +23,18 @@ namespace GamingNProgramming.WebAPI.Controllers
         protected ICoreUserService Service { get; set; }
         protected IPlayerService PlayerService { get; set; }
         protected IProfessorService ProfessorService { get; set; }
+        protected IGameService GameService { get; set; }
 
-        public UserController(ICoreUserService service, IPlayerService playerService, IProfessorService professorService)
+        public UserController(
+            ICoreUserService service, 
+            IPlayerService playerService, 
+            IProfessorService professorService,
+            IGameService gameService)
         {
             this.Service = service;
             this.PlayerService = playerService;
             this.ProfessorService = professorService;
+            this.GameService = gameService;
         }
 
         #region Professor
@@ -100,11 +107,22 @@ namespace GamingNProgramming.WebAPI.Controllers
         {
             var uuid = Helper.TransformGuid(id);
 
-            List<Expression<Func<Player, bool>>> filters = new List<Expression<Func<Player, bool>>>();            
+            List<Expression<Func<Player, bool>>> filters = new List<Expression<Func<Player, bool>>>();
             filters.Add(u => u.UserId == uuid);
 
             var result = (await PlayerService.FindAsync(filters, "", "Avatar")).FirstOrDefault();
-            return Ok(result);
+            if (result.ProfessorId != null)
+            {
+                var maps = await this.GameService.GetMapByProfessorIdAsync((Guid)result.ProfessorId);
+                var sum = 0;
+                foreach (var map in maps)
+                {
+                    sum += map.Points;
+                }
+                return Ok(new PlayerREST() { Player = result, Sum = sum} );
+            }
+        
+            return Ok(new PlayerREST() { Player = result, Sum = 0 });
         }
 
         [Authorize]
@@ -226,6 +244,12 @@ namespace GamingNProgramming.WebAPI.Controllers
             public string IncludeProperties { get; set; } = "";
             [FromQuery(Name = "professorId")]
             public string ProfessorId { get; set; } = "";
+        }
+
+        public class PlayerREST
+        {
+            public Player Player { get; set; }
+            public int Sum { get; set; } = 0;
         }
 
 

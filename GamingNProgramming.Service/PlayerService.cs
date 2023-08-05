@@ -133,6 +133,11 @@ namespace GamingNProgramming.Service
             return await Repository.GetPlayersNotFriendsAsync(id, filter, includeProperties);
         }
 
+        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId)
+        {
+            var list = await Repository.GetPlayerTask(playerId);
+            return list;
+        }
         #endregion
     }
 }

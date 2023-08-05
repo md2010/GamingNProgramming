@@ -24,6 +24,13 @@ namespace GamingNProgramming.Repository
         Task RemoveStudentAsync(Player entity);
 
         #endregion
+
+        Task<bool> InsertPlayerTask(PlayerTask playerTask);
+
+        Task<List<PlayerTask>> GetPlayerTask(Guid playerId);
+
+        Task<bool> UpdatePlayer(Player player);
+
         Task<IEnumerable<Player>> GetAllAsync();
 
         Task<Player> GetAsync(Guid id);

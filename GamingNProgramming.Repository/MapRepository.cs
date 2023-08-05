@@ -36,7 +36,29 @@ namespace GamingNProgramming.Repository
 
         public async Task<Map> GetAsync(Guid id)
         {
-            return await Entities.FindAsync(id);
+            var map = Entities
+                .Where(a => a.Id == id)
+                .Where(a => a.IsVisible == true)
+                .Include(a => a.Levels)
+                .ThenInclude(b => b.Assignments)
+                    .ThenInclude(c => c.Answers)
+                .Include(a => a.Levels)
+                    .ThenInclude(b => b.Assignments)
+                        .ThenInclude(c => c.TestCases)
+                .FirstOrDefault();
+
+            return map;
+        }
+
+        public async Task<Assignment> GetTaskAsync(Guid id)
+        {
+            var a = AssignmentEntities
+                .Where(a => a.Id == id)
+                .Include(a => a.Answers)               
+                .Include(a => a.TestCases)                    
+                .FirstOrDefault();
+
+            return a;
         }
 
         public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)

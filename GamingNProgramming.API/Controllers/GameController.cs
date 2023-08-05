@@ -1,9 +1,11 @@
 ﻿using GamingNProgramming.Common;
 using GamingNProgramming.Model;
+using GamingNProgramming.Repository;
 using GamingNProgramming.Service;
 using GamingNProgramming.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,10 +17,44 @@ namespace GamingNProgramming.WebAPI.Controllers
     public class GameController : ControllerBase
     {
         protected IGameService GameService { get; set; }
+        protected IPlayerService PlayerService { get; set; }
 
-        public GameController(IGameService service)
+        public GameController(IGameService service, IPlayerService playerService)
         {
             this.GameService = service;
+            PlayerService = playerService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("map/{id}")]
+        public async Task<IActionResult> GetMap(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.GetAsync(Helper.TransformGuid(id));
+
+            return Ok(result);
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("task/{id}")]
+        public async Task<IActionResult> GetTask(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.GetAsync(Helper.TransformGuid(id));
+
+            return Ok(result);
+
         }
 
         [Authorize]
@@ -84,6 +120,40 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.GameService.UpdateMapAsync(Helper.TransformGuid(id), map);
 
             return Ok();
+
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [Route("insert-player-task")]
+        public async Task<IActionResult> InsertPlayerTask([FromBody] InsertPlayerTaskModel model)
+        {
+            var playerTask = MapPlayerTask(model);
+            var result = await GameService.InsertPlayerTask(playerTask, model.IsDefaultMap);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("player-task/{playerId}")]
+        public async Task<IActionResult> GetPlayerTask(string playerId)
+        {
+            if (playerId == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId));
+
+            return Ok(result);
 
         }
 
@@ -254,6 +324,17 @@ namespace GamingNProgramming.WebAPI.Controllers
             public string Error { get; set; }
         }
 
+        public class InsertPlayerTaskModel
+        {
+            public bool IsDefaultMap { get; set; }
+            public string PlayerId { get; set; }
+            public string AssignmentId { get; set; }
+            public int ScoredPoints { get; set; }
+            public double Percentage { get; set; }
+            public string PlayersCode { get; set; } = "";
+            public string Answers { get; set; } = "";
+        }
+
         public class MapModel
         {
             public string Id { get; set; } = "";
@@ -382,6 +463,18 @@ namespace GamingNProgramming.WebAPI.Controllers
 
             map.Levels = levels;
             return map;
+        }
+
+        private PlayerTask MapPlayerTask(InsertPlayerTaskModel model)
+        {
+            PlayerTask entity = new PlayerTask();
+            entity.PlayerId = Helper.TransformGuid(model.PlayerId);
+            entity.AssignmentId = Helper.TransformGuid(model.AssignmentId);
+            entity.ScoredPoints = model.ScoredPoints;
+            entity.Percentage = model.Percentage;
+            entity.Answers = model.Answers;
+
+            return entity;
         }
 
         #endregion
