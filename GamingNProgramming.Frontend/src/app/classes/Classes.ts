@@ -5,6 +5,7 @@ export class Map {
     path: string = ''
     isVisible: boolean = false
     levels : Array<Level> = []
+    professorId : string = ''
 
     constructor(id: string, title: string, description: string, path: string, isVisible: boolean, levels: Array<Level>) { 
         this.levels = levels; 
@@ -22,6 +23,7 @@ export class Level {
     title: string = ''
     description: string = ''
     assignments : Array<Assignment> = []
+    number : number = 0
 
     constructor(tasks: Array<Assignment>) { this.assignments = tasks; }
 }
@@ -41,6 +43,7 @@ export class Assignment {
     seconds : number = 0
     isMultiSelect: boolean = false
     badgeId: string = ''
+    number : number = 0
    
 }
 

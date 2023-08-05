@@ -7,6 +7,23 @@
     margin-left: 5px;
 }
 
+.spc-left {
+    margin-left: 10px;
+}
+
+.p-answer {
+    font-size: medium;
+    margin-top: 15px;
+}
+
+.tp-radio-group {  
+    display: inline-flex;  
+    flex-direction: column;  
+ }  
+ .tp-radio-button {  
+    margin: 5px;  
+ }  
+
 .field_class {
     border-radius: 6px;
     border-style: solid;

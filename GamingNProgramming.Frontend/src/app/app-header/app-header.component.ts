@@ -18,13 +18,14 @@ export class AppHeaderComponent {
   role : string | null= "";
   route = "";
 
-  constructor(private authService: AuthService, private activeRoute: ActivatedRoute, private router: Router) {}
-
-  ngOnInit() {  
+  constructor(private authService: AuthService, private activeRoute: ActivatedRoute, private router: Router) {
     this.authorizedSub = this.authService.authorized.subscribe(data => {
       this.authorized = data.isAuth
       this.role = data.roleName
     });
+  }
+
+  ngOnInit() {  
     this.activeRoute.url.subscribe((event) => {
       console.log(event[0].path); 
       this.route = event[0].path;

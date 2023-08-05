@@ -36,6 +36,7 @@ ngOnInit() {
 }
 
 mapInfo(id: string) {
-  this.router.navigate(['/map-info', id]);
+  let map = this.maps.find(f => f.id === id);
+  this.router.navigate(['/map-info',  map!.id], {state : { avatarSrc : this.user.avatar.path} });
 }
 }

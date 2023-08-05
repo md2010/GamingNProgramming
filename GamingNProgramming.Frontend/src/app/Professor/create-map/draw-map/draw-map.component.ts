@@ -16,6 +16,10 @@ export class DrawMapComponent {
   @Input() levels! : Array<Level>; //10 max
   @Input() draw : boolean = false;
 
+  @Input() userLevel : number | null = null
+  @Input() userTask : number | null = null
+  @Input() avatarSrc : string = ''
+
   @ViewChild('canvas') canvas!: ElementRef;
 
   ctx!: CanvasRenderingContext2D;
@@ -39,10 +43,10 @@ export class DrawMapComponent {
   ngOnInit() {
     const img = this.image;
     this.image.onload = () => {
-      this.ctx.drawImage(img, 0, 0, img.width, img.height);
+      this.ctx.drawImage(img, 0, 0, img.width, img.height);  
       if(this.draw) {
         this.drawCircles();
-      }
+      }   
     };
     this.image.src = this.imgSrc;
   }
@@ -63,16 +67,12 @@ export class DrawMapComponent {
         let startAngle = 0; 
         let endAngle = 2 * Math.PI; 
         this.ctx.arc(x, y, radius, startAngle, endAngle); 
-        if(this.authService.getAuthorized().roleName === 'Student') {
-          if(i == 3 && j == 4)
-          {
-            const img = this.avatar;
-            this.avatar.onload = () => {
-              this.ctx.drawImage(img, x-15, y-15, img.width, img.height);
-            };
-            this.avatar.src = "../assets/images/man-avatar-1.png"
-
-          }
+        if(this.authService.getAuthorized().roleName === 'Student' && this.userLevel != null && this.userTask != null && i == this.userLevel && j == this.userTask) {
+          var img = this.avatar;
+          this.avatar.onload = () => {
+          this.ctx.drawImage(img, x-15, y-15, img.width, img.height);
+        }
+        this.avatar.src = this.avatarSrc     
         }    
         else {
           this.ctx.fillStyle = "yellow";

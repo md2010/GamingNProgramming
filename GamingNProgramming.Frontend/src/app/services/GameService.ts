@@ -58,6 +58,37 @@ export class GameService {
   
       return this.http.get<any>(this.apiUrl + '/get-map/' + id, {headers: headersToSend, observe : 'response'});
   }
+  getMap(id: string) {
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+  
+      return this.http.get<any>(this.apiUrl + '/map/' + id, {headers: headersToSend, observe : 'response'});
+  }
+  getTask(id: string) {
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+  
+      return this.http.get<any>(this.apiUrl + '/task/' + id, {headers: headersToSend, observe : 'response'});
+  }
+  getPlayerTask(id: string) {
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+  
+      return this.http.get<any>(this.apiUrl + '/player-task/' + id, {headers: headersToSend, observe : 'response'});
+  }
+
+  insertPlayerTask(playerTask : any) {
+    JSON.stringify(playerTask);
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+      .set('Accept','application/json');
+  
+      return this.http.post<any>(this.apiUrl + '/insert-player-task', playerTask, {headers: headersToSend, observe : 'response'});
+  }
  
 }
 

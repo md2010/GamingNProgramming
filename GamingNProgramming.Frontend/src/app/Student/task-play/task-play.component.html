@@ -1,6 +1,7 @@
-<div class="row">
+<div class="row" *ngIf="task.isCoding">
         <div class="col-md-4">
-                <h3>Task</h3>
+                <h3 class="spc-left">{{task.title}}</h3>
+                <div class="spc-left">{{task.description}}</div>
         </div>
         <div class="col-md-8">
                 <nu-monaco-editor 
@@ -17,7 +18,7 @@
         <app-spinner-component></app-spinner-component>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="task.isCoding">
         <div>
                 <div>
                         <label class="spc-button">Unesi ulazne podatke (ako ih je više, odvoji ih razmakom, npr: 1 5 3): </label>
@@ -31,4 +32,53 @@
                         <p>{{compileResult}}</p>
                 </div>
         </div>
+</div>
+
+<div class="row" *ngIf="!task.isCoding">
+        <div class="col-md-4">
+                <h3 class="spc-left">{{task.title}}</h3>
+        </div>
+</div>
+<div class="row" *ngIf="!task.isCoding">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+                <div class="fw-bold">{{task.description}}</div>
+                <div *ngIf="!task.isMultiSelect">
+                        <mat-radio-group aria-label="Select an option" name="correctAnswer" class="tp-radio-group" [(ngModel)]="checkedAnswer">
+                            <mat-radio-button *ngFor="let c of task.answers; let ind = index;" [value]="c.offeredAnswer" class="tp-radio-button"> 
+                                <p class="p-answer">{{c.offeredAnswer}}</p>                            
+                            </mat-radio-button>                
+                        </mat-radio-group>                         
+                    </div> 
+                    <div *ngIf="task.isMultiSelect">
+                        <ul>
+                            <li *ngFor="let c of task.answers; let ind = index;">
+                                <mat-checkbox  [value]="c.offeredAnswer" name="checkbox{{ind}}"> 
+                                        <p class="p-answer">{{c.offeredAnswer}} </p>                                
+                                </mat-checkbox> 
+                            </li> 
+                        </ul>                                       
+                    </div>
+        </div>
+        <div class="col-md-4"></div>
+</div>
+<hr>
+<div class="row" *ngIf="!task.isCoding">
+        <div class="col-4 spc-left spc-button">        
+                <button type="button" class="btn btn-success" (click)="checkCorrectAnswer()" [disabled]="checkedAnswer === null || done">Predaj</button> 
+                <div class="spc-button spc-bottom" *ngIf="done">
+                        <br>  
+                        <div *ngIf="theoryResult">
+                                <p>Odgovor je <strong>točan!</strong></p>
+                                <p>Osvojeno: <strong>{{task.points}} bodova.</strong></p>
+                        </div>
+                        <div *ngIf="!theoryResult">
+                                <p>Odgovor je <strong>netočan.</strong></p>
+                                <p>Točan odgovor: <strong>{{correctAnswer}}</strong></p>
+                        </div>                   
+                </div>               
+        </div>
+</div>
+<div class="row">
+        <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
 </div>

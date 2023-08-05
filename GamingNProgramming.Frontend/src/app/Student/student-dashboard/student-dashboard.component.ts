@@ -20,11 +20,12 @@ export class StudentDashboardComponent {
 
   constructor (private userService: UserService, private router: Router, private authService: AuthService) {}
 
-  user : User | null = null;
+  user : any | null = null;
   loaded = false;
   showFindFriends = false;
   showMyFriends = false;
   showHome = true;
+  professorMapPoints = 0;
 
   ngOnInit() {    
     this.getPlayer().then(() => {
@@ -38,7 +39,8 @@ export class StudentDashboardComponent {
     .subscribe(
       (Response) => {
         if(Response.body) {
-          this.user = Response.body;
+          this.user = Response.body.player;
+          this.professorMapPoints = (this.user.points / Response.body.sum) * 100;
           resolve('done');
         }
       },
@@ -74,6 +76,7 @@ export class StudentDashboardComponent {
 interface User {
   avatar: Avatar;
   username: string;
+  professorId : string | null
 }
 
 interface Avatar {

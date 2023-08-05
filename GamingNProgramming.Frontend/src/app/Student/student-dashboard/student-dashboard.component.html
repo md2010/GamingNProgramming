@@ -7,22 +7,11 @@
     </div>
     <p class="text-white text-center">{{user!.username}}</p>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">      
-      <li class="progress-circle">
-        <div class="progress yellow">
-            <span class="progress-left">
-                            <span class="progress-bar"></span>
-            </span>
-            <span class="progress-right">
-                            <span class="progress-bar"></span>
-            </span>
-            <div class="progress-value">37.5%</div>
-          </div>
-      </li> 
+    <ul class="nav nav-pills flex-column mb-auto">           
       <li class="nav-item">
         <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showHome === true" (click)="home()">
           <svg class="bi me-2" width="16" height="16"></svg>
-          Home
+          Početna
         </a>
       </li>    
       <li class="nav-item">
@@ -42,7 +31,30 @@
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Moja postignuća
         </a>
-      </li> 
+      </li>
+      <li class="progress-circle">
+        <div class="progress yellow">
+            <span class="progress-left">
+                            <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right">
+                            <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">37.5%</div>
+          </div>
+      </li>
+      <li class="progress-circle" *ngIf="user.professorId !== null">
+        <p>Postignuto na profesorovim mapama:</p>
+        <div class="progress yellow">
+            <span class="progress-left">
+                            <span class="progress-bar"></span>
+            </span>
+            <span class="progress-right" style="--deg:150deg;">
+                            <span class="progress-bar"></span>
+            </span>
+            <div class="progress-value">{{professorMapPoints}}</div>
+          </div>
+      </li>   
     </ul>
 </div>
 </div>

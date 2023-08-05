@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTaskDialogComponent } from 'src/app/Professor/create-map/create-task-dialog/create-task-dialog.component';
 import { DrawMapComponent } from 'src/app/Professor/create-map/draw-map/draw-map.component';
+import { GameService } from 'src/app/services/GameService';
 
 @Component({
   selector: 'app-map-info',
@@ -19,19 +20,70 @@ export class MapInfoComponent {
 
   id : string | null = null
   sub : any;
-  map! : Map;
+  mapId! : string | null;
+  map! : Map
   role! : string | null
+  userLevel : number | null = null
+  userTask : number | null = null
+  playersTasks : any = []
+  loaded : boolean = false
+  avatarSrc : string = ''
 
-  constructor( private route: ActivatedRoute, private router: Router, private authService : AuthService, public dialog: MatDialog) { 
-    this.map = this.router.getCurrentNavigation()!.extras!.state!['map'];
-   }
+  constructor( private route: ActivatedRoute, private router: Router, private authService : AuthService, public dialog: MatDialog, private gameService: GameService) { 
+    this.avatarSrc = this.router.getCurrentNavigation()!.extras!.state!['avatarSrc'];
+  }
 
   ngOnInit() {
     this.sub = this.route.paramMap.subscribe((params) => {
       console.log(params);
-      this.id = params.get('id');
+      this.mapId = params.get('id');
     });
     this.role = this.authService.getAuthorized().roleName
+    this.getMap().then(() => {
+      if(this.role == 'Student')
+      {
+        this.gameService.getPlayerTask(this.authService.getAuthorized().userId!) 
+        .subscribe(
+        (Response) => {
+          if(Response) {
+            this.playersTasks = Response.body            
+            var task = this.playersTasks[0].assignment;     
+            var level = this.map.levels.find(l => l.id === task.levelId);
+            if(level) {
+              this.userLevel = level!.number;
+              this.userTask = task.number;
+            }
+            else {
+              this.userLevel = 0;
+              this.userTask = 0;
+            }
+            this.loaded = true
+          }
+        (error: any) => {
+          console.log(error.error);
+        }
+      })
+    }
+  })    
+}  
+
+  getMap() {
+    var promise = new Promise((resolve, reject) => { this.gameService.getMap(this.mapId!) 
+      .subscribe(
+        (Response) => {
+          if(Response) {
+            this.map = Response.body;  
+            this.loaded = this.authService.getAuthorized().roleName === 'Student' ? false : true 
+            resolve('done')     
+          }        
+        },
+        (error: any) => {
+          console.log(error.error);
+          reject()
+        }
+    )
+       });
+     return promise;
   }
 
   openDialog(i : number, levelNumber: number) {
@@ -40,6 +92,10 @@ export class MapInfoComponent {
       height: '900px', 
       data: { task: this.map.levels[levelNumber].assignments[i], index : i, disableEdit : true },    
     });
+  }
+
+  taskPlay(taskId : string, levelId : string) {
+    this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id} });
   }
 
   onBack(): void {
