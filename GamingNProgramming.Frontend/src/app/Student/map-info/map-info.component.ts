@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Map } from 'src/app/classes/Classes';
+import { Assignment, Map, PlayerTask } from 'src/app/classes/Classes';
 import { AuthService } from 'src/app/services/AuthService';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateTaskDialogComponent } from 'src/app/Professor/create-map/create-task-dialog/create-task-dialog.component';
 import { DrawMapComponent } from 'src/app/Professor/create-map/draw-map/draw-map.component';
 import { GameService } from 'src/app/services/GameService';
+import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 
 @Component({
   selector: 'app-map-info',
   templateUrl: './map-info.component.html',
   styleUrls: ['./map-info.component.css'],
   standalone: true,
-  imports: [CommonModule, CreateTaskDialogComponent, DrawMapComponent]
+  imports: [CommonModule, CreateTaskDialogComponent, DrawMapComponent, SpinnerComponentComponent]
   
 })
 export class MapInfoComponent {
@@ -25,12 +26,19 @@ export class MapInfoComponent {
   role! : string | null
   userLevel : number | null = null
   userTask : number | null = null
-  playersTasks : any = []
+  playersTasks : Array<PlayerTask> = []
   loaded : boolean = false
   avatarSrc : string = ''
 
   constructor( private route: ActivatedRoute, private router: Router, private authService : AuthService, public dialog: MatDialog, private gameService: GameService) { 
-    this.avatarSrc = this.router.getCurrentNavigation()!.extras!.state!['avatarSrc'];
+    if(this.router.getCurrentNavigation()!.extras!.state!) {
+      this.avatarSrc = this.router.getCurrentNavigation()!.extras!.state!['avatarSrc'];
+      localStorage.setItem('avatarSrc', this.avatarSrc);
+    }
+    else {
+      this.avatarSrc = localStorage.getItem('avatarSrc')!;
+    }
+
   }
 
   ngOnInit() {
@@ -50,7 +58,7 @@ export class MapInfoComponent {
             var task = this.playersTasks[0].assignment;     
             var level = this.map.levels.find(l => l.id === task.levelId);
             if(level) {
-              this.userLevel = level!.number;
+              this.userLevel = level!.number - 1;
               this.userTask = task.number;
             }
             else {
@@ -84,6 +92,16 @@ export class MapInfoComponent {
     )
        });
      return promise;
+  }
+
+  isPlayed(taskId : string) {
+    var playerTask = this.playersTasks.find(b => b.assignmentId === taskId)
+    if(playerTask) {
+      return true;
+    } 
+    else {
+      return false;
+    }                        
   }
 
   openDialog(i : number, levelNumber: number) {

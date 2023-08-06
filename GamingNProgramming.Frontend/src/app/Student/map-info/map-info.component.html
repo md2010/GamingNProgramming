@@ -3,6 +3,11 @@
     <a href="javascript:void(0);" (click)="onBack()" class="previous">&#8249;</a>
   </div>
 </div>
+
+<div *ngIf="!loaded">
+  <app-spinner-component></app-spinner-component>
+</div>
+
 <div class="row" *ngIf="loaded">
 <div class="col-4">
 <div class="row row-cols">
@@ -15,7 +20,7 @@
             <ul class="list-group list-group-flush" *ngFor="let a of m.assignments; let i = index;">
               <li class="list-group-item">
                 Zadatak {{i+1}} : {{a.title}}
-                <button class="btn btn-primary" *ngIf="role === 'Student'" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;">Igraj</button>
+                <button class="btn btn-primary" *ngIf="role === 'Student'" [disabled]="isPlayed(a.id)" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;">Igraj</button>
                 <button class="btn btn-primary" *ngIf="role === 'Professor'" (click)="openDialog(i, ind)" style="margin-left: 10px; margin-right: 10px;">Pogledaj zadatak</button>
               </li>
             </ul>           

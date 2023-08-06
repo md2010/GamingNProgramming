@@ -1,22 +1,33 @@
-import { Component, Input } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router'
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NuMonacoEditorModule, NuMonacoEditorEvent, NuMonacoEditorModel } from '@ng-util/monaco-editor';
+import { NuMonacoEditorModule, NuMonacoEditorModel } from '@ng-util/monaco-editor';
 import { GameService } from 'src/app/services/GameService';
 import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 import { Assignment } from 'src/app/classes/Classes';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { AuthService } from 'src/app/services/AuthService';
+import { TimerComponent } from './timer/timer.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-task-play',
   templateUrl: './task-play.component.html',
   styleUrls: ['./task-play.component.css'],
   standalone: true,
-  imports: [FormsModule, CommonModule, NuMonacoEditorModule, SpinnerComponentComponent, MatCheckboxModule, MatRadioModule]
+  imports: [
+    FormsModule, 
+    CommonModule, 
+    NuMonacoEditorModule, 
+    SpinnerComponentComponent, 
+    MatCheckboxModule, 
+    MatRadioModule, 
+    TimerComponent, 
+    MatDialogModule
+  ]
 })
 
 export class TaskPlayComponent {
@@ -27,6 +38,9 @@ export class TaskPlayComponent {
   error : boolean = true
   args : string | null = null
   loading = false;
+  loaded = false;
+  timerStarted = false;
+  timerDone = false;
   checkedAnswers : Array<string> = [];
   checkedAnswer : string | null = null;
   theoryResult :  boolean = false
@@ -39,17 +53,25 @@ export class TaskPlayComponent {
   isDefaultMap! : boolean;
   mapId! : string;
 
-  constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, private authService : AuthService) { 
+  value: string = '';
+  editorOptions = { theme: 'vs-dark', language: 'c' };
+  model: NuMonacoEditorModel = {
+    language: "c"
+  }; 
+
+
+  @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
+
+  constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, private authService : AuthService, public dialog: MatDialog,) { 
     this.isDefaultMap = this.router.getCurrentNavigation()!.extras!.state!['isDefaultMap'];
     this.mapId = this.router.getCurrentNavigation()!.extras!.state!['mapId'];
    }
 
   ngOnInit() {
     this.sub = this.route.paramMap.subscribe((params) => {
-      console.log(params);
       this.taskId = params.get('id');
     });
-    this.gameService.getTask(this.mapId) 
+    this.gameService.getTask(this.taskId!) 
       .subscribe(
         (Response) => {
           if(Response) {
@@ -58,19 +80,24 @@ export class TaskPlayComponent {
               this.correctAnswer = this.task.answers.find((a) => a.isCorrect === true)?.offeredAnswer;
             else
             this.value = this.task.initialCode;        
-          }        
+          }
+          this.loaded = true;        
         },
         (error: any) => {
           console.log(error.error);
         }
       )
-  }  
+  }
 
-  value: string = '';
-  editorOptions = { theme: 'vs-dark', language: 'c' };
-  model: NuMonacoEditorModel = {
-    language: "c"
-  }; 
+  startCountDown() {
+    this.timerStarted = true;
+  }
+
+  countDownDone(message: string) {
+    this.timerStarted = false;
+    this.timerDone = true;
+    this.dialog.open(this.notification);
+  }
 
   checkCorrectAnswer() {
     if(this.task.isMultiSelect) {
@@ -142,7 +169,7 @@ export class TaskPlayComponent {
 
 
   onBack(): void {
-    this.router.navigate([".."]);
+    this.router.navigate(["/map-info/", this.mapId]);
   }
   goBack(): void {
     this.onBack();

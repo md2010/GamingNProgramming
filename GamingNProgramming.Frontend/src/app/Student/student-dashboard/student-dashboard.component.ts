@@ -26,6 +26,7 @@ export class StudentDashboardComponent {
   showMyFriends = false;
   showHome = true;
   professorMapPoints = 0;
+  professorMapPointsDeg = '0deg';
 
   ngOnInit() {    
     this.getPlayer().then(() => {
@@ -41,6 +42,8 @@ export class StudentDashboardComponent {
         if(Response.body) {
           this.user = Response.body.player;
           this.professorMapPoints = (this.user.points / Response.body.sum) * 100;
+          var deg = (this.professorMapPoints * 360)/100;
+          this.professorMapPointsDeg = deg + 'deg';
           resolve('done');
         }
       },

@@ -17,6 +17,15 @@ export class Map {
     }
 }
 
+export class PlayerTask {
+    id: string =''
+    assignmentId : string = ''
+    playerId : string = ''
+    scorePoints: number = 0
+    percentage: number = 0
+    answers : string = ''
+    assignment!: Assignment 
+}
 
 export class Level {
     id: string = ''
@@ -44,7 +53,7 @@ export class Assignment {
     isMultiSelect: boolean = false
     badgeId: string = ''
     number : number = 0
-   
+    levelId :  string = ''
 }
 
 export class TestCase {

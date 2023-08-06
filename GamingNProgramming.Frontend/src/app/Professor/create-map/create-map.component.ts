@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AvatarModule } from '@coreui/angular';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { DrawMapComponent } from './draw-map/draw-map.component';
 import { CreateTaskDialogComponent } from './create-task-dialog/create-task-dialog.component';

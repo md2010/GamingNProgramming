@@ -49,10 +49,10 @@
             <span class="progress-left">
                             <span class="progress-bar"></span>
             </span>
-            <span class="progress-right" style="--deg:150deg;">
+            <span class="progress-right" [ngStyle]="{'--deg' : professorMapPointsDeg}">
                             <span class="progress-bar"></span>
             </span>
-            <div class="progress-value">{{professorMapPoints}}</div>
+            <div class="progress-value">{{professorMapPoints}}%</div>
           </div>
       </li>   
     </ul>

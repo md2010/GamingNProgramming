@@ -36,3 +36,23 @@
     font-size: 0.9rem;
     letter-spacing: 2px;
 }
+
+.to-bottom {
+    padding: 15px;
+    position:absolute;
+    bottom:0;
+}
+
+textarea {
+    overflow-y: scroll;
+    height: 120px;
+    width: 90%;
+}
+
+.timer {
+    text-align: center;
+    align-items: center;
+    background-color: #ED1D24;
+    height: 25px;
+    color: white;
+}

@@ -1,5 +1,12 @@
+<div *ngIf="loaded">
+<div class="row timer" *ngIf="timerStarted && task.isTimeMeasured">
+        <timer [seconds]="10" (countDownEvent)="countDownDone($event)"></timer>
+</div>
+
 <div class="row" *ngIf="task.isCoding">
         <div class="col-md-4">
+                <p class="spc-left" *ngIf="task.isTimeMeasured">Zadatku se mjeri vrijeme. Pokreni odbrojavanje klikom na gumb.</p>
+                <button type="button" *ngIf="task.isTimeMeasured" [disabled]="timerDone || timerStarted" class="btn btn-success spc-left" (click)="startCountDown()">Pokreni odbrojavanje</button>
                 <h3 class="spc-left">{{task.title}}</h3>
                 <div class="spc-left">{{task.description}}</div>
         </div>
@@ -8,7 +15,8 @@
                 [(ngModel)]="value" 
                 [options]="editorOptions" 
                 [model]="model"
-                [height]="'500'">
+                [disabled]="!timerStarted && task.isTimeMeasured"
+                [height]="'470'">
                 </nu-monaco-editor>
         </div>
         <hr>
@@ -22,20 +30,21 @@
         <div>
                 <div>
                         <label class="spc-button">Unesi ulazne podatke (ako ih je više, odvoji ih razmakom, npr: 1 5 3): </label>
-                        <input class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="args">
+                        <input [disabled]="!timerStarted && task.isTimeMeasured" class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="args">
                 </div>
                 <button type="button" class="btn btn-primary spc-button" (click)="compile()">Pokreni</button>
                 <button type="button" class="btn btn-success" (click)="compile()" [disabled]=error>Predaj</button>
                 <hr>
-                <div class="spc-button">
-                        <p>Rezultat:</p><br>
-                        <p>{{compileResult}}</p>
+                <div class="spc-button col-12">
+                        <textarea readonly>{{compileResult}}</textarea>
                 </div>
         </div>
 </div>
 
 <div class="row" *ngIf="!task.isCoding">
         <div class="col-md-4">
+                <p class="spc-left" *ngIf="task.isTimeMeasured">Zadatku se mjeri vrijeme. Pokreni odbrojavanje klikom na gumb.</p>
+                <button type="button" *ngIf="task.isTimeMeasured" [disabled]="timerDone || timerStarted" class="btn btn-success spc-left" (click)="startCountDown()">Pokreni odbrojavanje</button>
                 <h3 class="spc-left">{{task.title}}</h3>
         </div>
 </div>
@@ -44,7 +53,7 @@
         <div class="col-md-4">
                 <div class="fw-bold">{{task.description}}</div>
                 <div *ngIf="!task.isMultiSelect">
-                        <mat-radio-group aria-label="Select an option" name="correctAnswer" class="tp-radio-group" [(ngModel)]="checkedAnswer">
+                        <mat-radio-group aria-label="Select an option" name="correctAnswer"  [disabled]="!timerStarted && task.isTimeMeasured" class="tp-radio-group" [(ngModel)]="checkedAnswer">
                             <mat-radio-button *ngFor="let c of task.answers; let ind = index;" [value]="c.offeredAnswer" class="tp-radio-button"> 
                                 <p class="p-answer">{{c.offeredAnswer}}</p>                            
                             </mat-radio-button>                
@@ -53,7 +62,7 @@
                     <div *ngIf="task.isMultiSelect">
                         <ul>
                             <li *ngFor="let c of task.answers; let ind = index;">
-                                <mat-checkbox  [value]="c.offeredAnswer" name="checkbox{{ind}}"> 
+                                <mat-checkbox  [value]="c.offeredAnswer" name="checkbox{{ind}}" [disabled]="!timerStarted && task.isTimeMeasured"> 
                                         <p class="p-answer">{{c.offeredAnswer}} </p>                                
                                 </mat-checkbox> 
                             </li> 
@@ -80,5 +89,18 @@
         </div>
 </div>
 <div class="row">
-        <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
+        <div class="col-2 to-bottom">
+                <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
+        </div>
 </div>
+</div>
+
+<ng-template #notification>
+        <h2 matDialogTitle>Obavijest</h2>
+        <mat-dialog-content>
+           <p>Vrijeme je isteklo!</p>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+        </mat-dialog-actions>
+</ng-template>

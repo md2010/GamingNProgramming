@@ -48,9 +48,9 @@ namespace GamingNProgramming.Service
             return await this.Repository.GetAsync(id);
         }
 
-        public async Task<Map> GetTaskAsync(Guid id)
+        public async Task<Assignment> GetTaskAsync(Guid id)
         {
-            return await this.Repository.GetAsync(id);
+            return await this.Repository.GetTaskAsync(id);
         }
 
         public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)
@@ -91,9 +91,10 @@ namespace GamingNProgramming.Service
             map.Id = Guid.NewGuid();
             var points = 0;
 
-            int i = 1; int j = 1; 
+            int i = 1; 
             foreach (var level in map.Levels)
             {
+                int j = 1;
                 level.DateCreated = DateTime.Now;
                 level.DateUpdated = DateTime.Now;
                 level.Id = Guid.NewGuid();

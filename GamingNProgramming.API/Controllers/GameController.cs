@@ -51,7 +51,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                 return BadRequest();
             }
 
-            var result = await this.GameService.GetAsync(Helper.TransformGuid(id));
+            var result = await this.GameService.GetTaskAsync(Helper.TransformGuid(id));
 
             return Ok(result);
 

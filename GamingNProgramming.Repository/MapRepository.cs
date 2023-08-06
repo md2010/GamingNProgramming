@@ -55,7 +55,8 @@ namespace GamingNProgramming.Repository
             var a = AssignmentEntities
                 .Where(a => a.Id == id)
                 .Include(a => a.Answers)               
-                .Include(a => a.TestCases)                    
+                .Include(a => a.TestCases)  
+                .Include(a => a.Badge)
                 .FirstOrDefault();
 
             return a;
