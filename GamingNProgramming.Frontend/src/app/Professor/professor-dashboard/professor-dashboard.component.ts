@@ -38,6 +38,7 @@ export class ProfessorDashboardComponent {
       (Response) => {
         if(Response.body) {
           this.user = Response.body;
+          this.userService.user = this.user;
           resolve('done');
         }
       },

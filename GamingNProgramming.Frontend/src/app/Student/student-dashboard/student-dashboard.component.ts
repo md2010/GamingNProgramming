@@ -25,8 +25,18 @@ export class StudentDashboardComponent {
   showFindFriends = false;
   showMyFriends = false;
   showHome = true;
+
   professorMapPoints = 0;
-  professorMapPointsDeg = '0deg';
+  usersPointsOnProfessorMaps = 0;
+  userPercentage = 0;
+  professorMapPointsDeg1 = '0deg';
+  professorMapPointsDeg2 = '0deg';
+
+  mapsPoints = 0;
+  usersPointsOnMaps = 0;
+  userDefaultPercentage = 0;
+  mapPointsDeg1 = '0deg';
+  mapPointsDeg2 = '0deg';
 
   ngOnInit() {    
     this.getPlayer().then(() => {
@@ -41,9 +51,13 @@ export class StudentDashboardComponent {
       (Response) => {
         if(Response.body) {
           this.user = Response.body.player;
-          this.professorMapPoints = (this.user.points / Response.body.sum) * 100;
-          var deg = (this.professorMapPoints * 360)/100;
-          this.professorMapPointsDeg = deg + 'deg';
+          localStorage.setItem('professorId', this.user.professorId);
+          this.usersPointsOnProfessorMaps = this.user.points;
+          this.professorMapPoints = Response.body.sum;
+          if (this.professorMapPoints > 0) {
+            this.userPercentage = Math.round((this.usersPointsOnProfessorMaps/this.professorMapPoints)*100)
+            this.calculateDegs();
+          }
           resolve('done');
         }
       },
@@ -54,6 +68,20 @@ export class StudentDashboardComponent {
     )
     })
     return promise;
+  }
+
+  calculateDegs() {
+    if(this.usersPointsOnProfessorMaps <= this.professorMapPoints/2) {
+      var deg1 = (this.usersPointsOnProfessorMaps / (this.professorMapPoints/2)) * 180;
+      this.professorMapPointsDeg1 = deg1 + 'deg';
+      this.professorMapPointsDeg2 = 0 + 'deg';
+    }
+    else if (this.usersPointsOnProfessorMaps >= this.professorMapPoints/2) {
+      this.professorMapPointsDeg1 = 180 + 'deg';
+      var deg2 = ((this.usersPointsOnProfessorMaps/2) / (this.professorMapPoints/2)) * 180;
+      this.professorMapPointsDeg2 = deg2 + 'deg';
+    }
+    
   }
  
   findFriends(){

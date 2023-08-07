@@ -26,8 +26,7 @@ export class AppHeaderComponent {
   }
 
   ngOnInit() {  
-    this.activeRoute.url.subscribe((event) => {
-      console.log(event[0].path); 
+    this.activeRoute.url.subscribe((event) => { 
       this.route = event[0].path;
     });
   }

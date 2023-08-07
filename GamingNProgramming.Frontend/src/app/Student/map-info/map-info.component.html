@@ -18,10 +18,12 @@
               <p class="card-text"> {{m.description}}</p>
             </div>
             <ul class="list-group list-group-flush" *ngFor="let a of m.assignments; let i = index;">
-              <li class="list-group-item">
-                Zadatak {{i+1}} : {{a.title}}
-                <button class="btn btn-primary" *ngIf="role === 'Student'" [disabled]="isPlayed(a.id)" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;">Igraj</button>
+              <li class="list-group-item" [ngClass]="{'li-green' : isPlayed(a.id)}">
+                <span>Zadatak {{i+1}} : {{a.title}} </span>             
+                <button class="btn btn-primary" *ngIf="role === 'Student' && !isPlayed(a.id)" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;" [disabled]="ind > userLevel! || i > userTask!">Igraj</button>
+                <button *ngIf="role === 'Student' && isPlayed(a.id)" class="btn btn-primary" (click)="taskView(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;">Pregledaj</button>
                 <button class="btn btn-primary" *ngIf="role === 'Professor'" (click)="openDialog(i, ind)" style="margin-left: 10px; margin-right: 10px;">Pogledaj zadatak</button>
+                <span class="percentage" *ngIf="isPlayed(a.id)"> {{getPercentage(a.id)}}%</span>
               </li>
             </ul>           
         </div>       

@@ -60,10 +60,10 @@
                         </mat-radio-group>                         
                     </div> 
                     <div *ngIf="task.isMultiSelect">
-                        <ul>
-                            <li *ngFor="let c of task.answers; let ind = index;">
-                                <mat-checkbox  [value]="c.offeredAnswer" name="checkbox{{ind}}" [disabled]="!timerStarted && task.isTimeMeasured"> 
-                                        <p class="p-answer">{{c.offeredAnswer}} </p>                                
+                        <ul style="list-style-type: none;">
+                            <li *ngFor="let c of offeredAnswers; let ind = index;">
+                                <mat-checkbox  [value]="c.value" name="checkbox{{ind}}" [disabled]="!timerStarted && task.isTimeMeasured" [(ngModel)]="c.checked" (ngModelChange)="checkBoxChanged(c)">
+                                        <p class="p-answer">{{c.value}} </p>                                
                                 </mat-checkbox> 
                             </li> 
                         </ul>                                       
@@ -74,16 +74,19 @@
 <hr>
 <div class="row" *ngIf="!task.isCoding">
         <div class="col-4 spc-left spc-button">        
-                <button type="button" class="btn btn-success" (click)="checkCorrectAnswer()" [disabled]="checkedAnswer === null || done">Predaj</button> 
+                <button type="button" class="btn btn-success" (click)="checkCorrectAnswer()" [disabled]="(checkedAnswer === null && checkedAnswers.length === 0) || done">Predaj</button> 
                 <div class="spc-button spc-bottom" *ngIf="done">
                         <br>  
                         <div *ngIf="theoryResult">
-                                <p>Odgovor je <strong>točan!</strong></p>
-                                <p>Osvojeno: <strong>{{task.points}} bodova.</strong></p>
+                                <p>Odgovor je <strong> {{points === task.points ? 'točan!' : 'djelomično točan.'}}</strong></p>
+                                <p>Osvojeno bodova: <strong>{{points}}/{{task.points}}</strong></p>
                         </div>
                         <div *ngIf="!theoryResult">
                                 <p>Odgovor je <strong>netočan.</strong></p>
-                                <p>Točan odgovor: <strong>{{correctAnswer}}</strong></p>
+                                <p>Točan odgovor: 
+                                        <strong *ngIf="!task.isMultiSelect">{{correctAnswer}}</strong>
+                                        <strong *ngIf="task.isMultiSelect">{{correctAnswers}}</strong>
+                                </p>
                         </div>                   
                 </div>               
         </div>

@@ -6,6 +6,7 @@ import { StudentDashboardComponent } from './Student/student-dashboard/student-d
 import { LeaderboardComponent } from './Student/leaderboard/leaderboard.component';
 import { MapInfoComponent } from './Student/map-info/map-info.component';
 import { TaskPlayComponent } from './Student/task-play/task-play.component';
+import { TaskViewComponent } from './Student/task-view/task-view.component';
 
 import { ProfessorDashboardComponent } from './Professor/professor-dashboard/professor-dashboard.component';
 
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'leaderboard', component: LeaderboardComponent},
   {path: 'map-info/:id', component: MapInfoComponent},
   {path: 'task-play/:id', component: TaskPlayComponent},
+  {path: 'task-view/:id', component: TaskViewComponent},
   {path: 'professor-dashboard', component: ProfessorDashboardComponent}
   
 ];

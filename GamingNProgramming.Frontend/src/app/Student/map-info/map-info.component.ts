@@ -8,13 +8,14 @@ import { CreateTaskDialogComponent } from 'src/app/Professor/create-map/create-t
 import { DrawMapComponent } from 'src/app/Professor/create-map/draw-map/draw-map.component';
 import { GameService } from 'src/app/services/GameService';
 import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
+import { TaskViewComponent } from '../task-view/task-view.component';
 
 @Component({
   selector: 'app-map-info',
   templateUrl: './map-info.component.html',
   styleUrls: ['./map-info.component.css'],
   standalone: true,
-  imports: [CommonModule, CreateTaskDialogComponent, DrawMapComponent, SpinnerComponentComponent]
+  imports: [CommonModule, CreateTaskDialogComponent, DrawMapComponent, SpinnerComponentComponent, TaskViewComponent]
   
 })
 export class MapInfoComponent {
@@ -24,8 +25,8 @@ export class MapInfoComponent {
   mapId! : string | null;
   map! : Map
   role! : string | null
-  userLevel : number | null = null
-  userTask : number | null = null
+  userLevel : number | null = 0
+  userTask : number | null = 0
   playersTasks : Array<PlayerTask> = []
   loaded : boolean = false
   avatarSrc : string = ''
@@ -45,35 +46,37 @@ export class MapInfoComponent {
     this.sub = this.route.paramMap.subscribe((params) => {
       console.log(params);
       this.mapId = params.get('id');
-    });
-    this.role = this.authService.getAuthorized().roleName
-    this.getMap().then(() => {
-      if(this.role == 'Student')
-      {
-        this.gameService.getPlayerTask(this.authService.getAuthorized().userId!) 
-        .subscribe(
-        (Response) => {
-          if(Response) {
-            this.playersTasks = Response.body            
-            var task = this.playersTasks[0].assignment;     
-            var level = this.map.levels.find(l => l.id === task.levelId);
-            if(level) {
-              this.userLevel = level!.number - 1;
-              this.userTask = task.number;
+      });
+      this.role = this.authService.getAuthorized().roleName
+      this.getMap().then(() => {
+        if(this.role == 'Student') {
+          this.gameService.getPlayerTask(this.authService.getAuthorized().userId!, this.mapId!) 
+          .subscribe(
+          (Response) => {
+            if(Response.body && Response.body.length > 0) {
+              this.playersTasks = Response.body            
+              var task = this.playersTasks[0].assignment;     
+              var level = this.map.levels.find(l => l.id === task.levelId);
+              if(level) {
+                this.userLevel = level!.number - 1;
+                this.userTask = task.number;
+              }
             }
-            else {
-              this.userLevel = 0;
-              this.userTask = 0;
-            }
-            this.loaded = true
+          (error: any) => {
+            console.log(error.error);
           }
-        (error: any) => {
-          console.log(error.error);
-        }
-      })
+        })
+      } this.loaded = true
+    })    
+  }
+  
+  getPercentage(taskId : string) {
+    var playerTask = this.playersTasks.find(a => a.assignmentId === taskId);
+    if(playerTask) {
+      return playerTask.percentage;
     }
-  })    
-}  
+    return null;
+  }
 
   getMap() {
     var promise = new Promise((resolve, reject) => { this.gameService.getMap(this.mapId!) 
@@ -114,6 +117,10 @@ export class MapInfoComponent {
 
   taskPlay(taskId : string, levelId : string) {
     this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id} });
+  }
+
+  taskView(taskId : string, levelId : string) {
+    this.router.navigate(['/task-view',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id} });
   }
 
   onBack(): void {

@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Gaming N Programming</a>
+      <a class="navbar-brand" [routerLink]="role === 'Student' ? ['/student-dashboard'] : ['/professor-dashboard']">Gaming N Programming</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -10,6 +10,7 @@
         <ul class="navbar-nav ms-auto ">
           <li class="nav-item">
             <a class="nav-link mx-2 active" [class.active]="route == '/student-dashboard'" *ngIf="authorized && role === 'Student'" [routerLink]="['/student-dashboard']">Početna</a>
+            <a class="nav-link mx-2 active" [class.active]="route == '/professor-dashboard'" *ngIf="authorized && role === 'Professor'" [routerLink]="['/professor-dashboard']">Početna</a>
           </li>
           <li class="nav-item">
             <a class="nav-link mx-2" [routerLink]="['/leaderboard']" *ngIf="authorized && role === 'Student'" [class.active]="route == '/leaderboard'">Ljestvica sa vodećim rezultatima</a>

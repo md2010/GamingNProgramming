@@ -16,22 +16,52 @@ export class LeaderboardComponent {
 
   constructor(private userService: UserService, private authService: AuthService) {}
 
-  friends: Friend[] = [];
-  players: Player[] = [];
+  friends: Player[] = [];
+  playersAll: Player[] = [];
+  players: Player[] = []
+  students: Player[] = [];
   loaded = false;
   searchName = '';
   allPlayers = false;
+  allStudents = false;
+  allFriends = true;
   userId : string | null = '';
 
   ngOnInit() { 
-    this.userId = this.authService.getAuthorized().userId;   
+    this.userId = this.authService.getAuthorized().userId; 
+    this.allStudents = false;
+    this.allFriends = true;
+    this.allPlayers = false;  
     this.getAllFriends();
   }
 
-  getAllFriends() {
-    this.allPlayers = false;
+  setPlayers(who : string) {
     this.loaded = false;
+    if(who === 'students') {
+      this.players = this.students;
+      this.allStudents = true;
+      this.allPlayers = false;
+      this.allFriends = false;
+    }
+    else if(who === 'friends') {
+      this.players = this.friends;
+      this.allStudents = false;
+      this.allFriends = true;
+      this.allPlayers = false;
+    }
+    else {
+      this.allFriends = false;
+      this.allStudents = false;
+      this.allPlayers = true;
+      this.players = this.playersAll;
+    }
+    this.loaded = true;
+  }
+
+  getAllFriends() {
     this.getFriends().then(() => { 
+      this.getAllPlayers();
+      this.getAllStudents(); 
       this.loaded = true 
     }); 
   }
@@ -43,8 +73,9 @@ export class LeaderboardComponent {
     .subscribe(
       (Response) => {
         if(Response.body) {
-          this.players = Response.body;
-          this.players.every(p => { p.avatar.path = '../' + p.avatar.path; });
+          this.friends = Response.body;
+          this.friends.every(p => { p.avatar.path = '../' + p.avatar.path; });
+          this.players = this.friends;
           resolve('done');
         }
       },
@@ -56,25 +87,43 @@ export class LeaderboardComponent {
     return promise;
   }
 
-  getAllPlayers() {
-    this.allPlayers = true;
-    this.loaded = false;
-    this.getPlayers().then(() => { 
-      this.loaded = true 
+  getAllPlayers() : boolean {
+    var search = {
+      sortOrder: 'asc'
+    };
+    this.getPlayers(search, 'players').then(() => { 
+      return true 
     });
+    return false;
   }
 
-  getPlayers() {
-    var promise = new Promise((resolve, reject) => {
-      var search = {
-        sortOrder: 'asc'
-      };
+  getAllStudents() : boolean {
+    var search = {
+      sortOrder: 'asc',
+      professorId: localStorage.getItem('professorId')
+    };
+    if(search.professorId != null) {
+      this.getPlayers(search, 'students').then(() => { 
+        return true; 
+      });
+    }
+    return false;
+  }
+
+  getPlayers(search : any, who : string) {
+    var promise = new Promise((resolve, reject) => {     
       this.userService.getPlayers(search)
     .subscribe(
       (Response) => {
         if(Response.body) {
-          this.players = Response.body;
-          this.players.every(p => { p.avatar.path = '../' + p.avatar.path; });
+          if(who === 'players') {
+            this.playersAll = Response.body;
+            this.playersAll.every(p => { p.avatar.path = '../' + p.avatar.path; });
+          }
+          else {
+            this.students = Response.body;
+            this.students.every(p => { p.avatar.path = '../' + p.avatar.path; });
+          }
           resolve('done');
         }
       },
@@ -102,5 +151,6 @@ interface Player {
   userId: string;
   username: string;
   avatar: Avatar;
+  defultPoints : number;
 }
 

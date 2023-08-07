@@ -32,4 +32,12 @@ font-size: 23px;
 a:hover {
     background-color: #ddd;
     color: black;
-  }
+}
+
+.percentage {
+    float: right;
+}
+
+.li-green {
+    background-color: #90EE91;
+}

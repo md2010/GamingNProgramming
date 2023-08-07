@@ -113,7 +113,8 @@ export class CreateMapComponent {
       .subscribe(
         (Response) => {
           if(Response) {
-            this.dialog.open(this.notification);
+            if(final !== 'final')
+              this.dialog.open(this.notification);
           }
         },
         (error: any) => {
@@ -126,7 +127,8 @@ export class CreateMapComponent {
       .subscribe(
         (Response) => {
           if(Response) {
-            
+            if(final !== 'final')
+              this.dialog.open(this.notification);
           }
         },
         (error: any) => {

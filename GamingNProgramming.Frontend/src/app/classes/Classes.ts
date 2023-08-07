@@ -21,9 +21,10 @@ export class PlayerTask {
     id: string =''
     assignmentId : string = ''
     playerId : string = ''
-    scorePoints: number = 0
+    scoredPoints: number = 0
     percentage: number = 0
     answers : string = ''
+    mapId : string = ''
     assignment!: Assignment 
 }
 

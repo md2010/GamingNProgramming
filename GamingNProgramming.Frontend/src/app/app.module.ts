@@ -27,6 +27,7 @@ import { MyMapsComponent } from './Professor/my-maps/my-maps.component';
 import { DrawMapComponent } from './Professor/create-map/draw-map/draw-map.component';
 import { CreateTaskDialogComponent } from './Professor/create-map/create-task-dialog/create-task-dialog.component';
 import { TimerComponent } from './Student/task-play/timer/timer.component';
+import { TaskViewComponent } from './Student/task-view/task-view.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { TimerComponent } from './Student/task-play/timer/timer.component';
     CreateMapComponent,
     MyMapsComponent,
     DrawMapComponent,
-    TimerComponent
+    TimerComponent,
+    TaskViewComponent
   ],
   exports: [
     MatSelectModule,

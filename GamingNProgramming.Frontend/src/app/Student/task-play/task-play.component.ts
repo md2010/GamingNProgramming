@@ -6,8 +6,8 @@ import { CommonModule } from '@angular/common';
 import { NuMonacoEditorModule, NuMonacoEditorModel } from '@ng-util/monaco-editor';
 import { GameService } from 'src/app/services/GameService';
 import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
-import { Assignment } from 'src/app/classes/Classes';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { Assignment, PlayerTask } from 'src/app/classes/Classes';
+import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { AuthService } from 'src/app/services/AuthService';
 import { TimerComponent } from './timer/timer.component';
@@ -42,9 +42,11 @@ export class TaskPlayComponent {
   timerStarted = false;
   timerDone = false;
   checkedAnswers : Array<string> = [];
+  offeredAnswers : Array<OfferedAnswer> = [];
   checkedAnswer : string | null = null;
   theoryResult :  boolean = false
   correctAnswer : string | undefined = '';
+  correctAnswers : string = ''
   done :  boolean = false
   points : number = 0
 
@@ -52,6 +54,7 @@ export class TaskPlayComponent {
   taskId! : string | null
   isDefaultMap! : boolean;
   mapId! : string;
+  playersTask : PlayerTask | null = null;
 
   value: string = '';
   editorOptions = { theme: 'vs-dark', language: 'c' };
@@ -59,12 +62,12 @@ export class TaskPlayComponent {
     language: "c"
   }; 
 
-
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
   constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, private authService : AuthService, public dialog: MatDialog,) { 
     this.isDefaultMap = this.router.getCurrentNavigation()!.extras!.state!['isDefaultMap'];
     this.mapId = this.router.getCurrentNavigation()!.extras!.state!['mapId'];
+    this.playersTask = this.router.getCurrentNavigation()!.extras!.state!['playersTask'];
    }
 
   ngOnInit() {
@@ -76,10 +79,19 @@ export class TaskPlayComponent {
         (Response) => {
           if(Response) {
             this.task = Response.body;
-            if (!this.task.isCoding)
+            if (!this.task.isCoding) {
               this.correctAnswer = this.task.answers.find((a) => a.isCorrect === true)?.offeredAnswer;
-            else
-            this.value = this.task.initialCode;        
+              if(this.task.isMultiSelect) {
+                this.task.answers.forEach(a => {
+                  this.offeredAnswers.push({value: a.offeredAnswer, checked: false});
+                  if(a.isCorrect)
+                    this.correctAnswers += ' ' + a.offeredAnswer
+                });
+              }
+            }
+            else {
+              this.value = this.task.initialCode;    
+            }    
           }
           this.loaded = true;        
         },
@@ -99,9 +111,26 @@ export class TaskPlayComponent {
     this.dialog.open(this.notification);
   }
 
+  checkBoxChanged(obj : OfferedAnswer) {
+    if(obj.checked) {
+      this.checkedAnswers.push(obj.value)
+    }
+    else {
+      this.checkedAnswers = this.checkedAnswers.filter(a => a !== obj.value);
+    }
+  }
+
   checkCorrectAnswer() {
     if(this.task.isMultiSelect) {
-
+      var correct = 0;
+      this.task.answers.forEach(answer => {
+        if(this.checkedAnswers.some((a) => a === answer.offeredAnswer && answer.isCorrect))
+        {
+          correct++;
+          this.theoryResult = true;
+        }
+      })
+      this.points = Math.round(correct/this.task.points)
     } 
     else {
       if(this.task.answers.some((a) => a.offeredAnswer === this.checkedAnswer && a.isCorrect)) {
@@ -120,9 +149,10 @@ export class TaskPlayComponent {
         playerId : this.authService.getAuthorized().userId,
         assignmentId : this.task.id,
         scoredPoints: this.points,
-        percentage: this.points / this.task.points,
+        percentage: (this.points / this.task.points)*100,
         answers : this.task.isCoding ? '' : (this.task.isMultiSelect ? this.checkedAnswers.join(',') : this.checkedAnswer),
-        playersCode : this.task.isCoding ? this.value : ''
+        playersCode : this.task.isCoding ? this.value : '',
+        mapId : this.mapId
       }
       this.gameService.insertPlayerTask(playerTask)
       .subscribe(
@@ -142,8 +172,8 @@ export class TaskPlayComponent {
 
   compile() {
     this.loading = true;
-    var code = {code : this.value, inputs: this.args}
-    this.gameService.runCode(code)
+    var code = {code : this.value, inputs: this.args ?? "", testCases: this.task.testCases}
+    this.gameService.submitCode(code)
     .subscribe(
       (Response) => {  
           if(Response.status == 200) {
@@ -166,8 +196,6 @@ export class TaskPlayComponent {
      
   }
 
-
-
   onBack(): void {
     this.router.navigate(["/map-info/", this.mapId]);
   }
@@ -179,5 +207,10 @@ export class TaskPlayComponent {
     if (this.sub) this.sub.unsubscribe();
   }
 
+}
+
+interface OfferedAnswer {
+  value: string 
+  checked : boolean 
 }
 
