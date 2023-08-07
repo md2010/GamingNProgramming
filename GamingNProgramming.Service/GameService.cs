@@ -73,11 +73,10 @@ namespace GamingNProgramming.Service
 
         public async Task<bool> UpdateMapAsync(Guid professorId, Map map)
         {
-            map.ProfessorId = professorId;
-            var oldLevels = map.Levels.Where(l => l.Id != Guid.Empty).ToList();
-            var oldMap = map;
-            oldMap.Levels = oldLevels;
+            var oldMap = await this.Repository.GetMapByProfessorIdForEditingAsync(professorId);
             this.Repository.Remove(oldMap);
+
+            map.ProfessorId = professorId;            
             CreateMapEntity(map);
             this.Repository.Add(map);
 

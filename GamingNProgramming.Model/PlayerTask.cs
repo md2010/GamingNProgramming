@@ -23,6 +23,9 @@ namespace GamingNProgramming.Model
         public Guid AssignmentId { get; set; }
         public virtual Assignment Assignment { get; set; }
 
+        [ForeignKey("MapId")]
+        public Guid MapId { get; set; }
+
         public int ScoredPoints { get; set; }
         public double Percentage { get; set; }
 

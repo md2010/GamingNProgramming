@@ -27,7 +27,7 @@ namespace GamingNProgramming.Repository
 
         Task<bool> InsertPlayerTask(PlayerTask playerTask);
 
-        Task<List<PlayerTask>> GetPlayerTask(Guid playerId);
+        Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId);
 
         Task<bool> UpdatePlayer(Player player);
 

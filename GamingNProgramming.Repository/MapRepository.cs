@@ -47,6 +47,12 @@ namespace GamingNProgramming.Repository
                         .ThenInclude(c => c.TestCases)
                 .FirstOrDefault();
 
+            map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
+            foreach(var level in map.Levels)
+            {
+                level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+            }
+
             return map;
         }
 

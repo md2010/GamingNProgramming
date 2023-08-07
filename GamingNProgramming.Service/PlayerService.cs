@@ -133,9 +133,9 @@ namespace GamingNProgramming.Service
             return await Repository.GetPlayersNotFriendsAsync(id, filter, includeProperties);
         }
 
-        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId)
+        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId)
         {
-            var list = await Repository.GetPlayerTask(playerId);
+            var list = await Repository.GetPlayerTask(playerId, mapId);
             return list;
         }
         #endregion

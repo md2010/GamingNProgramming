@@ -143,15 +143,15 @@ namespace GamingNProgramming.WebAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("player-task/{playerId}")]
-        public async Task<IActionResult> GetPlayerTask(string playerId)
+        [Route("player-task/{playerId}/{mapId}")]
+        public async Task<IActionResult> GetPlayerTask(string playerId, string mapId)
         {
-            if (playerId == null)
+            if (playerId == null || mapId == null)
             {
                 return BadRequest();
             }
 
-            var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId));
+            var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId), Helper.TransformGuid(mapId));
 
             return Ok(result);
 
@@ -170,10 +170,9 @@ namespace GamingNProgramming.WebAPI.Controllers
             }
             else
             {
-                var inputs = new[] { "2 5", "1 2", "0 3" };
                 var results = new List<RunTestCasesResultModel>();
 
-                foreach (var input in inputs)
+                foreach (var testCase in model.TestCases)
                 {
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.CreateNoWindow = false;
@@ -183,7 +182,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                     startInfo.FileName = @"C:\Windows\System32\cmd.exe";
                     startInfo.WindowStyle = ProcessWindowStyle.Normal;
                     startInfo.WorkingDirectory = @"C:\Users\Martina\Documents\GamingNProgramming\GamingNProgramming.API\codeFiles";
-                    startInfo.Arguments = "/c a.exe " + (string.IsNullOrEmpty(model.Inputs) ? "" : model.Inputs);
+                    startInfo.Arguments = "/c a.exe " + testCase.Input;
 
                     var result = "";
                     var error = "";
@@ -201,7 +200,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                             {
                                 error = reader.ReadToEnd();
                             }
-                            results.Add(new RunTestCasesResultModel { Inputs = input, Result = result, Error = error });
+                            results.Add(new RunTestCasesResultModel { Inputs = testCase.Input, Result = result, Error = error });
                         }
                     }
                     catch { }
@@ -307,6 +306,8 @@ namespace GamingNProgramming.WebAPI.Controllers
             public string Code { get; set; }
 
             public string Inputs { get; set; } = "";
+
+            public List<TestCase> TestCases { get; set; } = null;
         }
 
         public class RunCodeResultModel
@@ -328,6 +329,7 @@ namespace GamingNProgramming.WebAPI.Controllers
         {
             public bool IsDefaultMap { get; set; }
             public string PlayerId { get; set; }
+            public string MapId { get; set; }
             public string AssignmentId { get; set; }
             public int ScoredPoints { get; set; }
             public double Percentage { get; set; }
@@ -473,6 +475,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             entity.ScoredPoints = model.ScoredPoints;
             entity.Percentage = model.Percentage;
             entity.Answers = model.Answers;
+            entity.MapId = Helper.TransformGuid(model.MapId);
 
             return entity;
         }

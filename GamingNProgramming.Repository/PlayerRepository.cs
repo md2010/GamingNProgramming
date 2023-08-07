@@ -103,10 +103,11 @@ namespace GamingNProgramming.Repository
             return true;
         }
 
-        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId)
+        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId)
         {
             var list = await PlayerTaskEntities
                 .Where(p => p.PlayerId == playerId)
+                .Where(p => p.MapId == mapId)
                 .Include(p => p.Assignment)
                 .OrderByDescending(p => p.DateCreated)           
                 .ToListAsync();
