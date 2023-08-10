@@ -20,7 +20,7 @@ namespace GamingNProgramming.Service
             this.PlayerRepository = playerRepository;
         }
 
-        public async Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap)
+        public async Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap, Guid levelId)
         {
             playerTask.DateUpdated = DateTime.Now;
             playerTask.DateCreated = DateTime.Now;
@@ -36,7 +36,7 @@ namespace GamingNProgramming.Service
             else
             {
                 player.Points += playerTask.ScoredPoints;
-            }
+            }           
 
             await PlayerRepository.UpdatePlayer(player);
 

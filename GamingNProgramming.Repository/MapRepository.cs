@@ -68,6 +68,16 @@ namespace GamingNProgramming.Repository
             return a;
         }
 
+        public async Task<Level> GetLevelAsync(Guid levelId)
+        {
+            var a = LevelEntities
+                .Where(a => a.Id == levelId)
+                .Include(a => a.Assignments)
+                .FirstOrDefault();
+
+            return a;
+        }
+
         public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)
         {
             var map = Entities

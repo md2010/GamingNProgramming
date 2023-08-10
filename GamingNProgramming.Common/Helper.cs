@@ -12,5 +12,12 @@ namespace GamingNProgramming.Common
         {
             return Guid.Parse(guid);
         }
+
+        public static int GetPoints(int passed, int count, int points)
+        {
+            var percentage = (decimal)passed / count;
+            var scored = (decimal)percentage * points;
+            return (int)Math.Round(scored, 0, MidpointRounding.AwayFromZero);
+        }
     }
 }

@@ -130,7 +130,7 @@ namespace GamingNProgramming.WebAPI.Controllers
         public async Task<IActionResult> InsertPlayerTask([FromBody] InsertPlayerTaskModel model)
         {
             var playerTask = MapPlayerTask(model);
-            var result = await GameService.InsertPlayerTask(playerTask, model.IsDefaultMap);
+            var result = await GameService.InsertPlayerTask(playerTask, model.IsDefaultMap, Helper.TransformGuid(model.LevelId));
             if (result)
             {
                 return Ok();
@@ -160,7 +160,7 @@ namespace GamingNProgramming.WebAPI.Controllers
         [Authorize]
         [HttpPost]
         [Route("submit-code")]
-        public async Task<IActionResult> SubmitCode([FromBody] RunCodeModel model)
+        public async Task<IActionResult> SubmitCode([FromBody] SubmitCodeModel model)
         {
             var compileResult = await CompileCode(model.Code);
 
@@ -171,6 +171,8 @@ namespace GamingNProgramming.WebAPI.Controllers
             else
             {
                 var results = new List<RunTestCasesResultModel>();
+                var scoredPoints = 0;
+                var passedTestCases = 0;
 
                 foreach (var testCase in model.TestCases)
                 {
@@ -200,12 +202,20 @@ namespace GamingNProgramming.WebAPI.Controllers
                             {
                                 error = reader.ReadToEnd();
                             }
-                            results.Add(new RunTestCasesResultModel { Inputs = testCase.Input, Result = result, Error = error });
+
+                            if(result == testCase.Output)
+                            {
+                                passedTestCases++;
+                            }
+
+                            results.Add(new RunTestCasesResultModel { Inputs = testCase.Input, Result = result, ExpectedOutput = testCase.Output, Error = error });
                         }
                     }
                     catch { }
                 }
-                return Ok(results);
+
+                scoredPoints = Helper.GetPoints(passedTestCases, model.TestCases.Count, model.Points);
+                return Ok(new SubmitCodeResultModel { Points = scoredPoints, Results = results});
             }
 
         }
@@ -306,6 +316,13 @@ namespace GamingNProgramming.WebAPI.Controllers
             public string Code { get; set; }
 
             public string Inputs { get; set; } = "";
+        }
+
+        public class SubmitCodeModel
+        {
+            public string Code { get; set; }
+
+            public int Points { get; set; }
 
             public List<TestCase> TestCases { get; set; } = null;
         }
@@ -321,8 +338,14 @@ namespace GamingNProgramming.WebAPI.Controllers
         {
             public string Inputs { get; set; }
             public string Result { get; set; }
-
+            public string ExpectedOutput { get; set; }
             public string Error { get; set; }
+        }
+
+        public class SubmitCodeResultModel
+        {
+           public int Points { get; set; }
+           public List<RunTestCasesResultModel> Results { get; set; }
         }
 
         public class InsertPlayerTaskModel
@@ -331,6 +354,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             public string PlayerId { get; set; }
             public string MapId { get; set; }
             public string AssignmentId { get; set; }
+            public string LevelId { get; set; }
             public int ScoredPoints { get; set; }
             public double Percentage { get; set; }
             public string PlayersCode { get; set; } = "";
@@ -473,9 +497,10 @@ namespace GamingNProgramming.WebAPI.Controllers
             entity.PlayerId = Helper.TransformGuid(model.PlayerId);
             entity.AssignmentId = Helper.TransformGuid(model.AssignmentId);
             entity.ScoredPoints = model.ScoredPoints;
-            entity.Percentage = model.Percentage;
+            entity.Percentage = Math.Round(model.Percentage, 2);
             entity.Answers = model.Answers;
             entity.MapId = Helper.TransformGuid(model.MapId);
+            entity.PlayersCode = model.PlayersCode;
 
             return entity;
         }
