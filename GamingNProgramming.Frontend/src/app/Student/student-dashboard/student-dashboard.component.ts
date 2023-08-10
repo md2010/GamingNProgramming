@@ -58,6 +58,12 @@ export class StudentDashboardComponent {
             this.userPercentage = Math.round((this.usersPointsOnProfessorMaps/this.professorMapPoints)*100)
             this.calculateDegs();
           }
+          this.usersPointsOnMaps = this.user.defultPoints;
+          this.mapsPoints = Response.body.sum;
+          if (this.mapsPoints > 0) {
+            this.userDefaultPercentage = Math.round((this.usersPointsOnMaps/this.mapsPoints)*100)
+            this.calculateDegs();
+          }
           resolve('done');
         }
       },

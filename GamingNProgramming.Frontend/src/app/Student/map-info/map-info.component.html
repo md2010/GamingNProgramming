@@ -12,15 +12,15 @@
 <div class="col-4">
 <div class="row row-cols">
     <div class="col-sm" *ngFor="let m of map.levels; let ind = index;">
-        <div class="card spc-top spc-bottom" style="width: 30rem;">           
+        <div class="card spc-top spc-bottom" style="width: 40rem;">           
             <div class="card-body">
               <h5 class="card-title">Razina {{ind+1}}: {{m.title}}</h5>
               <p class="card-text"> {{m.description}}</p>
             </div>
             <ul class="list-group list-group-flush" *ngFor="let a of m.assignments; let i = index;">
-              <li class="list-group-item" [ngClass]="{'li-green' : isPlayed(a.id)}">
+              <li class="list-group-item" [ngClass]="getColor(a.id)">
                 <span>Zadatak {{i+1}} : {{a.title}} </span>             
-                <button class="btn btn-primary" *ngIf="role === 'Student' && !isPlayed(a.id)" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;" [disabled]="ind > userLevel! || i > userTask!">Igraj</button>
+                <button class="btn btn-primary" *ngIf="role === 'Student' && !isPlayed(a.id)" (click)="taskPlay(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;" [disabled]="ind > userLevel!">Igraj</button>
                 <button *ngIf="role === 'Student' && isPlayed(a.id)" class="btn btn-primary" (click)="taskView(a.id, m.id)" style="margin-left: 10px; margin-right: 10px;">Pregledaj</button>
                 <button class="btn btn-primary" *ngIf="role === 'Professor'" (click)="openDialog(i, ind)" style="margin-left: 10px; margin-right: 10px;">Pogledaj zadatak</button>
                 <span class="percentage" *ngIf="isPlayed(a.id)"> {{getPercentage(a.id)}}%</span>

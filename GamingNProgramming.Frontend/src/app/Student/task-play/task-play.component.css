@@ -56,3 +56,8 @@ textarea {
     height: 25px;
     color: white;
 }
+
+.wrong {
+    border: 2px solid !important;
+    border-color: #ED1D24 !important;    
+}

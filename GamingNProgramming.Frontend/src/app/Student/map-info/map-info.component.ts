@@ -57,10 +57,18 @@ export class MapInfoComponent {
               this.playersTasks = Response.body            
               var task = this.playersTasks[0].assignment;     
               var level = this.map.levels.find(l => l.id === task.levelId);
+              var lastTask = level?.assignments.reverse()[0];
+              level?.assignments.reverse();
               if(level) {
-                this.userLevel = level!.number - 1;
-                this.userTask = task.number;
-              }
+                if(task.id === lastTask!.id) {
+                  this.userLevel = 1;
+                  this.userTask = 0;
+                }
+                else {
+                  this.userLevel = level!.number - 1;
+                  this.userTask = task.number;
+                }
+              }                           
             }
           (error: any) => {
             console.log(error.error);
@@ -107,6 +115,19 @@ export class MapInfoComponent {
     }                        
   }
 
+  getColor(taskId : string) {
+    if(this.isPlayed(taskId)) {
+      var p = this.getPercentage(taskId);
+      if(p! < 50) {
+        return 'li-yellow';
+      }
+      else if (p! >= 50 ) {
+        return 'li-green';
+      }
+    }
+    return '';
+  }
+
   openDialog(i : number, levelNumber: number) {
     let dialogRef = this.dialog.open(CreateTaskDialogComponent, {
       width: '1500px',
@@ -116,7 +137,7 @@ export class MapInfoComponent {
   }
 
   taskPlay(taskId : string, levelId : string) {
-    this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id} });
+    this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id, levelId : levelId} });
   }
 
   taskView(taskId : string, levelId : string) {

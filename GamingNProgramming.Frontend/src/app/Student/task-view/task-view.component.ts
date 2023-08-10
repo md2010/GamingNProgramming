@@ -41,6 +41,9 @@ export class TaskViewComponent {
   correctAnswers : string = ''
   done :  boolean = false
   points : number = 0
+  compileResult : string | null = null
+  submitCodeResult : any | null = null;
+  error : boolean = true
 
   task! : Assignment;
   taskId! : string | null
@@ -89,7 +92,7 @@ export class TaskViewComponent {
         }
       )
     })
-    promise.then(() => {
+    promise.then(() => {     
       this.gameService.getPlayerTask(this.authService.getAuthorized().userId!, this.mapId)
       .subscribe(
         (Response) => {
@@ -108,9 +111,15 @@ export class TaskViewComponent {
               else {
                 this.checkedAnswer = userAnswers![0];
               }
+            }
+            else {
+              this.value = this.playersTask?.playersCode ?? '';
             }  
           }
-          this.loaded = true;                  
+          this.loaded = true; 
+          if(this.task.isCoding) {
+            this.submitCode();
+          }                 
         },
         (error: any) => {
           console.log(error.error);
@@ -119,6 +128,37 @@ export class TaskViewComponent {
     })    
   }
 
+  submitCode() {   
+    var promise = new Promise((resolve, reject) => {
+    this.loading = true;
+    var code = {code : this.value, testCases: this.task.testCases, points: this.task.points}
+    this.gameService.submitCode(code)
+    .subscribe(
+      (Response) => {  
+          if(Response.status == 200) {
+            if(Response.body.error) {
+              this.error = true;
+              this.compileResult = Response.body.error;
+              this.loading = false;
+              reject();
+            }
+            if(Response.body.results) {
+              this.error = false;
+              this.loading = false;
+              this.points = Response.body.points;
+              this.submitCodeResult = Response.body.results;
+              resolve('done');
+            }             
+          }         
+      },
+      (error: any) => {
+          console.log(error); 
+          this.loading = false;
+          reject();          
+      });
+    });
+    return promise; 
+  } 
   
   onBack(): void {
     this.router.navigate(["/map-info/", this.mapId]);

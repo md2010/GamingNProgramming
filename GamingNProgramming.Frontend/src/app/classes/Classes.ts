@@ -26,6 +26,7 @@ export class PlayerTask {
     answers : string = ''
     mapId : string = ''
     assignment!: Assignment 
+    playersCode : string = ''
 }
 
 export class Level {

@@ -35,6 +35,7 @@ export class TaskPlayComponent {
   id : string | null = null
   sub : any;
   compileResult : string | null = null
+  submitCodeResult : any | null = null;
   error : boolean = true
   args : string | null = null
   loading = false;
@@ -54,7 +55,7 @@ export class TaskPlayComponent {
   taskId! : string | null
   isDefaultMap! : boolean;
   mapId! : string;
-  playersTask : PlayerTask | null = null;
+  levelId : string | null = null;
 
   value: string = '';
   editorOptions = { theme: 'vs-dark', language: 'c' };
@@ -63,11 +64,13 @@ export class TaskPlayComponent {
   }; 
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
+  timeUpMessage = 'Vrijeme je isteklo.'
+  missingInputMessage = 'Za ovaj zadatak su potrebni ulazni parametri koje je potrebno unijeti u polje \'Unesi ulazne podatke\''
 
   constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, private authService : AuthService, public dialog: MatDialog,) { 
     this.isDefaultMap = this.router.getCurrentNavigation()!.extras!.state!['isDefaultMap'];
     this.mapId = this.router.getCurrentNavigation()!.extras!.state!['mapId'];
-    this.playersTask = this.router.getCurrentNavigation()!.extras!.state!['playersTask'];
+    this.levelId = this.router.getCurrentNavigation()!.extras!.state!['levelId'];
    }
 
   ngOnInit() {
@@ -108,7 +111,7 @@ export class TaskPlayComponent {
   countDownDone(message: string) {
     this.timerStarted = false;
     this.timerDone = true;
-    this.dialog.open(this.notification);
+    this.dialog.open(this.notification, { data: "Vrijeme je isteklo." });
   }
 
   checkBoxChanged(obj : OfferedAnswer) {
@@ -143,11 +146,22 @@ export class TaskPlayComponent {
     })
   }
 
+  submit() {
+    if(this.task.isCoding) {
+      this.submitCode().then(() => {
+        this.submitTask().then(() => {
+          this.done = true;
+        })
+      })
+    } 
+  }
+
   submitTask() {
     var promise = new Promise((resolve, reject) => {
       var playerTask = {
         playerId : this.authService.getAuthorized().userId,
         assignmentId : this.task.id,
+        levelId : this.levelId,
         scoredPoints: this.points,
         percentage: (this.points / this.task.points)*100,
         answers : this.task.isCoding ? '' : (this.task.isMultiSelect ? this.checkedAnswers.join(',') : this.checkedAnswer),
@@ -158,6 +172,7 @@ export class TaskPlayComponent {
       .subscribe(
         (Response) => {  
             if(Response.status == 200) {
+              this.loading = false;
               resolve('done');
             }         
         },
@@ -170,30 +185,67 @@ export class TaskPlayComponent {
       return promise;
   }
 
-  compile() {
+  submitCode() {   
+    var promise = new Promise((resolve, reject) => {
     this.loading = true;
-    var code = {code : this.value, inputs: this.args ?? "", testCases: this.task.testCases}
+    var code = {code : this.value, inputs: this.args ?? "", testCases: this.task.testCases, points: this.task.points}
     this.gameService.submitCode(code)
     .subscribe(
       (Response) => {  
           if(Response.status == 200) {
-            if(Response.body.error != '') {
+            if(Response.body.error) {
               this.error = true;
               this.compileResult = Response.body.error;
-              this.loading = false; 
-            } 
-            else {
-              this.error = false;
-              this.compileResult = Response.body.result;
-              this.loading = false; 
+              this.loading = false;
+              reject();
             }
+            if(Response.body.results) {
+              this.error = false;
+              this.points = Response.body.points;
+              this.submitCodeResult = Response.body.results;
+              resolve('done');
+            }             
           }         
       },
       (error: any) => {
-          console.log(error);  
-          this.loading = false;         
-      }); 
-     
+          console.log(error); 
+          this.loading = false;
+          reject();          
+      });
+    });
+    return promise; 
+  } 
+
+
+  compile() {
+    if (this.task.hasArgs && this.args === null) {
+      this.dialog.open(this.notification, { data: "Za ovaj zadatak su potrebni ulazni parametri koje je potrebno unijeti u polje 'Unesi ulazne podatke'." });
+    }
+    else {
+      this.loading = true;
+      var code = {code : this.value, inputs: this.args ?? ""}
+      this.gameService.runCode(code)
+      .subscribe(
+        (Response) => {  
+            if(Response.status == 200) {
+              if(Response.body.error != '') {
+                this.error = true;
+                this.compileResult = Response.body.error;
+                this.loading = false; 
+              } 
+              else {
+                this.error = false;
+                this.compileResult = Response.body.result;
+                this.loading = false; 
+              }
+            }         
+        },
+        (error: any) => {
+            console.log(error);  
+            this.loading = false;         
+        });       
+    }
+
   }
 
   onBack(): void {

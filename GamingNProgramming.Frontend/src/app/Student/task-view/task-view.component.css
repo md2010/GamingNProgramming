@@ -2,6 +2,10 @@
     padding-bottom: 20px;
 }
 
+.spc-top {
+    padding-top: 20px;
+}
+
 .spc-button {
     margin-right: 15px;
     margin-left: 5px;
@@ -55,4 +59,9 @@ textarea {
     background-color: #ED1D24;
     height: 25px;
     color: white;
+}
+
+.wrong {
+    border: 2px solid !important;
+    border-color: #ED1D24 !important;    
 }

@@ -7,7 +7,7 @@
         <div class="col-md-4">
                 <p class="spc-left" *ngIf="task.isTimeMeasured">Zadatku se mjeri vrijeme. Pokreni odbrojavanje klikom na gumb.</p>
                 <button type="button" *ngIf="task.isTimeMeasured" [disabled]="timerDone || timerStarted" class="btn btn-success spc-left" (click)="startCountDown()">Pokreni odbrojavanje</button>
-                <h3 class="spc-left">{{task.title}}</h3>
+                <h3 class="spc-left">{{task.title}}</h3><hr>
                 <div class="spc-left">{{task.description}}</div>
         </div>
         <div class="col-md-8">
@@ -15,7 +15,7 @@
                 [(ngModel)]="value" 
                 [options]="editorOptions" 
                 [model]="model"
-                [disabled]="!timerStarted && task.isTimeMeasured"
+                [disabled]="!timerStarted && task.isTimeMeasured || done"
                 [height]="'470'">
                 </nu-monaco-editor>
         </div>
@@ -28,15 +28,38 @@
 
 <div class="row" *ngIf="task.isCoding">
         <div>
-                <div>
+                <div *ngIf="task.hasArgs">
                         <label class="spc-button">Unesi ulazne podatke (ako ih je više, odvoji ih razmakom, npr: 1 5 3): </label>
-                        <input [disabled]="!timerStarted && task.isTimeMeasured" class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="args">
+                        <input [disabled]="!timerStarted && task.isTimeMeasured || done" class="field_class" name="login_txt" type="text" autofocus [(ngModel)]="args">
                 </div>
-                <button type="button" class="btn btn-primary spc-button" (click)="compile()">Pokreni</button>
-                <button type="button" class="btn btn-success" (click)="compile()" [disabled]=error>Predaj</button>
+                <button type="button" class="btn btn-primary spc-button" (click)="compile()" [disabled]="done">Pokreni</button>
+                <button type="button" class="btn btn-success" (click)="submit()" [disabled]="done">Predaj</button>
                 <hr>
-                <div class="spc-button col-12">
+                <div class="spc-button col-12" *ngIf="!done" >
                         <textarea readonly>{{compileResult}}</textarea>
+                </div>
+                <div *ngIf="done" class="spc-button row">
+                        <div class="col-8 overflow-auto" style="height: 130px;">
+                        <table class="table table-striped">
+                                <thead>
+                                        <tr>
+                                                <th scope="col">Ulaz</th>
+                                                <th scope="col">Izlaz</th>
+                                                <th scope="col">Očekivani izlaz</th>
+                                        </tr>                                       
+                                </thead>
+                                <tbody>
+                                        <tr *ngFor="let r of this.submitCodeResult"  [ngClass]="{ 'wrong' : r.result !== r.expectedOutput}">
+                                                <td>{{r.inputs}}</td>
+                                                <td>{{r.result}}</td>
+                                                <td>{{r.expectedOutput}}</td>
+                                        </tr>
+                                </tbody>                                
+                        </table>
+                </div>
+                <div class="col-2">
+                        <p>Osvojeno bodova: <strong>{{points}}/{{task.points}}</strong></p>
+                </div>
                 </div>
         </div>
 </div>
@@ -80,6 +103,10 @@
                         <div *ngIf="theoryResult">
                                 <p>Odgovor je <strong> {{points === task.points ? 'točan!' : 'djelomično točan.'}}</strong></p>
                                 <p>Osvojeno bodova: <strong>{{points}}/{{task.points}}</strong></p>
+                                <p *ngIf="points !== task.points">Točan odgovor: 
+                                        <strong *ngIf="!task.isMultiSelect">{{correctAnswer}}</strong>
+                                        <strong *ngIf="task.isMultiSelect">{{correctAnswers}}</strong>
+                                </p>
                         </div>
                         <div *ngIf="!theoryResult">
                                 <p>Odgovor je <strong>netočan.</strong></p>
@@ -91,17 +118,19 @@
                 </div>               
         </div>
 </div>
-<div class="row">
-        <div class="col-2 to-bottom">
-                <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
+</div>
+<footer>
+        <div class="row">
+                <div class="col-2 to-bottom">
+                        <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
+                </div>
         </div>
-</div>
-</div>
+</footer>
 
-<ng-template #notification>
+<ng-template #notification let-data>
         <h2 matDialogTitle>Obavijest</h2>
         <mat-dialog-content>
-           <p>Vrijeme je isteklo!</p>
+           <p>{{data}}</p>
         </mat-dialog-content>
         <mat-dialog-actions align="end">
           <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>

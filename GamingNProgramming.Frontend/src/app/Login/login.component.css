@@ -52,6 +52,7 @@ main {
     font-family: 'system-ui';
     font-size: 0.9rem;
     letter-spacing: 2px;
+    height: 35px;
 }
 .submit_class {
     border-style: none;

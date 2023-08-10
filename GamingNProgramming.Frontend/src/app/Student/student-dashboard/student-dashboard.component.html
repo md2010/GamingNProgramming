@@ -20,27 +20,21 @@
           Pronađi prijatelje
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item spc-bottom">
         <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyFriends === true" (click)="myFriends()">
           <svg class="bi me-2" width="16" height="16"></svg>
           Moji prijatelji
         </a>
-      </li>
-      <li class="nav-item">
-        <a href="javascript:void(0)" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          Moja postignuća
-        </a>
-      </li>
+      </li>      
       <li class="progress-circle">
         <div class="progress yellow">
-            <span class="progress-left">
+            <span class="progress-left"[ngStyle]="{'--deg2' : mapPointsDeg2}">
                             <span class="progress-bar"></span>
             </span>
-            <span class="progress-right" [ngStyle]="{'--deg' : (37*180)/100}">
+            <span class="progress-right" [ngStyle]="{'--deg1' : mapPointsDeg1}">
                             <span class="progress-bar"></span>
             </span>
-            <div class="progress-value">37.5%</div>
+            <div class="progress-value">{{userDefaultPercentage}}%</div>
           </div>
       </li>
       <li class="progress-circle" *ngIf="user.professorId !== null">

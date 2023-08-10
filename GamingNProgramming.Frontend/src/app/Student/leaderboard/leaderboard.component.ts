@@ -152,5 +152,7 @@ interface Player {
   username: string;
   avatar: Avatar;
   defultPoints : number;
+  points : number;
+  xPs : number;
 }
 

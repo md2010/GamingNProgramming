@@ -11,24 +11,27 @@
       <tr *ngIf="players.length == 0">Nema rezultata</tr>
       <tr *ngIf="players.length > 0">
         <th scope="col"></th>
-        <th scope="col">Rang</th>
+        <th scope="col"></th>
         <th scope="col">Korisničko ime</th>
         <th scope="col">Bodovi</th>
+        <th scope="col">XPs</th>
         <th scope="col">Značke</th>
       </tr>
     </thead>
     <tbody *ngIf="players.length > 0">
       <tr *ngFor="let p of players; let i = index;" [ngClass]="{ 'me' : p.userId === userId}">
-        <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{i + 1}}</td>
+        <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{p?.username}}</td>
-        <td class="points">{{p.defultPoints}} 
-            <img *ngIf="i == 0 && p.defultPoints > 0" class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+        <td class="points">{{allStudents ? p.points : p.defultPoints}} 
+            <img *ngIf="i == 0 && (p.defultPoints > 0 || p.points > 0)" class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
         </td>
+        <td>{{p?.xPs}}</td>
         <td>značka</td>
       </tr>     
     </tbody>
   </table>
+  <p>*<i>Na ovoj ljestvici prikazani su bodovi prikupljeni na {{allStudents ? 'profesorovim' : 'osnovnim'}} mapama.</i></p>
   </div>
 
 

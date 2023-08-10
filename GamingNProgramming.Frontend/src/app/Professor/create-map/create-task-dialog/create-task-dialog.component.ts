@@ -114,13 +114,13 @@ export class CreateTaskDialogComponent {
   }
 
   save() {
-    if(!this.task.isMultiSelect) {
+    if(!this.task.isMultiSelect && !this.task.isCoding) {
       this.task.answers.forEach(answer => {
         if(answer.offeredAnswer === this.correctAnswer) {
           answer.isCorrect = true;
         }
       }); 
-    }
+    }    
     this.dialogRef.close({task: this.task});
   }
 }

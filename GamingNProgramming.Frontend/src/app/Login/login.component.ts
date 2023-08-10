@@ -47,10 +47,16 @@ export class LoginComponent {
                     var data = Response.body;
                     this.authService.storeData(data); 
                     if(data.roleName === 'Student') {
-                        this.router.navigate(['/student-dashboard']); 
+                        this.router.navigate(['/student-dashboard'])
+                        .then(() => {
+                            window.location.reload();
+                          });
                     }
                     else {
-                        this.router.navigate(['/professor-dashboard']); 
+                        this.router.navigate(['/professor-dashboard'])
+                        .then(() => {
+                            window.location.reload();
+                          });
                     }
 
                     this.loading = false;                
