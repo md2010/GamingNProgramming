@@ -20,5 +20,7 @@ namespace GamingNProgramming.Service.Interfaces
         Task<bool> UpdateMapAsync(Guid professorId, Map map);
 
         Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap, Guid levelId);
+
+        Task<bool> UpdateScoredPoints(Guid playerTaskId, int newPoints);
     }
 }

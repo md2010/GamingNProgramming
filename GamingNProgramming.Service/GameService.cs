@@ -45,6 +45,29 @@ namespace GamingNProgramming.Service
             return true;
         }
 
+        public async Task<bool> UpdateScoredPoints(Guid playerTaskId, int newPoints)
+        {
+            var entity = await PlayerRepository.GetPlayerTask(playerTaskId);
+
+            var player = await PlayerRepository.GetAsync(entity.PlayerId);
+            
+            if(entity.ScoredPoints < newPoints)
+            {
+                player.Points += (newPoints - entity.ScoredPoints);
+            }
+            else
+            {
+                player.Points -= (entity.ScoredPoints - newPoints);
+            }
+
+            entity.ScoredPoints = newPoints;
+
+            await PlayerRepository.UpdatePlayerTask(entity);
+            await PlayerRepository.UpdatePlayer(player);
+
+            return true;
+        }
+
         public async Task<Map> GetAsync(Guid id)
         {
             return await this.Repository.GetAsync(id);

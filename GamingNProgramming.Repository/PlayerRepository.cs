@@ -119,6 +119,22 @@ namespace GamingNProgramming.Repository
             var list = await query.ToListAsync();
             return list;
         }
+
+        public async Task<PlayerTask> GetPlayerTask(Guid id)
+        {
+            var result = await PlayerTaskEntities
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+
+            return result;
+        }
+
+        public async Task<bool> UpdatePlayerTask(PlayerTask playerTask)
+        {
+            PlayerTaskEntities.Update(playerTask);
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> UpdatePlayer(Player player)
         {
             Entities.Update(player);

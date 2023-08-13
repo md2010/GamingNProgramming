@@ -177,7 +177,8 @@ export class TaskViewComponent {
       this.dialog.open(this.notification, { data: 'Neispravan unos bodova!'});
     }
     else {
-      //update points
+      var data = {playersTaskId: this.playersTask!.id, newPoints: this.newPoints }
+      this.gameService.updateScoredPoints(data);
     }
   }
   

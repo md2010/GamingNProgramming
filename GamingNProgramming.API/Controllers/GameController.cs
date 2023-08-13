@@ -142,6 +142,27 @@ namespace GamingNProgramming.WebAPI.Controllers
         }
 
         [Authorize]
+        [HttpPut]
+        [Route("update-scored-points")]
+        public async Task<IActionResult> UpdateScoredPoints([FromBody] UpdateScoredPointsModel model)
+        {
+            if(model.PlayerTaskId == null)
+            {
+                return BadRequest();
+            }
+            var result = await GameService.UpdateScoredPoints(Helper.TransformGuid(model.PlayerTaskId), model.NewPoints);
+            
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [HttpGet]
         [Route("player-task/{playerId}/{mapId}")]
         public async Task<IActionResult> GetPlayerTask(string playerId, string mapId, String? taskId = "")
@@ -356,6 +377,12 @@ namespace GamingNProgramming.WebAPI.Controllers
            public int Points { get; set; }
             public long ExecutionTime { get; set; }
            public List<RunTestCasesResultModel> Results { get; set; }
+        }
+
+        public class UpdateScoredPointsModel
+        {
+            public string PlayerTaskId { get; set; }
+            public int NewPoints { get; set; }
         }
 
         public class InsertPlayerTaskModel

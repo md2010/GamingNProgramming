@@ -29,6 +29,10 @@ namespace GamingNProgramming.Repository
 
         Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId, Guid? taskId = null);
 
+        Task<bool> UpdatePlayerTask(PlayerTask playerTask);
+
+        Task<PlayerTask> GetPlayerTask(Guid id);
+
         Task<bool> UpdatePlayer(Player player);
 
         Task<IEnumerable<Player>> GetAllAsync();
