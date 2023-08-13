@@ -144,14 +144,14 @@ namespace GamingNProgramming.WebAPI.Controllers
         [Authorize]
         [HttpGet]
         [Route("player-task/{playerId}/{mapId}")]
-        public async Task<IActionResult> GetPlayerTask(string playerId, string mapId)
+        public async Task<IActionResult> GetPlayerTask(string playerId, string mapId, String? taskId = "")
         {
             if (playerId == null || mapId == null)
             {
                 return BadRequest();
             }
 
-            var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId), Helper.TransformGuid(mapId));
+            var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId), Helper.TransformGuid(mapId), String.IsNullOrEmpty(taskId) ? null : Helper.TransformGuid(taskId));
 
             return Ok(result);
 
@@ -173,6 +173,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                 var results = new List<RunTestCasesResultModel>();
                 var scoredPoints = 0;
                 var passedTestCases = 0;
+                List<long> times = new List<long>();
 
                 foreach (var testCase in model.TestCases)
                 {
@@ -191,9 +192,17 @@ namespace GamingNProgramming.WebAPI.Controllers
 
                     try
                     {
+                        Stopwatch stopwatch = new Stopwatch();
+                        stopwatch.Start();
+
                         using (Process exeProcess = Process.Start(startInfo))
                         {
                             exeProcess.WaitForExit();
+
+                            stopwatch.Stop();
+                            long ts = stopwatch.ElapsedMilliseconds;
+                            times.Add(ts);
+
                             using (StreamReader reader = exeProcess.StandardOutput)
                             {
                                 result = reader.ReadToEnd();
@@ -213,9 +222,9 @@ namespace GamingNProgramming.WebAPI.Controllers
                     }
                     catch { }
                 }
-
+                var bestTime = times.Min();
                 scoredPoints = Helper.GetPoints(passedTestCases, model.TestCases.Count, model.Points);
-                return Ok(new SubmitCodeResultModel { Points = scoredPoints, Results = results});
+                return Ok(new SubmitCodeResultModel { Points = scoredPoints, ExecutionTime = bestTime, Results = results});
             }
 
         }
@@ -345,6 +354,7 @@ namespace GamingNProgramming.WebAPI.Controllers
         public class SubmitCodeResultModel
         {
            public int Points { get; set; }
+            public long ExecutionTime { get; set; }
            public List<RunTestCasesResultModel> Results { get; set; }
         }
 
@@ -359,6 +369,9 @@ namespace GamingNProgramming.WebAPI.Controllers
             public double Percentage { get; set; }
             public string PlayersCode { get; set; } = "";
             public string Answers { get; set; } = "";
+            public long ExecutionTime { get; set; } = 0;
+
+            public string BadgeId { get; set; } = "";
         }
 
         public class MapModel
@@ -501,6 +514,8 @@ namespace GamingNProgramming.WebAPI.Controllers
             entity.Answers = model.Answers;
             entity.MapId = Helper.TransformGuid(model.MapId);
             entity.PlayersCode = model.PlayersCode;
+            entity.ExecutionTime = model.ExecutionTime;
+            entity.BadgeId = string.IsNullOrEmpty(model.BadgeId) ? null : Helper.TransformGuid(model.BadgeId);
 
             return entity;
         }

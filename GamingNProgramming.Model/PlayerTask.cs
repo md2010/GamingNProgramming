@@ -14,10 +14,10 @@ namespace GamingNProgramming.Model
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
+        public long ExecutionTime { get; set; }
 
         [ForeignKey("Player")]
         public Guid PlayerId { get; set; }
-        public virtual Player Player { get; set; }
 
         [ForeignKey("AssignmentId")]
         public Guid AssignmentId { get; set; }
@@ -31,5 +31,9 @@ namespace GamingNProgramming.Model
 
         public string PlayersCode { get; set; } = "";
         public string Answers { get; set; } = null;
+
+        [ForeignKey("BadgeId")]
+        public Guid? BadgeId { get; set; } = null;
+        public virtual Badge Badge { get; set; } = null;
     }
 }

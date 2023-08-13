@@ -144,7 +144,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                 }
             }
 
-            var result = await PlayerService.FindAsync(filters, model.SortOrder, "Avatar");
+            var result = await PlayerService.FindAsync(filters, model.SortOrder, model.IncludeProperties);
             return Ok(result);
         }
 

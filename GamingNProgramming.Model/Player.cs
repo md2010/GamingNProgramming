@@ -16,9 +16,11 @@ namespace GamingNProgramming.Model
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
         public string Username { get; set; }
-        public int DefultPoints { get; set; }
+        public int DefaultPoints { get; set; }
         public int Points { get; set; }
         public int XPs { get; set; }
+        public long TimeConsumed { get; set; }
+        public long DefaultTimeConsumed{ get; set; }
 
         [ForeignKey("Professor")]
         public Guid? ProfessorId { get; set; }
@@ -28,5 +30,7 @@ namespace GamingNProgramming.Model
         public Guid AvatarId { get; set; }
 
         public virtual Avatar Avatar { get; set; }
+
+        public virtual IList<PlayerTask> PlayerTasks { get; set; }
     }
 }

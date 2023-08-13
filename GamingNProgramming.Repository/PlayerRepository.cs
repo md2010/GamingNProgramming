@@ -103,14 +103,20 @@ namespace GamingNProgramming.Repository
             return true;
         }
 
-        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId)
+        public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId, Guid? taskId = null)
         {
-            var list = await PlayerTaskEntities
+            IQueryable<PlayerTask> query = PlayerTaskEntities;
+            query = query
                 .Where(p => p.PlayerId == playerId)
                 .Where(p => p.MapId == mapId)
                 .Include(p => p.Assignment)
-                .OrderByDescending(p => p.DateCreated)           
-                .ToListAsync();
+                .Include(p => p.Badge)
+                .OrderByDescending(p => p.DateCreated);
+            if(taskId != null)
+            {
+                query = query.Where(p => p.AssignmentId == taskId);
+            }
+            var list = await query.ToListAsync();
             return list;
         }
         public async Task<bool> UpdatePlayer(Player player)
@@ -134,7 +140,16 @@ namespace GamingNProgramming.Repository
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                query = query.Include(includeProperty);
+                if(includeProperty == "playerTasks")
+                {
+                    query = query
+                        .Include(p => p.PlayerTasks)
+                        .ThenInclude(a => a.Badge);
+                }
+                else
+                {
+                    query = query.Include(includeProperty);
+                }
             }
 
             var result = await query.ToPagedListAsync(1, 20);
@@ -209,25 +224,31 @@ namespace GamingNProgramming.Repository
             {
                 foreach (var includeProperty in includeProperties.Split
                     (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
+                {                   
+                    query = query.Include(includeProperty);                    
                 }
             }
 
-            query = query.Include("Player1");
-            query = query.Include("Player2");
             query = query.Include("Player1.Avatar");
             query = query.Include("Player2.Avatar");
+            query = query
+                .Include(p => p.Player1)
+                .ThenInclude(a => a.PlayerTasks)
+                .ThenInclude(b => b.Badge);
+            query = query
+                .Include(p => p.Player2)
+                .ThenInclude(a => a.PlayerTasks)
+                .ThenInclude(b => b.Badge);
 
-            var str = query.ToQueryString();
-
-            var result = await query.ToPagedListAsync(1, 20);
+            var result = await query.ToPagedListAsync(1, 50);
             var playersFriends = await FilterPlayersFriends(id, result, includeUser);
             
             if (!String.IsNullOrEmpty(sortOrder))
             {
                 if(sortOrder == "desc")
-                    playersFriends.OrderByDescending(p => p.Points);
+                    playersFriends
+                        .OrderByDescending(p => p.Points)
+                        .OrderBy(p => p.TimeConsumed);
                 else
                     playersFriends.OrderBy(p => p.Points);
             }

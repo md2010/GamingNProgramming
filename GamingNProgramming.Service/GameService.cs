@@ -31,13 +31,15 @@ namespace GamingNProgramming.Service
             var player = await PlayerRepository.GetAsync(playerTask.PlayerId);
             if(isDefaultMap)
             {
-                player.DefultPoints += playerTask.ScoredPoints;
+                player.DefaultPoints += playerTask.ScoredPoints;
+                player.DefaultTimeConsumed += playerTask.ExecutionTime;
             }
             else
             {
                 player.Points += playerTask.ScoredPoints;
-            }           
-
+                player.TimeConsumed += playerTask.ExecutionTime;
+            }
+            
             await PlayerRepository.UpdatePlayer(player);
 
             return true;

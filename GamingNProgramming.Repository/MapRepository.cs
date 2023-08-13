@@ -45,6 +45,9 @@ namespace GamingNProgramming.Repository
                 .Include(a => a.Levels)
                     .ThenInclude(b => b.Assignments)
                         .ThenInclude(c => c.TestCases)
+                .Include(a => a.Levels)
+                    .ThenInclude(b => b.Assignments)
+                        .ThenInclude(c => c.Badge)
                 .FirstOrDefault();
 
             map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();

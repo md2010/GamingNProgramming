@@ -59,7 +59,7 @@ namespace GamingNProgramming.Service
            string includeProperties = ""
         );
 
-        Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId);
+        Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId, Guid? taskId = null);
 
         #endregion
     }

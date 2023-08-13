@@ -4,6 +4,7 @@ using GamingNProgramming.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamingNProgramming.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813085332_addbadgetoplayertask")]
+    partial class addbadgetoplayertask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,11 +322,8 @@ namespace GamingNProgramming.DAL.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DefaultPoints")
+                    b.Property<int>("DefultPoints")
                         .HasColumnType("int");
-
-                    b.Property<long>("DefaultTimeConsumed")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
@@ -579,7 +579,7 @@ namespace GamingNProgramming.DAL.Migrations
                         .WithMany()
                         .HasForeignKey("BadgeId");
 
-                    b.HasOne("GamingNProgramming.Model.Player", null)
+                    b.HasOne("GamingNProgramming.Model.Player", "Player")
                         .WithMany("PlayerTasks")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -588,6 +588,8 @@ namespace GamingNProgramming.DAL.Migrations
                     b.Navigation("Assignment");
 
                     b.Navigation("Badge");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.TestCase", b =>

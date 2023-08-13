@@ -50,12 +50,6 @@ namespace GamingNProgramming.Repository
 
             return await query.ToPagedListAsync(1, 10);      
         }
-
-        private void ApplyFilter()
-        {
-
-        }
-
         public async Task AddAsync(Professor entity)
         {
             Entities.Add(entity);

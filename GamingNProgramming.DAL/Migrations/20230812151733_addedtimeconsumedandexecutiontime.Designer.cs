@@ -4,6 +4,7 @@ using GamingNProgramming.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamingNProgramming.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230812151733_addedtimeconsumedandexecutiontime")]
+    partial class addedtimeconsumedandexecutiontime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,11 +322,8 @@ namespace GamingNProgramming.DAL.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DefaultPoints")
+                    b.Property<int>("DefultPoints")
                         .HasColumnType("int");
-
-                    b.Property<long>("DefaultTimeConsumed")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
@@ -363,9 +363,6 @@ namespace GamingNProgramming.DAL.Migrations
                     b.Property<Guid>("AssignmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BadgeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -394,8 +391,6 @@ namespace GamingNProgramming.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
-
-                    b.HasIndex("BadgeId");
 
                     b.HasIndex("PlayerId");
 
@@ -575,19 +570,15 @@ namespace GamingNProgramming.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GamingNProgramming.Model.Badge", "Badge")
+                    b.HasOne("GamingNProgramming.Model.Player", "Player")
                         .WithMany()
-                        .HasForeignKey("BadgeId");
-
-                    b.HasOne("GamingNProgramming.Model.Player", null)
-                        .WithMany("PlayerTasks")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Assignment");
 
-                    b.Navigation("Badge");
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.TestCase", b =>
@@ -612,11 +603,6 @@ namespace GamingNProgramming.DAL.Migrations
             modelBuilder.Entity("GamingNProgramming.Model.Map", b =>
                 {
                     b.Navigation("Levels");
-                });
-
-            modelBuilder.Entity("GamingNProgramming.Model.Player", b =>
-                {
-                    b.Navigation("PlayerTasks");
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Professor", b =>
