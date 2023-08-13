@@ -23,7 +23,7 @@
         <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{p?.username}}</td>
         <td>{{p?.points}}</td>
-        <td><button class="btn btn-primary">Pregledaj rješene zadatke</button></td>
+        <td><button class="btn btn-primary" (click)="review(p.userId)">Pregledaj rješene zadatke</button></td>
         <td><button class="btn btn-primary" (click)="deleteStudent(p.userId)">Obriši sa popisa studenata</button></td>
       </tr>     
     </tbody>

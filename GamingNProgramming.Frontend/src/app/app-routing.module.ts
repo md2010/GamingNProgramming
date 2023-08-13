@@ -9,6 +9,7 @@ import { TaskPlayComponent } from './Student/task-play/task-play.component';
 import { TaskViewComponent } from './Student/task-view/task-view.component';
 
 import { ProfessorDashboardComponent } from './Professor/professor-dashboard/professor-dashboard.component';
+import { ReviewComponent } from './Professor/review/review.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'map-info/:id', component: MapInfoComponent},
   {path: 'task-play/:id', component: TaskPlayComponent},
   {path: 'task-view/:id', component: TaskViewComponent},
-  {path: 'professor-dashboard', component: ProfessorDashboardComponent}
+  {path: 'professor-dashboard', component: ProfessorDashboardComponent},
+  {path: 'review/:id', component: ReviewComponent}
   
 ];
 

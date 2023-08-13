@@ -7,13 +7,14 @@ import { FindStudentsComponent } from './find-students/find-students.component';
 import { MyStudentsComponent } from './my-students/my-students.component';
 import { CreateMapComponent } from '../create-map/create-map.component';
 import { MyMapsComponent } from '../my-maps/my-maps.component';
+import { HomeComponent } from 'src/app/Student/home/home.component';
 
 @Component({
   selector: 'app-professor-dashboard',
   templateUrl: './professor-dashboard.component.html',
   styleUrls: ['./professor-dashboard.component.css'],
   standalone: true,
-  imports: [FindStudentsComponent, MyStudentsComponent, CommonModule, CreateMapComponent, MyMapsComponent]
+  imports: [FindStudentsComponent, MyStudentsComponent, CommonModule, CreateMapComponent, MyMapsComponent, HomeComponent]
 })
 export class ProfessorDashboardComponent {
   constructor (private userService: UserService, private router: Router) {}
@@ -24,6 +25,8 @@ export class ProfessorDashboardComponent {
   showMyStudents = true;
   showCreateMap = false;
   showMyMaps = false;
+
+  playerId = ''
 
   ngOnInit() {    
     this.getPlayer().then(() => {
@@ -79,9 +82,19 @@ export class ProfessorDashboardComponent {
     this.showMyMaps = true;
   }
 
+  review(playerId: any) {
+    this.showMyStudents = false;
+    this.showFindStudents = false;
+    this.showCreateMap = false;
+    this.showMyMaps = false;
+    this.playerId = playerId;
+    this.router.navigate(['/review', playerId])
+  }
+
 }
 
 interface User {
+  userId: string;
   username: string;
   students: Array<Student>;
 }

@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-1 spc-top">
+      <a href="javascript:void(0);" (click)="onBack()" class="previous">&#8249;</a>
+    </div>
+  </div>
+  
+  <div *ngIf="!loaded">
+    <app-spinner-component></app-spinner-component>
+  </div>
+  <div class="row" *ngIf="loaded">
+    <div *ngFor="let p of maps" class="spc-bottom spc-top">
+        <div class="col-4">
+        <div class="row row-cols">
+            <h3 class="spc-left"><strong>{{p.title}}</strong></h3>
+            <div class="col-sm" *ngFor="let m of p.levels; let ind = index;">
+                <div class="card spc-bottom" style="width: 40rem;">           
+                    <div class="card-body">
+                        <h5 class="card-title">Razina {{ind+1}}: {{m.title}}</h5>
+                        <p class="card-text"> {{m.description}}</p>
+                    </div>
+                    <ul class="list-group list-group-flush" *ngFor="let a of m.assignments; let i = index;">
+                        <div *ngIf="isPlayed(a.id)">
+                            <li class="list-group-item" [ngClass]="getColor(a.id)">
+                            <span>Zadatak {{i+1}} : {{a.title}} </span>                                     
+                            <button class="btn btn-primary" (click)="taskView(a.id, p.id)" style="margin-left: 10px; margin-right: 10px;">Pregledaj</button>
+                            <span class="percentage"> {{getPercentage(a.id)}}%</span>
+                            </li>
+                        </div>
+                    </ul>           
+                </div>       
+            </div>
+        </div>
+        </div>
+    </div>   
+  </div>
+  

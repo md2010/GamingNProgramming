@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/UserService';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ export class MyStudentsComponent {
   players: Player[] = [];
   loaded = false;
   searchName = '';
+  @Output() reviewEvent = new EventEmitter<string>();
 
   ngOnInit() {    
     this.find().then(() => { 
@@ -51,6 +52,10 @@ export class MyStudentsComponent {
     )
     });
      return promise;
+  }
+
+  review(value: any) {
+    this.reviewEvent.emit(value);
   }
 
   deleteStudent(id: string) {

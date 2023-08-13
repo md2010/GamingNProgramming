@@ -50,14 +50,23 @@ export class TaskViewComponent {
   mapId! : string;
   playersTask : PlayerTask | null = null;
 
+  playerId: string | null = null
+  newPoints : number | null = null
+
   value: string = '';
   editorOptions = { theme: 'vs-dark', language: 'c' };
   model: NuMonacoEditorModel = {
     language: "c"
   }; 
 
-  constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, private authService : AuthService) { 
+  @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
+
+  constructor( private route: ActivatedRoute, private router: Router, private gameService: GameService, public dialog: MatDialog, private authService : AuthService) { 
     this.mapId = this.router.getCurrentNavigation()!.extras!.state!['mapId'];
+    this.playerId = this.router.getCurrentNavigation()!.extras!.state!['playerId'];
+    if(!this.playerId) {
+      this.authService.getAuthorized().userId;
+    }
     this.role = this.authService.getAuthorized().roleName;
    }
 
@@ -93,13 +102,14 @@ export class TaskViewComponent {
       )
     })
     promise.then(() => {     
-      this.gameService.getPlayerTask(this.authService.getAuthorized().userId!, this.mapId)
+      this.gameService.getPlayerTask(this.playerId!, this.mapId)
       .subscribe(
         (Response) => {
           if(Response.body && Response.body.length > 0) {
             var playerTasks = Response.body;
             this.playersTask = playerTasks.find((a : any) => a.assignmentId === this.taskId);
-            if(!this.task.isCoding) {
+            this.newPoints = this.playersTask!.scoredPoints
+            if(!this.task.isCoding) {             
               var userAnswers = this.playersTask?.answers.split(',')
               if(this.task.isMultiSelect) {
                 this.offeredAnswers.forEach(el => {
@@ -145,7 +155,6 @@ export class TaskViewComponent {
             if(Response.body.results) {
               this.error = false;
               this.loading = false;
-              this.points = Response.body.points;
               this.submitCodeResult = Response.body.results;
               resolve('done');
             }             
@@ -159,9 +168,24 @@ export class TaskViewComponent {
     });
     return promise; 
   } 
+
+  updatePoints() {
+    if(!this.newPoints) {
+      this.dialog.open(this.notification, { data: 'Unesi vrijednost!'});
+    }
+    if(this.newPoints! > this.task.points || this.newPoints! < 0 || this.newPoints === this.playersTask?.scoredPoints) {
+      this.dialog.open(this.notification, { data: 'Neispravan unos bodova!'});
+    }
+    else {
+      //update points
+    }
+  }
   
   onBack(): void {
-    this.router.navigate(["/map-info/", this.mapId]);
+    if(this.role === 'Student')
+      this.router.navigate(["/map-info/", this.mapId]);
+    else 
+      this.router.navigate(["/review/", this.playerId]);
   }
   goBack(): void {
     this.onBack();

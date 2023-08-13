@@ -47,10 +47,13 @@
                         </table>
                     </div>
                     <div class="col-2">
-                        <strong *ngIf="role !== 'Student'">
-                                <input class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}"> / {{task.points}}                                           
-                        </strong>
-                        <p>Osvojeno bodova: <strong>{{playersTask!.scoredPoints}}/{{task.points}}</strong></p>
+                        <p>Osvojeno bodova: 
+                                <strong *ngIf="role === 'Student'">{{playersTask!.scoredPoints}}/{{task.points}}</strong>
+                                <strong *ngIf="role !== 'Student'">
+                                    <input class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}" [(ngModel)]="newPoints"> / {{task.points}}                                           
+                                </strong>
+                        </p>
+                        <button *ngIf="role !== 'Student'" type="button" class="btn btn-success" (click)="updatePoints()">Spremi izmjenu</button> 
                         <p>Vrijeme izvođenja: <strong>{{playersTask!.executionTime}} ms</strong></p>
                     </div>
                 </div>
@@ -127,6 +130,16 @@
                     <button type="button" class="btn btn-success" (click)="goBack()">Natrag na zadatke</button> 
             </div>            
     </div>
-    </div>
+</div>
+
+<ng-template #notification let-data>
+        <h2 matDialogTitle>Obavijest</h2>
+        <mat-dialog-content>
+           <p>{{data}}</p>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+        </mat-dialog-actions>
+</ng-template>
 
     

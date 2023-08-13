@@ -37,7 +37,7 @@
     </div>
     <div class="col-9">
         <app-find-students *ngIf="showFindStudents"></app-find-students>
-        <app-my-students *ngIf="showMyStudents && loaded"></app-my-students>
+        <app-my-students *ngIf="showMyStudents && loaded" (reviewEvent)="review($event)"></app-my-students>
         <app-create-map *ngIf="showCreateMap"></app-create-map>
         <app-my-maps *ngIf="showMyMaps"></app-my-maps>
     </div>
