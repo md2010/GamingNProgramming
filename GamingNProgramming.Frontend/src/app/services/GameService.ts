@@ -82,12 +82,17 @@ export class GameService {
   
       return this.http.get<any>(this.apiUrl + '/task/' + id, {headers: headersToSend, observe : 'response'});
   }
-  getPlayerTask(playerId: string, mapId : string) {
+  getPlayerTask(playerId: string, mapId : string, taskId : string = '') {
     let headersToSend = new HttpHeaders();
     headersToSend = headersToSend
       .set( 'Authorization', `Bearer ${this.authService.token}`)
-  
+
+    if(taskId !== '') {
+      return this.http.get<any>(this.apiUrl + '/player-task/' + playerId + '/' + mapId +  '?' + 'taskId=' + taskId, {headers: headersToSend, observe : 'response'});
+    }
+    else {
       return this.http.get<any>(this.apiUrl + '/player-task/' + playerId + '/' + mapId, {headers: headersToSend, observe : 'response'});
+    }    
   }
 
   insertPlayerTask(playerTask : any) {

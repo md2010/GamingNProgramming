@@ -34,7 +34,7 @@ export class MyStudentsComponent {
 
   find() {
     var promise = new Promise((resolve, reject) => {
-      var search = { username : this.searchName, professorId: sessionStorage.getItem("userId")};
+      var search = { username : this.searchName, professorId: sessionStorage.getItem("userId"), includeProperties: 'Avatar'};
       this.userService.getPlayers(search)
     .subscribe(
       (Response) => {
@@ -76,5 +76,6 @@ interface Player {
   userId: string;
   username: string;
   avatar: Avatar;
+  points: number;
 }
 

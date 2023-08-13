@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/UserService';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/AuthService';
+import { PlayerTask } from 'src/app/classes/Classes';
 
 @Component({
   selector: 'app-leaderboard',
@@ -15,7 +16,7 @@ import { AuthService } from 'src/app/services/AuthService';
 export class LeaderboardComponent {
 
   constructor(private userService: UserService, private authService: AuthService) {}
-
+  role!: string | null
   friends: Player[] = [];
   playersAll: Player[] = [];
   players: Player[] = []
@@ -28,11 +29,29 @@ export class LeaderboardComponent {
   userId : string | null = '';
 
   ngOnInit() { 
+    this.role = this.authService.getAuthorized().roleName;
     this.userId = this.authService.getAuthorized().userId; 
-    this.allStudents = false;
-    this.allFriends = true;
-    this.allPlayers = false;  
-    this.getAllFriends();
+    if(this.role === 'Student') {
+      this.allStudents = false;
+      this.allFriends = true;
+      this.allPlayers = false;  
+      this.getAllFriends();
+    } 
+    else {
+      var search = {
+        sortOrder: 'asc',
+        professorId: this.userId,
+        includeProperties: 'playerTasks,Avatar'
+      };
+      this.getPlayers(search, 'students').then(() => {
+        this.players = this.students;
+        this.allStudents = true;
+        this.allPlayers = false;
+        this.allFriends = false;
+       this.loaded = true;
+      });  
+    }
+
   }
 
   setPlayers(who : string) {
@@ -76,6 +95,14 @@ export class LeaderboardComponent {
           this.friends = Response.body;
           this.friends.every(p => { p.avatar.path = '../' + p.avatar.path; });
           this.players = this.friends;
+          this.friends.forEach(p => { 
+            p.badges = [];
+            p.playerTasks.forEach(element => {
+            if(element.badge) {
+              p.badges.push({path: element.badge?.path!, isDefaultMap: false});
+            }             
+          })
+          });        
           resolve('done');
         }
       },
@@ -89,7 +116,7 @@ export class LeaderboardComponent {
 
   getAllPlayers() : boolean {
     var search = {
-      sortOrder: 'asc'
+      sortOrder: 'asc', includeProperties: 'playerTasks,Avatar'
     };
     this.getPlayers(search, 'players').then(() => { 
       return true 
@@ -100,7 +127,8 @@ export class LeaderboardComponent {
   getAllStudents() : boolean {
     var search = {
       sortOrder: 'asc',
-      professorId: localStorage.getItem('professorId')
+      professorId: this.role === 'Student' ? localStorage.getItem('professorId') : this.userId,
+      includeProperties: 'playerTasks,Avatar'
     };
     if(search.professorId != null) {
       this.getPlayers(search, 'students').then(() => { 
@@ -119,10 +147,26 @@ export class LeaderboardComponent {
           if(who === 'players') {
             this.playersAll = Response.body;
             this.playersAll.every(p => { p.avatar.path = '../' + p.avatar.path; });
+            this.playersAll.forEach(p => { 
+              p.badges = [];
+              p.playerTasks.forEach(element => {
+              if(element.badge) {
+                p.badges.push({path: element.badge?.path!, isDefaultMap: false});
+              }             
+            })
+            });
           }
           else {
             this.students = Response.body;
             this.students.every(p => { p.avatar.path = '../' + p.avatar.path; });
+            this.students.forEach(p => { 
+              p.badges = [];
+              p.playerTasks.forEach(element => {
+              if(element.badge) {
+                p.badges.push({path: element.badge?.path!, isDefaultMap: false});
+              }             
+            })
+            });          
           }
           resolve('done');
         }
@@ -151,8 +195,17 @@ interface Player {
   userId: string;
   username: string;
   avatar: Avatar;
-  defultPoints : number;
+  defaultPoints : number;
   points : number;
   xPs : number;
+  timeConsumed: number;
+  defaultTimeConsumed: number;
+  badges: Array<BadgeREST>;
+  playerTasks: Array<PlayerTask>;
+}
+
+interface BadgeREST {
+  path: string;
+  isDefaultMap: boolean;
 }
 

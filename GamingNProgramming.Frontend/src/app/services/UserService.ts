@@ -118,6 +118,19 @@ export class UserService {
       }
       params += `includeUser=${search.includeUser}`;
     }
+    if(search?.includeProperties != null) {
+      if(params.length > 0) {
+        params += '&';
+      }
+      var includes = search?.includeProperties.split(',');
+      params += 'includeProperties=';
+      includes.forEach((element : string, index : number) => {
+        params += `${element}`;
+        if(index + 1 < includes.length) {
+          params += ',';
+        }
+      });      
+    }
     if(search?.professorId != null) {
       if(params.length > 0) {
         params += '&';
@@ -133,5 +146,6 @@ interface Search {
   username : string,
   includeUser: string,
   professorId: string
+  includeProperties: string;
 }
 

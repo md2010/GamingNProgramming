@@ -27,6 +27,8 @@ export class PlayerTask {
     mapId : string = ''
     assignment!: Assignment 
     playersCode : string = ''
+    executionTime : number = 0
+    badge: Badge | null = null
 }
 
 export class Level {
@@ -54,6 +56,7 @@ export class Assignment {
     seconds : number = 0
     isMultiSelect: boolean = false
     badgeId: string = ''
+    badge : Badge | null = null
     number : number = 0
     levelId :  string = ''
 }

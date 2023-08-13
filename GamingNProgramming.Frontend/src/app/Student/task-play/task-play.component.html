@@ -1,4 +1,9 @@
-<div *ngIf="loaded">
+
+<div *ngIf="alreadyPlayed" style="text-align: center;">
+        <h3>Ovaj zadatak je već riješen.</h3><hr>
+</div>
+
+<div *ngIf="loaded && !alreadyPlayed">
 <div class="row timer" *ngIf="timerStarted && task.isTimeMeasured">
         <timer [seconds]="10" (countDownEvent)="countDownDone($event)"></timer>
 </div>
@@ -59,6 +64,7 @@
                 </div>
                 <div class="col-2">
                         <p>Osvojeno bodova: <strong>{{points}}/{{task.points}}</strong></p>
+                        <p>Vrijeme izvođenja: <strong>{{executionTime}} ms</strong></p>
                 </div>
                 </div>
         </div>
@@ -135,4 +141,16 @@
         <mat-dialog-actions align="end">
           <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
         </mat-dialog-actions>
+</ng-template>
+
+<ng-template #badge let-data>
+                <h2 matDialogTitle>Značka osvojena!</h2>
+                <mat-dialog-content>
+                <div style="text-align: center;">
+                        <img src="{{data}}" width="130" height="115">
+                </div>
+                </mat-dialog-content>
+                <mat-dialog-actions align="end">
+                <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+                </mat-dialog-actions>
 </ng-template>

@@ -2,6 +2,7 @@
     <div class="col-sm">
         <button class="btn btn-primary spc-left" (click)="theory()" *ngIf="disableEdit === false ? true : (!task.isCoding)" [disabled]="!task.isCoding || disableEdit">Teoretski zadatak</button>
         <button class="btn btn-primary spc-left" (click)="coding()" *ngIf="disableEdit === false ? true : (task.isCoding)" [disabled]="task.isCoding || disableEdit">Programski zadatak</button>
+        <button type="button" class="btn btn-success btn-right" (click)="data.close()">Zatvori</button> 
     </div>
     
     <form *ngIf="!task.isCoding" class="spc-top">
@@ -124,7 +125,7 @@
                         [(ngModel)]="task.isTimeMeasured"
                         [disabled]="disableEdit"
                         name="isTimeMeasured">
-                        Zadatku se mjeri vrijeme izvršavanja
+                        Zadatku je ograničeno vrijeme izvršavanja
                     </mat-slide-toggle>
                 </div>
             </div>

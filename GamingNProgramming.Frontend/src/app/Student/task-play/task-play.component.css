@@ -61,3 +61,15 @@ textarea {
     border: 2px solid !important;
     border-color: #ED1D24 !important;    
 }
+
+canvas {
+    height: 800px;
+    width: 800px;
+    position: fixed;
+    top: 20%;
+    left: 30%;
+}
+
+.bdp{
+    background: rgba(160, 144, 144, 0.759);
+}

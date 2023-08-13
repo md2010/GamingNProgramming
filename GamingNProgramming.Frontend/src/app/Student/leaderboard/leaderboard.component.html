@@ -1,5 +1,5 @@
 
-<div class="align-items-center spc-bottom spc-top spc-left">
+<div class="align-items-center spc-bottom spc-top spc-left" *ngIf="role === 'Student'">
     <button class="btn btn-primary spc-right" [disabled]="allFriends" (click)="setPlayers('friends')">Prikaži prijatelje</button>
     <button class="btn btn-primary spc-right" [disabled]="allPlayers" (click)="setPlayers('players')">Prikaži sve igrače</button>
     <button class="btn btn-primary" *ngIf="students && students.length > 0" [disabled]="allStudents" (click)="setPlayers('students')">Prikaži studente</button>
@@ -14,6 +14,7 @@
         <th scope="col"></th>
         <th scope="col">Korisničko ime</th>
         <th scope="col">Bodovi</th>
+        <th scope="col">Ukupno vrijeme izvršavanja [ms]</th>
         <th scope="col">XPs</th>
         <th scope="col">Značke</th>
       </tr>
@@ -23,15 +24,20 @@
         <td>{{i + 1}}</td>
         <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{p?.username}}</td>
-        <td class="points">{{allStudents ? p.points : p.defultPoints}} 
-            <img *ngIf="i == 0 && (p.defultPoints > 0 || p.points > 0)" class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
+        <td class="points">{{allStudents ? p.points : p.defaultPoints}} 
+            <img *ngIf="i == 0 && (p.defaultPoints > 0 || p.points > 0)" class="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>
         </td>
+        <td>{{allStudents ? p?.timeConsumed : p.defaultTimeConsumed}}</td>
         <td>{{p?.xPs}}</td>
-        <td>značka</td>
+        <td>
+          <div *ngFor="let el of p?.badges" style="display:inline">
+            <img src="{{el.path}}" width="65px" height="55px" style="margin-left: 5px;">
+          </div>
+        </td>
       </tr>     
     </tbody>
   </table>
-  <p>*<i>Na ovoj ljestvici prikazani su bodovi prikupljeni na {{allStudents ? 'profesorovim' : 'osnovnim'}} mapama.</i></p>
+  <p *ngIf="role === 'Student'">*<i>Na ovoj ljestvici prikazani su bodovi prikupljeni na {{allStudents ? 'profesorovim' : 'osnovnim'}} mapama.</i></p>
   </div>
 
 

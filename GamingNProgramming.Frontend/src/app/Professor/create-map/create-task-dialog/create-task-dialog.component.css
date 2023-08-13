@@ -27,3 +27,13 @@
 ul {
     list-style-type: none;
   }
+
+  .to-top {
+    padding: 15px;
+    position:absolute;
+    top:0;
+}
+
+.btn-right {
+    float: right;
+}

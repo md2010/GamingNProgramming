@@ -132,7 +132,7 @@ export class MapInfoComponent {
     let dialogRef = this.dialog.open(CreateTaskDialogComponent, {
       width: '1500px',
       height: '900px', 
-      data: { task: this.map.levels[levelNumber].assignments[i], index : i, disableEdit : true },    
+      data: { task: this.map.levels[levelNumber].assignments[i], index : i, disableEdit : true, close : (() => dialogRef.close()) },    
     });
   }
 

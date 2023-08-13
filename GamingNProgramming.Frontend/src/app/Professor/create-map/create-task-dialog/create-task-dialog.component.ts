@@ -85,7 +85,7 @@ export class CreateTaskDialogComponent {
     '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
     'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
     '\n a ne tekstulani (string), potrebno je ' +
-    'ulaze pretvoriti \n u brojeve. Primjer: a = argv[1]; val = atoi(a);\n*/';
+    'ulaze pretvoriti \n u brojeve. Primjer: int value = atoi(argv[1]);\n*/';
     this.task.isCoding = true;
   }
 
@@ -128,6 +128,7 @@ export class CreateTaskDialogComponent {
 interface Data {
   task: Assignment
   disableEdit: boolean
+  close() : any
 }
 
 
