@@ -68,6 +68,63 @@ namespace GamingNProgramming.Service
             return true;
         }
 
+        #region Battle
+
+        public async Task<Battle> GetBattleAsync(Guid id)
+        {
+            return await PlayerRepository.GetBattleAsync(id);
+        }
+        public async Task<Battle> InsertBattle(Guid player1Id, Guid player2Id)
+        {
+            var result = await GetAssignmentsForBattleAsync(player1Id, player2Id);
+
+            var battle = new Battle();
+            battle.DateUpdated = DateTime.Now;
+            battle.DateCreated = DateTime.Now;
+            battle.Id = Guid.NewGuid();
+            battle.LevelNumber = result.Item2;
+            battle.Player1Points = 0;
+            battle.Player2Points = 0;
+
+            battle.AssignmentIds = string.Join(",", result.Item1.Select(x => x.Id));
+
+            await PlayerRepository.AddBattleAsync(battle);
+
+            return battle;
+        }
+
+        private async Task<int> GetLevelNumberForBattle(Guid player1Id, Guid player2Id, Guid defaultMapId)
+        {
+            var level1 = 1;
+            var level2 = 1;
+
+            var playerTask1 = await PlayerRepository.FindPlayerTaskForBattle(player1Id, defaultMapId!);
+            if(playerTask1 != null)
+            {
+                level1 = (await Repository.GetLevelAsync(playerTask1.Assignment.LevelId)).Number;
+            }
+
+            var playerTask2 = await PlayerRepository.FindPlayerTaskForBattle(player2Id, defaultMapId);
+            if(playerTask2 != null)
+            {
+                level2 = (await Repository.GetLevelAsync(playerTask2.Assignment.LevelId)).Number;
+            }
+            
+            return level1 > level2 ? level2 : level1;
+        }
+
+        private async Task<Tuple<List<Assignment>, int>> GetAssignmentsForBattleAsync(Guid player1Id, Guid player2Id)
+        {
+            var defaultMapId = (await Repository.GetDefaultMapAsync()).Id;
+
+            int levelNumber = await GetLevelNumberForBattle(player1Id, player2Id, defaultMapId);
+            var assignments = await Repository.GetAssignmentsForForBattleAsync(levelNumber, defaultMapId);
+
+            return new Tuple<List<Assignment>, int>(assignments, levelNumber);
+        }
+
+
+        #endregion
         public async Task<Map> GetAsync(Guid id)
         {
             return await this.Repository.GetAsync(id);
@@ -124,6 +181,7 @@ namespace GamingNProgramming.Service
                 level.Id = Guid.NewGuid();
                 level.MapId = map.Id;
                 level.Number = i;
+                var levelPoints = 0;
 
                 foreach (var task in level.Assignments)
                 {
@@ -133,6 +191,7 @@ namespace GamingNProgramming.Service
                     task.LevelId = level.Id;
                     task.Number = j;
                     points += task.Points;
+                    levelPoints += task.Points;
 
                     foreach (var testCase in task.TestCases)
                     {
@@ -151,6 +210,7 @@ namespace GamingNProgramming.Service
                     }
                     j++;
                 }
+                level.Points = levelPoints;
                 i++;
             }
             map.Points = points;

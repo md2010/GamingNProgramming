@@ -142,7 +142,7 @@ namespace GamingNProgramming.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPost]
         [Route("update-scored-points")]
         public async Task<IActionResult> UpdateScoredPoints([FromBody] UpdateScoredPointsModel model)
         {
@@ -173,6 +173,39 @@ namespace GamingNProgramming.WebAPI.Controllers
             }
 
             var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId), Helper.TransformGuid(mapId), String.IsNullOrEmpty(taskId) ? null : Helper.TransformGuid(taskId));
+
+            return Ok(result);
+
+        }
+       
+        [Authorize]
+        [HttpPost]
+        [Route("insert-battle/{player2Id}")]
+        public async Task<IActionResult> InsertBattle(string player2Id)
+        {
+            if (player2Id == null)
+            {
+                return BadRequest();
+            }
+
+            var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await this.GameService.InsertBattle(Helper.TransformGuid(id), Helper.TransformGuid(player2Id));
+
+            return Ok(result);
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("battle/{id}")]
+        public async Task<IActionResult> GetBattle(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.GetBattleAsync(Helper.TransformGuid(id));
 
             return Ok(result);
 

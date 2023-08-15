@@ -15,9 +15,13 @@ namespace GamingNProgramming.Repository
 
         Task<Map> GetAsync(Guid id);
 
+        Task<Map> GetDefaultMapAsync();
+
         Task<Assignment> GetTaskAsync(Guid id);
 
         Task<Level> GetLevelAsync(Guid levelId);
+
+        Task<List<Assignment>> GetAssignmentsForForBattleAsync(int levelNumber, Guid mapId);
 
         Task<Map> GetMapByProfessorIdForEditingAsync(Guid id);
 

@@ -59,6 +59,23 @@ namespace GamingNProgramming.Repository
             return map;
         }
 
+        public async Task<Map> GetDefaultMapAsync()
+        {
+            var map = Entities.Where(a => a.ProfessorId == null)
+                .Include(a => a.Levels)
+                .ThenInclude(b => b.Assignments)
+                .FirstOrDefault();           
+
+            map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
+
+            foreach (var level in map.Levels)
+            {
+                level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+            }
+
+            return map;
+        }
+
         public async Task<Assignment> GetTaskAsync(Guid id)
         {
             var a = AssignmentEntities
@@ -79,6 +96,26 @@ namespace GamingNProgramming.Repository
                 .FirstOrDefault();
 
             return a;
+        }
+
+        public async Task<List<Assignment>> GetAssignmentsForForBattleAsync(int levelNumber, Guid mapId)
+        {
+            var levels = await LevelEntities
+                .Where(a => a.Number <= levelNumber)
+                .Where(a => a.MapId == mapId)
+                .Include(a => a.Assignments)
+                .ToListAsync();
+
+            var random = new Random();
+            int index1 = random.Next(levels.Count);
+            var codingTask1 = levels[index1].Assignments.Where(a => a.IsCoding == true).FirstOrDefault();
+            var theoryTask1 = levels[index1].Assignments.Where(a => a.IsCoding == false).FirstOrDefault();
+
+            int index2 = random.Next(levels.Count);
+            var codingTask2 = levels[index2].Assignments.Where(a => a.IsCoding == true).FirstOrDefault();
+            var theoryTask2 = levels[index2].Assignments.Where(a => a.IsCoding == false).FirstOrDefault();
+
+            return new List<Assignment> { codingTask1, theoryTask1, codingTask2, theoryTask2 };
         }
 
         public async Task<Map> GetMapByProfessorIdForEditingAsync(Guid id)

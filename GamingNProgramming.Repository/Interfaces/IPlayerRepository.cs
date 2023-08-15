@@ -29,9 +29,17 @@ namespace GamingNProgramming.Repository
 
         Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId, Guid? taskId = null);
 
+        Task<PlayerTask> FindPlayerTaskForBattle(Guid playerId, Guid mapId);
+
         Task<bool> UpdatePlayerTask(PlayerTask playerTask);
 
         Task<PlayerTask> GetPlayerTask(Guid id);
+
+        Task AddBattleAsync(Battle entity);
+
+        Task<bool> UpdateBattle(Battle battle);
+
+        Task<Battle> GetBattleAsync(Guid id);
 
         Task<bool> UpdatePlayer(Player player);
 

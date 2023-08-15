@@ -11,7 +11,7 @@ namespace GamingNProgramming.Model
 {
     public class Map
     {
-        [Required, Key]
+        [Key]
         public Guid Id { get; set; }
         public DateTime DateUpdated { get; set; }
         public DateTime DateCreated { get; set; }
@@ -23,8 +23,7 @@ namespace GamingNProgramming.Model
         public int Points { get; set; }
 
         [ForeignKey("ProfessorId")]
-        public Guid? ProfessorId { get; set; }
-        public virtual Professor Professor { get; set; }
+        public Guid? ProfessorId { get; set; } = null;
 
         public virtual ICollection<Level> Levels { get; set; }
     }

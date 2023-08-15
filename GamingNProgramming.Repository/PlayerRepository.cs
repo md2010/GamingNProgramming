@@ -19,6 +19,7 @@ namespace GamingNProgramming.Repository
         protected DbSet<Player> Entities;
         protected DbSet<Friend> FriendEntities;
         protected DbSet<PlayerTask> PlayerTaskEntities;
+        protected DbSet<Battle> BattleEntities;
 
         public PlayerRepository(AppDbContext context)
         {
@@ -26,6 +27,7 @@ namespace GamingNProgramming.Repository
             Entities = DbContext.Set<Player>();
             FriendEntities = DbContext.Set<Friend>();
             PlayerTaskEntities = DbContext.Set<PlayerTask>();
+            BattleEntities = DbContext.Set<Battle>();
         }
 
         #region Professor
@@ -102,6 +104,23 @@ namespace GamingNProgramming.Repository
             await DbContext.SaveChangesAsync();
             return true;
         }
+        public async Task AddBattleAsync(Battle entity)
+        {
+            BattleEntities.Add(entity);
+            await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<Battle> GetBattleAsync(Guid id)
+        {
+            return await BattleEntities.FindAsync(id) ?? null;
+        }
+
+        public async Task<bool> UpdateBattle(Battle battle)
+        {
+            BattleEntities.Update(battle);
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
 
         public async Task<List<PlayerTask>> GetPlayerTask(Guid playerId, Guid mapId, Guid? taskId = null)
         {
@@ -118,6 +137,19 @@ namespace GamingNProgramming.Repository
             }
             var list = await query.ToListAsync();
             return list;
+        }
+
+        public async Task<PlayerTask> FindPlayerTaskForBattle(Guid playerId, Guid mapId)
+        {
+            IQueryable<PlayerTask> query = PlayerTaskEntities;
+            query = query
+                .Where(p => p.PlayerId == playerId)
+                .Where(p => p.MapId == mapId)
+                .Include(p => p.Assignment)
+                .OrderByDescending(p => p.DateCreated);
+
+            var resultPlayer1 = await query.FirstOrDefaultAsync();            
+            return resultPlayer1;
         }
 
         public async Task<PlayerTask> GetPlayerTask(Guid id)
@@ -173,7 +205,9 @@ namespace GamingNProgramming.Repository
             if (!String.IsNullOrEmpty(sortOrder))
             {
                 if (sortOrder == "desc")
-                    result.OrderByDescending(p => p.Points);
+                    result.OrderByDescending(p => p.Points)
+                        .OrderBy(p => p.TimeConsumed)
+                        .OrderByDescending(p => p.XPs);
                 else
                     result.OrderBy(p => p.Points);
             }
@@ -264,7 +298,8 @@ namespace GamingNProgramming.Repository
                 if(sortOrder == "desc")
                     playersFriends
                         .OrderByDescending(p => p.Points)
-                        .OrderBy(p => p.TimeConsumed);
+                        .OrderBy(p => p.TimeConsumed)
+                        .OrderByDescending(p => p.XPs);
                 else
                     playersFriends.OrderBy(p => p.Points);
             }

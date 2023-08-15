@@ -20,6 +20,7 @@ namespace GamingNProgramming.DAL.Context
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Badge> Badges { get; set; }
         public DbSet<PlayerTask> PlayersTasks { get; set; }
+        public DbSet<Battle> Battles { get; set; }
 
 
         private readonly IConfiguration _configuration;
