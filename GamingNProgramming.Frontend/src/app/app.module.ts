@@ -29,6 +29,8 @@ import { CreateTaskDialogComponent } from './Professor/create-map/create-task-di
 import { TimerComponent } from './Student/task-play/timer/timer.component';
 import { TaskViewComponent } from './Student/task-view/task-view.component';
 import { ReviewComponent } from './Professor/review/review.component';
+import { BattleComponent } from './Student/battle/battle.component';
+import { PlayComponent } from './Student/battle/play/play.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,9 @@ import { ReviewComponent } from './Professor/review/review.component';
     DrawMapComponent,
     TimerComponent,
     TaskViewComponent,
-    ReviewComponent
+    ReviewComponent,
+    BattleComponent,
+    PlayComponent
   ],
   exports: [
     MatSelectModule,

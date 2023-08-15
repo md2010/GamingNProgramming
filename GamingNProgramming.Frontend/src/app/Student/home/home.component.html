@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row spc-top">
 <div class="col-md-4 spc-bottom spc-top">
     <div class="image-box-map">
         <a href="javascript:void(0);"><img src="../assets/images/defaultMap.jpg" width="300px" height="280px"></a>
@@ -15,14 +15,13 @@
 <hr>
 </div>
 
-<div class="row">
-    <p>Mape profesora:</p>
+<div class="row spc-bottom">
+    <h4>Mape profesora:</h4>
 </div>
 <div class="row">
     <div class="col-md-4 align-items-left" *ngFor="let map of maps">
-        <div class="image-box-map">
-            <a href="javascript:void(0);" (click)="mapInfo(map.id)"><img src="{{map.path}}" width="300px" height="280px"></a>
-            <p>{{map.title}}</p>
-        </div>
+        <div (click)="mapInfo(map.id)" class="map-click">
+            <app-draw-map *ngIf="loaded" [imgSrc]="map.path" [writeText]="true" [mapTitle]="map.title"></app-draw-map>
+        </div>       
     </div>
 </div>

@@ -10,6 +10,7 @@ import { TaskViewComponent } from './Student/task-view/task-view.component';
 
 import { ProfessorDashboardComponent } from './Professor/professor-dashboard/professor-dashboard.component';
 import { ReviewComponent } from './Professor/review/review.component';
+import { BattleComponent } from './Student/battle/battle.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: 'task-play/:id', component: TaskPlayComponent},
   {path: 'task-view/:id', component: TaskViewComponent},
   {path: 'professor-dashboard', component: ProfessorDashboardComponent},
-  {path: 'review/:id', component: ReviewComponent}
+  {path: 'review/:id', component: ReviewComponent},
+  {path: 'battle/:id', component: BattleComponent}
   
 ];
 

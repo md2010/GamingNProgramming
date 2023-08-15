@@ -52,6 +52,7 @@ export class StudentDashboardComponent {
         if(Response.body) {
           this.user = Response.body.player;
           localStorage.setItem('professorId', this.user.professorId);
+          localStorage.setItem('avatarSrc', this.user.avatar.path);
           this.usersPointsOnProfessorMaps = this.user.points;
           this.professorMapPoints = Response.body.sum;
           if (this.professorMapPoints > 0 && this.usersPointsOnProfessorMaps) {

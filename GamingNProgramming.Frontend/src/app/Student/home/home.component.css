@@ -1,4 +1,11 @@
-.image-box-map {
-    padding-top: 30px;
-    text-align: center;
+.spc-bottom {
+    padding-bottom: 20px;
+}
+
+.spc-top {
+    padding-top: 20px;
+}
+
+.map-click {
+    cursor: pointer;
 }

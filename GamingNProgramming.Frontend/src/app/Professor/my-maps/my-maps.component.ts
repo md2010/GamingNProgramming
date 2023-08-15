@@ -4,14 +4,14 @@ import { GameService } from 'src/app/services/GameService';
 import { AuthService } from 'src/app/services/AuthService';
 import { Map } from 'src/app/classes/Classes';
 import { CommonModule } from '@angular/common';
-import { find } from 'rxjs';
+import { DrawMapComponent } from '../create-map/draw-map/draw-map.component';
 
 @Component({
   selector: 'app-my-maps',
   templateUrl: './my-maps.component.html',
   styleUrls: ['./my-maps.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, DrawMapComponent]
 })
 export class MyMapsComponent {
 

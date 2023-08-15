@@ -7,10 +7,11 @@ import { NuMonacoEditorModule, NuMonacoEditorModel } from '@ng-util/monaco-edito
 import { GameService } from 'src/app/services/GameService';
 import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 import { Assignment, PlayerTask } from 'src/app/classes/Classes';
-import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { AuthService } from 'src/app/services/AuthService';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ToastComponentComponent } from 'src/app/toast-component/toast-component.component';
 
 @Component({
   selector: 'app-task-view',
@@ -24,7 +25,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     SpinnerComponentComponent, 
     MatCheckboxModule, 
     MatRadioModule, 
-    MatDialogModule
+    MatDialogModule,
+    ToastComponentComponent
   ]
 })
 
@@ -44,6 +46,8 @@ export class TaskViewComponent {
   compileResult : string | null = null
   submitCodeResult : any | null = null;
   error : boolean = true
+  showToast : boolean = false
+  message : string = ''
 
   task! : Assignment;
   taskId! : string | null
@@ -54,9 +58,9 @@ export class TaskViewComponent {
   newPoints : number | null = null
 
   value: string = '';
-  editorOptions = { theme: 'vs-dark', language: 'c' };
+  editorOptions = { theme: 'vs-dark', language: 'cpp' };
   model: NuMonacoEditorModel = {
-    language: "c"
+    language: "cpp"
   }; 
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
@@ -170,6 +174,7 @@ export class TaskViewComponent {
   } 
 
   updatePoints() {
+    this.loading = true;
     if(!this.newPoints) {
       this.dialog.open(this.notification, { data: 'Unesi vrijednost!'});
     }
@@ -177,10 +182,26 @@ export class TaskViewComponent {
       this.dialog.open(this.notification, { data: 'Neispravan unos bodova!'});
     }
     else {
-      var data = {playersTaskId: this.playersTask!.id, newPoints: this.newPoints }
-      this.gameService.updateScoredPoints(data);
+      var data = {playerTaskId: this.playersTask!.id, newPoints: this.newPoints }
+      this.gameService.updateScoredPoints(data)
+      .subscribe(
+        (Response) => {  
+            if(Response.status == 200) {
+              this.loading = false;
+              this.message = "Bodovi su ažurirani."
+              this.showToast = true;
+            }         
+        },
+        (error: any) => {
+            console.log(error); 
+            this.loading = false;                
+        });
     }
   }
+
+  onToastMessageElapsed() {
+    this.showToast = false;
+}
   
   onBack(): void {
     if(this.role === 'Student')

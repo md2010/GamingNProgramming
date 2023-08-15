@@ -31,20 +31,17 @@ export class MapInfoComponent {
   loaded : boolean = false
   avatarSrc : string = ''
 
-  constructor( private route: ActivatedRoute, private router: Router, private authService : AuthService, public dialog: MatDialog, private gameService: GameService) { 
+  constructor (private route: ActivatedRoute, private router: Router, private authService : AuthService, public dialog: MatDialog, private gameService: GameService) { 
     if(this.router.getCurrentNavigation()!.extras!.state!) {
       this.avatarSrc = this.router.getCurrentNavigation()!.extras!.state!['avatarSrc'];
-      localStorage.setItem('avatarSrc', this.avatarSrc);
     }
     else {
       this.avatarSrc = localStorage.getItem('avatarSrc')!;
     }
-
   }
 
   ngOnInit() {
     this.sub = this.route.paramMap.subscribe((params) => {
-      console.log(params);
       this.mapId = params.get('id');
       });
       this.role = this.authService.getAuthorized().roleName

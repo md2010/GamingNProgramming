@@ -15,10 +15,12 @@ export class DrawMapComponent {
   @Input() imgSrc : string = '';
   @Input() levels! : Array<Level>; //10 max
   @Input() draw : boolean = false;
+  @Input() writeText : boolean = false;
 
   @Input() userLevel : number | null = null
   @Input() userTask : number | null = null
   @Input() avatarSrc : string = ''
+  @Input() mapTitle : string = ''
 
   @ViewChild('canvas') canvas!: ElementRef;
 
@@ -26,6 +28,8 @@ export class DrawMapComponent {
   image = new Image(1000, 800);
   avatar = new Image(40,40);
   circles! : any;
+  canvasWidth : number = 1000
+  canvasHeight : number = 800
 
   constructor(private authService: AuthService) {}
 
@@ -42,18 +46,36 @@ export class DrawMapComponent {
 
   ngOnInit() {
     const img = this.image;
-    this.image.onload = () => {
-      this.ctx.drawImage(img, 0, 0, img.width, img.height);  
-      if(this.draw) {
-        this.drawCircles();
-      }   
-    };
+    if(this.writeText) {
+      this.canvasWidth = 400;
+      this.canvasHeight = 350;
+      this.image.onload = () => {
+        this.image.width = 400;
+        this.image.height = 350;
+        this.ctx.drawImage(img, 0, 0, img.width, img.height); 
+        this.ctx.textAlign = "center";
+        this.ctx.font = "bold 20px Calibri";
+        this.ctx.fillStyle = "white";
+        this.ctx.fillText(this.mapTitle, img.width/2, img.height/2); 
+      }      
+    }
+    else {
+      this.image.onload = () => {
+        this.ctx.drawImage(img, 0, 0, img.width, img.height);         
+        if(this.draw) {
+          this.drawCircles();
+        }   
+      };
+    }
+    
     this.image.src = this.imgSrc;
   }
 
   ngAfterViewInit() {
-    this.ctx = this.canvas.nativeElement.getContext('2d');
-    this.drawCircles();
+    this.ctx = this.canvas.nativeElement.getContext('2d'); 
+    if(this.draw) {
+      this.drawCircles();
+    }   
   }
 
   drawCircles() {

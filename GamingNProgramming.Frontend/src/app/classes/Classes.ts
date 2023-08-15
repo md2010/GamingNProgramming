@@ -6,6 +6,7 @@ export class Map {
     isVisible: boolean = false
     levels : Array<Level> = []
     professorId : string = ''
+    points: number = 0
 
     constructor(id: string, title: string, description: string, path: string, isVisible: boolean, levels: Array<Level>) { 
         this.levels = levels; 
@@ -37,6 +38,7 @@ export class Level {
     description: string = ''
     assignments : Array<Assignment> = []
     number : number = 0
+    points: number = 0
 
     constructor(tasks: Array<Assignment>) { this.assignments = tasks; }
 }
@@ -78,4 +80,16 @@ export class Answer {
 export class Badge {
     path: string = ''
     id: string = ''
+}
+
+export class Battle {
+    id: string = ''
+    player1Id: string = ''
+    player2Id : string = ''
+    player1Points : number = 0
+    player2Points : number = 0
+    player1Time : number = 0
+    player2Time : number = 0
+    assignmentIds : string = ''
+    levelNumber : number = 0
 }

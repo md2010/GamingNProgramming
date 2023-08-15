@@ -21,6 +21,9 @@
     <div *ngIf="loading">
             <app-spinner-component></app-spinner-component>
     </div>
+    <div *ngIf="showToast">
+        <app-toast-component [message]="message" (timeElapsedEvent)="onToastMessageElapsed()"></app-toast-component>
+    </div>
     
     <div class="row" *ngIf="task.isCoding">
             <div>                   
@@ -50,7 +53,7 @@
                         <p>Osvojeno bodova: 
                                 <strong *ngIf="role === 'Student'">{{playersTask!.scoredPoints}}/{{task.points}}</strong>
                                 <strong *ngIf="role !== 'Student'">
-                                    <input class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}" [(ngModel)]="newPoints"> / {{task.points}}                                           
+                                    <input style="width:60px" class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}" [(ngModel)]="newPoints"> / {{task.points}}                                           
                                 </strong>
                         </p>
                         <button *ngIf="role !== 'Student'" type="button" class="btn btn-success" (click)="updatePoints()">Spremi izmjenu</button> 
@@ -100,21 +103,21 @@
                                     <p>Osvojeno bodova: 
                                         <strong *ngIf="role === 'Student'">{{playersTask!.scoredPoints}}/{{task.points}}</strong>
                                         <strong *ngIf="role !== 'Student'">
-                                            <input class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}"> / {{task.points}}                                           
+                                            <input class="form-control-sm" style="width:60px" name="point" type="number" value="{{playersTask!.scoredPoints}}" [(ngModel)]="newPoints"> / {{task.points}}                                           
                                         </strong>
                                     </p>
                                     <p *ngIf="points !== task.points">Točan odgovor: 
                                         <strong *ngIf="!task.isMultiSelect">{{correctAnswer}}</strong>
                                         <strong *ngIf="task.isMultiSelect">{{correctAnswers}}</strong>
                                     </p>
-                                    <button *ngIf="role !== 'Student'" type="button" class="btn btn-success" (click)="goBack()">Spremi izmjenu</button> 
+                                    <button *ngIf="role !== 'Student'" type="button" class="btn btn-success" (click)="updatePoints()">Spremi izmjenu</button> 
                             </div>
-                            <div *ngIf="!(playersTask!.scoredPoints > 0)">
+                            <div *ngIf="!(playersTask!.scoredPoints > 0)" class="col-2">
                                     <p>Odgovor je <strong>netočan.</strong></p>
                                     <p>Osvojeno bodova: 
                                         <strong *ngIf="role === 'Student'">{{playersTask!.scoredPoints}}/{{task.points}}</strong>
                                         <strong *ngIf="role !== 'Student'">
-                                            <input class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}"> / {{task.points}}                                           
+                                            <input style="width:60px" class="form-control-sm" name="point" type="number" value="{{playersTask!.scoredPoints}}" [(ngModel)]="newPoints"> / {{task.points}}                                           
                                         </strong>
                                     </p>
                                     <p>Točan odgovor: 

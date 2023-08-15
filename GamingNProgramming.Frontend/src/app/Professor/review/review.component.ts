@@ -60,7 +60,17 @@ export class ReviewComponent {
     if(playerTask) {
       return playerTask.percentage;
     }
-    return null;
+    return 0;
+  }
+
+  getMapPercentage(mapId : string, mapPoints: number) {
+    var sum = 0;
+    this.playersTasks.forEach(pt => {
+      if(pt.mapId === mapId) {
+        sum += pt.scoredPoints;
+      }
+    });
+    return sum > 0 ? Math.round((sum / mapPoints)*100) : 0;
   }
 
   getMaps() {

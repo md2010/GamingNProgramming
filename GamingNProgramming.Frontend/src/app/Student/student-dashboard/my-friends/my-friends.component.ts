@@ -2,6 +2,9 @@ import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/UserService';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { GameService } from 'src/app/services/GameService';
+import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 
 @Component({
   selector: 'app-my-friends',
@@ -9,16 +12,17 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./my-friends.component.css'],
   providers: [UserService],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, SpinnerComponentComponent]
 })
 export class MyFriendsComponent {
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router, private gameService: GameService) {}
 
   friends: Friend[] = [];
   players: Player[] = [];
   loaded = false;
   searchName = '';
+  battleId : string = ''
 
   ngOnInit() {    
     this.getFriends().then(() => { 
@@ -86,6 +90,26 @@ export class MyFriendsComponent {
       (error: any) => {
           console.log(error);
       });       
+  }
+
+  battle(opponentId : string, opponentAvatar: string) {
+    var promise = new Promise((resolve, reject) => {
+    this.gameService.startBattle(opponentId)
+    .subscribe(
+      (Response) => {
+          if(Response.status == 200) {
+              this.battleId = Response.body.id
+              resolve('done');
+          }         
+      },
+      (error: any) => {
+          console.log(error);
+          reject();
+      });   
+    });
+    promise.then((id) => {
+      this.router.navigate(['/battle', this.battleId], {state: {player2Avatar: opponentAvatar}});
+    })    
   }
 }
 

@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { GameService } from 'src/app/services/GameService';
 import { Map } from 'src/app/classes/Classes';
 import { CommonModule } from '@angular/common';
+import { DrawMapComponent } from 'src/app/Professor/create-map/draw-map/draw-map.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, DrawMapComponent]
 })
 export class HomeComponent {
 
@@ -17,6 +18,7 @@ constructor(private router: Router, private gameService: GameService) {}
 
 @Input() user: any 
 maps : Array<Map> = []
+loaded : boolean = false;
 
 ngOnInit() {
   if(this.user !== undefined)
@@ -25,7 +27,8 @@ ngOnInit() {
       .subscribe(
         (Response) => {
           if(Response) {
-            this.maps = Response.body;        
+            this.maps = Response.body; 
+            this.loaded = true;       
           }        
         },
         (error: any) => {

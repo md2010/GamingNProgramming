@@ -1,0 +1,48 @@
+<div class="container" *ngIf="!playing">
+    <div class="row">        
+        <div class="col-1"></div>
+        <div class="col-2 spc-top">
+            <div class="spc-bottom">
+                <c-avatar src="{{player1Avatar}}" shape="rounded"></c-avatar>
+            </div>
+            <p><strong>username</strong></p>
+        </div>
+        <div class="col-6">
+            <div class="image-box-map">
+                <img src="assets/images/battle-start.gif">
+            </div> 
+        </div>
+        <div class="col-2 spc-top">
+            <div class="spc-bottom">
+                <c-avatar src="{{player2Avatar}}" shape="rounded"></c-avatar>
+            </div>
+            <p><strong>username</strong></p>
+        </div>
+        <div class="col-1"></div> 
+    </div>
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <div class="spc-top center">
+                <p>Bitka zahtjeva znanje do {{battle?.levelNumber}}. razine. Pobjedom osvajaš XPs!</p>
+                <button class="btn btn-primary" (click)="start()">Kreni u bitku!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" *ngIf="timerStarted">
+    <div class="row timer">
+        <timer [seconds]="900" (countDownEvent)="countDownDone($event)"></timer>
+    </div>
+    <app-play *ngIf="playing" [taskId]="currentTaskId" (nextTaskEvent)="nextTask($event)" [isLast]="isLast"></app-play>
+</div>
+
+<ng-template #notification let-data>
+    <h2 matDialogTitle>Obavijest</h2>
+    <mat-dialog-content>
+       <p>{{data}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+    </mat-dialog-actions>
+</ng-template>
