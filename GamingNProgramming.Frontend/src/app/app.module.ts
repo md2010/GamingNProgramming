@@ -32,6 +32,7 @@ import { ReviewComponent } from './Professor/review/review.component';
 import { BattleComponent } from './Student/battle/battle.component';
 import { PlayComponent } from './Student/battle/play/play.component';
 import { MyBattlesComponent } from './Student/student-dashboard/my-battles/my-battles.component';
+import { RulesComponent } from './rules/rules.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { MyBattlesComponent } from './Student/student-dashboard/my-battles/my-ba
     ReviewComponent,
     BattleComponent,
     PlayComponent,
-    MyBattlesComponent
+    MyBattlesComponent,
+    RulesComponent
   ],
   exports: [
     MatSelectModule,

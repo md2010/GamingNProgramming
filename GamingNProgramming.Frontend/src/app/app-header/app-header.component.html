@@ -16,6 +16,9 @@
             <a class="nav-link mx-2" [routerLink]="['/leaderboard']" *ngIf="authorized" [class.active]="route == '/leaderboard'">Ljestvica sa vodećim rezultatima</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link mx-2" [routerLink]="['/rules']" *ngIf="authorized" [class.active]="route == '/rules'">Pravila</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link mx-2" [routerLink]="['/logout']" *ngIf="authorized"  [class.active]="route == '/logout'" (click)="logout()">Odjavi se</a>
             <a class="nav-link mx-2" [routerLink]="['/login']" *ngIf="!authorized"  [class.active]="route == '/login'">Prijavi se</a>
           </li>         

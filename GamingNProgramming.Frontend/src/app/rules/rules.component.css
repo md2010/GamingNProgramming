@@ -1,0 +1,10 @@
+.bkg {
+    background-image: url("/assets/images/rules.jpg");
+    background-repeat: repeat-y;
+    width: 350px;
+    height: 900px;
+}
+
+.center {
+    text-align: left;
+}

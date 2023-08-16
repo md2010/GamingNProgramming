@@ -169,7 +169,7 @@
         <div class="row">
             <div class="col-sm">
                 <button class="btn btn-primary spc-right" [disabled]="disableEdit" (click)="addTestCase()">Dodaj testni slučaj</button>
-                <button class="btn btn-primary" (click)="save()" [disabled]="disableEdit">Spremi zadatak</button>
+                <button class="btn btn-primary" (click)="save()" [disabled]="disableEdit ||(task.title.length === 0 || task.points === 0 || task.description.length === 0 || task.testCases.length === 0)">Spremi zadatak</button>
             </div>
         </div>                   
     </form>
