@@ -17,13 +17,17 @@ namespace GamingNProgramming.Model
 
         [ForeignKey("Player1")]
         public Guid Player1Id { get; set; }
+        public virtual Player Player1 { get; set; }
         public int Player1Points { get; set; }
         public double Player1Time{ get; set; }
 
         [ForeignKey("Player2")]
         public Guid Player2Id { get; set; }
+        public virtual Player Player2 { get; set; }
         public int Player2Points { get; set; }
         public double Player2Time { get; set; }
+
+        public Guid? WonId { get; set; }
 
         public int LevelNumber { get; set; }
         public string AssignmentIds { get; set; }

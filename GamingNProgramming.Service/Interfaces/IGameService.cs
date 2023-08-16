@@ -27,5 +27,9 @@ namespace GamingNProgramming.Service.Interfaces
 
         Task<Battle> GetBattleAsync(Guid id);
 
+        Task<List<Battle>> FindBattlesAsync(Guid playerId);
+
+        Task UpdateBattleAsync(Battle battle);
+
     }
 }

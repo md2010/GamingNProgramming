@@ -108,12 +108,36 @@ namespace GamingNProgramming.Repository
 
             var random = new Random();
             int index1 = random.Next(levels.Count);
-            var codingTask1 = levels[index1].Assignments.Where(a => a.IsCoding == true).FirstOrDefault();
-            var theoryTask1 = levels[index1].Assignments.Where(a => a.IsCoding == false).FirstOrDefault();
+            var codingTasks1 = levels[index1].Assignments.Where(a => a.IsCoding == true);
+            var codingTask1 = codingTasks1.ElementAt(random.Next(codingTasks1.Count()));
+            var theoryTasks1 = levels[index1].Assignments.Where(a => a.IsCoding == false);
+            var theoryTask1 = theoryTasks1.ElementAt(random.Next(theoryTasks1.Count()));
 
             int index2 = random.Next(levels.Count);
-            var codingTask2 = levels[index2].Assignments.Where(a => a.IsCoding == true).FirstOrDefault();
-            var theoryTask2 = levels[index2].Assignments.Where(a => a.IsCoding == false).FirstOrDefault();
+            var codingTasks2 = levels[index2].Assignments.Where(a => a.IsCoding == true);
+            var codingTask2 = codingTasks2.ElementAt(random.Next(codingTasks2.Count()));
+            var theoryTasks2 = levels[index2].Assignments.Where(a => a.IsCoding == false);
+            var theoryTask2 = theoryTasks2.ElementAt(random.Next(theoryTasks2.Count()));
+            if(codingTask2.Id == codingTask1.Id)
+            {
+                do
+                {
+                    index2 = random.Next(levels.Count);
+                    codingTasks2 = levels[index2].Assignments.Where(a => a.IsCoding == true);
+                    codingTask2 = codingTasks2.ElementAt(random.Next(codingTasks2.Count()));
+
+                } while (codingTask1.Id == codingTask2.Id);
+            }
+            if (theoryTask2.Id == theoryTask1.Id)
+            {
+                do
+                {
+                    index2 = random.Next(levels.Count);
+                    theoryTasks2 = levels[index2].Assignments.Where(a => a.IsCoding == true);
+                    theoryTask2 = codingTasks2.ElementAt(random.Next(codingTasks2.Count()));
+
+                } while (theoryTask1.Id == theoryTask2.Id);
+            }
 
             return new List<Assignment> { codingTask1, theoryTask1, codingTask2, theoryTask2 };
         }

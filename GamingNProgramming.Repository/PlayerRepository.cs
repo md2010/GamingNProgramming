@@ -38,7 +38,7 @@ namespace GamingNProgramming.Repository
           string includeProperties = "")
         {           
             IQueryable<Player> query = Entities;
-            query = query.Where(p => p.ProfessorId != id && p.ProfessorId == null);
+            query = query.Where(p => p.ProfessorId == null);
 
             if (filter != null)
             {
@@ -108,6 +108,19 @@ namespace GamingNProgramming.Repository
         {
             BattleEntities.Add(entity);
             await DbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Battle>> FindBattlesAsync(Guid playerId)
+        {
+            var result = await BattleEntities
+                .Where(a => a.Player1Id == playerId || a.Player2Id == playerId)
+                .Include(a => a.Player1)
+                    .ThenInclude(p => p.Avatar)
+                .Include(a => a.Player2)
+                    .ThenInclude(p => p.Avatar)
+                .ToListAsync();
+
+            return result;
         }
 
         public async Task<Battle> GetBattleAsync(Guid id)

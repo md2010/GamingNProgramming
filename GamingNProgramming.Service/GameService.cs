@@ -69,7 +69,10 @@ namespace GamingNProgramming.Service
         }
 
         #region Battle
-
+        public async Task<List<Battle>> FindBattlesAsync(Guid playerId)
+        {
+            return await PlayerRepository.FindBattlesAsync(playerId);
+        }
         public async Task<Battle> GetBattleAsync(Guid id)
         {
             return await PlayerRepository.GetBattleAsync(id);
@@ -85,6 +88,8 @@ namespace GamingNProgramming.Service
             battle.LevelNumber = result.Item2;
             battle.Player1Points = 0;
             battle.Player2Points = 0;
+            battle.Player1Id = player1Id;
+            battle.Player2Id = player2Id;
 
             battle.AssignmentIds = string.Join(",", result.Item1.Select(x => x.Id));
 
@@ -123,6 +128,39 @@ namespace GamingNProgramming.Service
             return new Tuple<List<Assignment>, int>(assignments, levelNumber);
         }
 
+        public async Task UpdateBattleAsync(Battle battle)
+        {
+            if(battle.Player1Time != 0 && battle.Player2Time != 0)
+            {
+                var loserId = Guid.Empty;
+                if(battle.Player1Points > battle.Player2Points)
+                {
+                    battle.WonId = battle.Player1Id;
+                    loserId= battle.Player2Id;
+                }
+                else if(battle.Player1Points == battle.Player2Points && battle.Player1Time < battle.Player2Time)
+                {
+                    battle.WonId = battle.Player1Id;
+                    loserId = battle.Player2Id;
+                }
+                else 
+                {
+                    battle.WonId = battle.Player2Id;
+                    loserId = battle.Player1Id;
+                }
+                var player = await PlayerRepository.GetAsync(battle.WonId.Value);
+                player.XPs = battle.WonId == battle.Player1Id ? battle.Player1Points * 2 : battle.Player2Points * 2;
+                await PlayerRepository.UpdatePlayer(player);
+
+                var playerLoser = await PlayerRepository.GetAsync(loserId);
+                playerLoser.XPs -= 2;
+                if (playerLoser.XPs < 0)
+                    playerLoser.XPs = 0;
+                await PlayerRepository.UpdatePlayer(playerLoser);
+            }
+            await PlayerRepository.UpdateBattle(battle);
+            return;
+        }
 
         #endregion
         public async Task<Map> GetAsync(Guid id)

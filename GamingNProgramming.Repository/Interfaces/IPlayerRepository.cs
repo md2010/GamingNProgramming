@@ -39,6 +39,8 @@ namespace GamingNProgramming.Repository
 
         Task<bool> UpdateBattle(Battle battle);
 
+        Task<List<Battle>> FindBattlesAsync(Guid playerId);
+
         Task<Battle> GetBattleAsync(Guid id);
 
         Task<bool> UpdatePlayer(Player player);

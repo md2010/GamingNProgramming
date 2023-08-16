@@ -208,6 +208,40 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.GameService.GetBattleAsync(Helper.TransformGuid(id));
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("battles/{id}")]
+        public async Task<IActionResult> FindBattles(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await this.GameService.FindBattlesAsync(Helper.TransformGuid(id));
+
+            return Ok(result);
+
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("battle/{id}")]
+        public async Task<IActionResult> UpdateBattle(string id, UpdateBattleModel model)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            var entity = await GameService.GetBattleAsync(Helper.TransformGuid(id));
+            MapBattle(model, entity);
+
+            await GameService.UpdateBattleAsync(entity);
+
+            return Ok();
 
         }
 
@@ -488,6 +522,16 @@ namespace GamingNProgramming.WebAPI.Controllers
             public bool IsCorrect { get; set; }
         }
 
+        public class UpdateBattleModel
+        {
+            public int Player1Points { get; set; } = 0;
+
+            public int Player2Points { get; set; } = 0;
+
+            public double Player1Time { get; set; } = 0;
+
+            public double Player2Time { get; set; } = 0;
+        }
         #endregion
 
         #region Mapping
@@ -578,6 +622,22 @@ namespace GamingNProgramming.WebAPI.Controllers
             entity.BadgeId = string.IsNullOrEmpty(model.BadgeId) ? null : Helper.TransformGuid(model.BadgeId);
 
             return entity;
+        }
+
+        private void MapBattle(UpdateBattleModel model, Battle entity)
+        {
+            if(model.Player1Time != 0 && model.Player1Points != 0)
+            {
+                entity.Player1Time = model.Player1Time!;
+                entity.Player1Points = model.Player1Points;
+            }
+            if(model.Player2Time != 0 && model.Player2Points != 0)
+            {
+                entity.Player2Points = model.Player2Points;
+                entity.Player2Time = model.Player2Time;
+            }
+
+            return;
         }
 
         #endregion

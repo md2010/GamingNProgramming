@@ -135,7 +135,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             {
                 if(!string.IsNullOrEmpty(model.Name))
                 {
-                    filters.Add(u => u.Username != model.Name);
+                    filters.Add(u => u.Username == model.Name);
                 }
                 if (!string.IsNullOrEmpty(model.ProfessorId))
                 {

@@ -4,6 +4,7 @@ using GamingNProgramming.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamingNProgramming.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230816082546_addnavigationplayeronbattle")]
+    partial class addnavigationplayeronbattle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,9 +203,6 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.Property<double>("Player2Time")
                         .HasColumnType("float");
-
-                    b.Property<Guid?>("WonId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -549,13 +549,13 @@ namespace GamingNProgramming.DAL.Migrations
                     b.HasOne("GamingNProgramming.Model.Player", "Player1")
                         .WithMany()
                         .HasForeignKey("Player1Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GamingNProgramming.Model.Player", "Player2")
                         .WithMany()
                         .HasForeignKey("Player2Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Player1");
