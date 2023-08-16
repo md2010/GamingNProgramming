@@ -20,10 +20,16 @@
           Pronađi prijatelje
         </a>
       </li>
-      <li class="nav-item spc-bottom">
+      <li class="nav-item">
         <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyFriends === true" (click)="myFriends()">
           <svg class="bi me-2" width="16" height="16"></svg>
           Moji prijatelji
+        </a>
+      </li> 
+      <li class="nav-item spc-bottom">
+        <a href="javascript:void(0)" class="nav-link text-white" [class.active]="showMyBattles === true" (click)="myBattles()">
+          <svg class="bi me-2" width="16" height="16"></svg>
+          Moje bitke
         </a>
       </li>      
       <li class="progress-circle">
@@ -52,10 +58,16 @@
     </ul>
 </div>
 </div>
+
+<div *ngIf="!loaded">
+  <app-spinner-component></app-spinner-component>
+</div>
+
 <div class="col-9">
     <app-home *ngIf="showHome && user !== null" [user]="user"></app-home>
     <app-find-friends-component *ngIf="showFindFriends"></app-find-friends-component>
     <app-my-friends *ngIf="showMyFriends"></app-my-friends>
+    <app-my-battles *ngIf="showMyBattles"></app-my-battles>
 </div>
 </div>
 

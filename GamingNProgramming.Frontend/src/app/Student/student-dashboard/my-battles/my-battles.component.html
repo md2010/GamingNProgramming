@@ -1,0 +1,52 @@
+<div *ngIf="!loaded">
+  <app-spinner-component></app-spinner-component>
+</div>
+      
+<div class="col-10 align-items-center spc-top">
+<table class="table table-striped" *ngIf="loaded">
+    <thead>
+      <tr *ngIf="battles.length == 0">Nema rezultata. Klikni na 'Moji prijatelji' kako bi započeo bitku!</tr>
+      <tr *ngIf="battles.length > 0">
+        <th scope="col"></th>
+        <th scope="col">Korisničko ime</th>
+        <th scope="col">Trajanje</th>
+        <th scope="col">Bodovi</th>
+        <th scope="col"></th>
+        <th scope="col">Bodovi</th>
+        <th scope="col">Trajanje</th>
+        <th scope="col">Korisničko ime</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngIf="battles.length > 0">
+      <tr *ngFor="let b of battles">
+        <td><img src={{b.player1.avatar.path}} class="rounded-circle center" width="70px" height="60px"></td>
+        <td>{{b.player1.username}}</td>
+        <td>{{getTime(b.player1Time) | date:'mm:ss'}}</td>
+        <td>{{b.player1Points}}</td>
+        <td *ngIf="(b.player1Id === userId && b.player1Time === 0) || (b.player2Id === userId && b.player2Time === 0)"><button class="btn btn-primary" (click)="battle(b.id)">Igraj bitku!</button></td>
+        <td *ngIf="(b.player1Id === userId && b.player1Time !== 0) || (b.player2Id === userId && b.player2Time !== 0)"><button class="btn btn-primary" (click)="result(b.id)">Pogledaj rezultat</button></td>
+        <td>{{b.player2Points}}</td>
+        <td>{{getTime(b.player2Time) | date:'mm:ss'}}</td>
+        <td>{{b.player2.username}}</td>
+        <td><img src={{b.player2.avatar.path}} class="rounded-circle center" width="70px" height="60px"></td>
+      </tr>     
+    </tbody>
+  </table>
+  </div>
+
+  <ng-template #notification let-data>
+    <h2 matDialogTitle>Rezultat</h2>
+    <mat-dialog-content>
+       <p>{{data.message}}</p>
+       <p *ngIf="data.won && data.message !== 'Protivnik još nije odigrao bitku.'">Osvojio si {{data.points}}XPs!</p>
+       <div>
+        <img *ngIf="data.won && data.message !== 'Protivnik još nije odigrao bitku.'" src="../assets/images/battle-won.gif">
+        <img *ngIf="!data.won && data.message !== 'Protivnik još nije odigrao bitku.'" src="../assets/images/battle-lost.gif">
+       </div>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button class="btn btn-primary" mat-button matDialogClose>Zatvori</button>
+    </mat-dialog-actions>
+</ng-template>
+

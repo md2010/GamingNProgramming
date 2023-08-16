@@ -7,12 +7,14 @@ import { FindFriendsComponentComponent } from './find-friends-component/find-fri
 import { MyFriendsComponent } from './my-friends/my-friends.component';
 import { HomeComponent } from '../home/home.component';
 import { AuthService } from 'src/app/services/AuthService';
+import { MyBattlesComponent } from './my-battles/my-battles.component';
+import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.css'],
-  imports: [AvatarModule, FindFriendsComponentComponent, CommonModule, MyFriendsComponent, HomeComponent],
+  imports: [AvatarModule, FindFriendsComponentComponent, CommonModule, MyFriendsComponent, HomeComponent, MyBattlesComponent, SpinnerComponentComponent],
   providers: [UserService],
   standalone: true
 })
@@ -25,6 +27,7 @@ export class StudentDashboardComponent {
   showFindFriends = false;
   showMyFriends = false;
   showHome = true;
+  showMyBattles = false;
 
   professorMapPoints = 0;
   usersPointsOnProfessorMaps = 0;
@@ -53,6 +56,7 @@ export class StudentDashboardComponent {
           this.user = Response.body.player;
           localStorage.setItem('professorId', this.user.professorId);
           localStorage.setItem('avatarSrc', this.user.avatar.path);
+          localStorage.setItem('username', this.user.username);
           this.usersPointsOnProfessorMaps = this.user.points;
           this.professorMapPoints = Response.body.sum;
           if (this.professorMapPoints > 0 && this.usersPointsOnProfessorMaps) {
@@ -95,18 +99,28 @@ export class StudentDashboardComponent {
     this.showFindFriends = true;
     this.showHome = false;
     this.showMyFriends = false;
+    this.showMyBattles = false;
   }
 
   myFriends(){  
     this.showMyFriends = true;
     this.showHome = false;
     this.showFindFriends = false;
+    this.showMyBattles = false;
   }
 
   home() {
     this.showMyFriends = false;
     this.showHome = true;
     this.showFindFriends = false;
+    this.showMyBattles = false;
+  }
+
+  myBattles() {
+    this.showMyFriends = false;
+    this.showHome = false;
+    this.showFindFriends = false;
+    this.showMyBattles = true;
   }
 
 }

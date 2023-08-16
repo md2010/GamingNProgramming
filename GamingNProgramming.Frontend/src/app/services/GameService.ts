@@ -60,6 +60,24 @@ export class GameService {
       return this.http.get<any>(this.apiUrl + '/battle/' + id, {headers: headersToSend, observe : 'response'});
   }
 
+  findBattles(id: string) {
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+  
+      return this.http.get<any>(this.apiUrl + '/battles/' + id, {headers: headersToSend, observe : 'response'});
+  }
+
+  updateBattle(battle : any) {
+    JSON.stringify(battle);
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+      .set('Accept','application/json');
+  
+      return this.http.put<any>(this.apiUrl + '/battle/' + battle.id, battle, {headers: headersToSend, observe : 'response'});
+  }
+
   updateMap(map : any) {
     JSON.stringify(map);
     let headersToSend = new HttpHeaders();

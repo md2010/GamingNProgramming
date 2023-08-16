@@ -31,7 +31,7 @@
         <td>{{p?.xPs}}</td>
         <td>
           <div *ngFor="let el of p?.badges" style="display:inline">
-            <img src="{{el.path}}" width="65px" height="55px" style="margin-left: 5px;">
+            <img *ngIf="allStudents ? !el.isDefaultMap : el.isDefaultMap" src="{{el.path}}" width="65px" height="55px" style="margin-left: 5px;">
           </div>
         </td>
       </tr>     

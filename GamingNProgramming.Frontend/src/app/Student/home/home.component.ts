@@ -28,6 +28,8 @@ ngOnInit() {
         (Response) => {
           if(Response) {
             this.maps = Response.body; 
+            var defaultId = this.maps.find(a => a.professorId === null)?.id;
+            localStorage.setItem('defaultMapId', defaultId!);
             this.loaded = true;       
           }        
         },

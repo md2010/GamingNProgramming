@@ -35,6 +35,11 @@
         </ul>
     </div>
     </div>
+
+    <div *ngIf="!loaded">
+      <app-spinner-component></app-spinner-component>
+    </div>
+
     <div class="col-9">
         <app-find-students *ngIf="showFindStudents"></app-find-students>
         <app-my-students *ngIf="showMyStudents && loaded" (reviewEvent)="review($event)"></app-my-students>

@@ -13,7 +13,6 @@
       <tr *ngIf="players.length > 0">
         <th scope="col"></th>
         <th scope="col">Korisničko ime</th>
-        <th scope="col">Bodovi</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -21,7 +20,6 @@
       <tr *ngFor="let p of players">
         <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{p?.username}}</td>
-        <td>120</td>
         <td><button class="btn btn-primary" (click)="addFriend(p.userId)">Dodaj za prijatelja</button></td>
       </tr>     
     </tbody>

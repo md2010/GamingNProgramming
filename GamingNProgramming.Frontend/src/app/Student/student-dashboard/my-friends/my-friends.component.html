@@ -17,7 +17,6 @@
       <tr *ngIf="players.length > 0">
         <th scope="col"></th>
         <th scope="col">Korisničko ime</th>
-        <th scope="col">Bodovi</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>
@@ -26,8 +25,7 @@
       <tr *ngFor="let p of players">
         <td><img src={{p?.avatar?.path}} class="rounded-circle center" width="70px" height="60px"></td>
         <td>{{p?.username}}</td>
-        <td>120</td>
-        <td><button class="btn btn-primary" (click)="battle(p.userId, p.avatar.path)">Započni bitku</button></td>
+        <td><button class="btn btn-primary" (click)="battle(p.userId, p.avatar.path, p.username)">Započni bitku</button></td>
         <td><button class="btn btn-primary" (click)="deleteFriend(p.userId)">Obriši iz prijatelja</button></td>
       </tr>     
     </tbody>

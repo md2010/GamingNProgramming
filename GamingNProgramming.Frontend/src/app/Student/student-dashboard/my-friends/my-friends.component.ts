@@ -92,7 +92,8 @@ export class MyFriendsComponent {
       });       
   }
 
-  battle(opponentId : string, opponentAvatar: string) {
+  battle(opponentId : string, opponentAvatar: string, opponentUsername : string) {
+    this.loaded = false;
     var promise = new Promise((resolve, reject) => {
     this.gameService.startBattle(opponentId)
     .subscribe(
@@ -108,7 +109,8 @@ export class MyFriendsComponent {
       });   
     });
     promise.then((id) => {
-      this.router.navigate(['/battle', this.battleId], {state: {player2Avatar: opponentAvatar}});
+      this.loaded = true;
+      this.router.navigate(['/battle', this.battleId], {state: {player2Avatar: opponentAvatar, opponentUsername : opponentUsername}});
     })    
   }
 }

@@ -27,8 +27,10 @@ export class LeaderboardComponent {
   allStudents = false;
   allFriends = true;
   userId : string | null = '';
+  defaultMapId = ''
 
   ngOnInit() { 
+    this.defaultMapId = localStorage.getItem('defaultMapId')!
     this.role = this.authService.getAuthorized().roleName;
     this.userId = this.authService.getAuthorized().userId; 
     if(this.role === 'Student') {
@@ -94,14 +96,14 @@ export class LeaderboardComponent {
         if(Response.body) {
           this.friends = Response.body;
           this.friends.every(p => { p.avatar.path = '../' + p.avatar.path; });
-          this.players = this.friends;
           this.friends.forEach(p => { 
             p.badges = [];
             p.playerTasks.forEach(element => {
             if(element.badge) {
-              p.badges.push({path: element.badge?.path!, isDefaultMap: false});
+              p.badges.push({path: element.badge?.path!, isDefaultMap: element.mapId === this.defaultMapId ? true : false});
             }             
           })
+          this.players = this.friends;
           });        
           resolve('done');
         }

@@ -92,4 +92,17 @@ export class Battle {
     player2Time : number = 0
     assignmentIds : string = ''
     levelNumber : number = 0
+    player1! : User 
+    player2! : User
+    wonId : string = ''
 }
+
+interface User {
+    avatar: Avatar;
+    username: string;
+    professorId : string | null
+  }
+  
+  interface Avatar {
+    path: string;
+  }

@@ -8,13 +8,14 @@ import { MyStudentsComponent } from './my-students/my-students.component';
 import { CreateMapComponent } from '../create-map/create-map.component';
 import { MyMapsComponent } from '../my-maps/my-maps.component';
 import { HomeComponent } from 'src/app/Student/home/home.component';
+import { SpinnerComponentComponent } from 'src/app/spinner-component/spinner-component.component';
 
 @Component({
   selector: 'app-professor-dashboard',
   templateUrl: './professor-dashboard.component.html',
   styleUrls: ['./professor-dashboard.component.css'],
   standalone: true,
-  imports: [FindStudentsComponent, MyStudentsComponent, CommonModule, CreateMapComponent, MyMapsComponent, HomeComponent]
+  imports: [FindStudentsComponent, MyStudentsComponent, CommonModule, CreateMapComponent, MyMapsComponent, HomeComponent, SpinnerComponentComponent]
 })
 export class ProfessorDashboardComponent {
   constructor (private userService: UserService, private router: Router) {}

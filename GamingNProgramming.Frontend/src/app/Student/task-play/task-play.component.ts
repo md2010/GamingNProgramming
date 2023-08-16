@@ -136,7 +136,7 @@ export class TaskPlayComponent {
     this.timerStarted = true;
   }
 
-  countDownDone(message: string) {
+  countDownDone(message: Date) {
     this.timerStarted = false;
     this.timerDone = true;
     this.dialog.open(this.notification, { data: "Vrijeme je isteklo." });

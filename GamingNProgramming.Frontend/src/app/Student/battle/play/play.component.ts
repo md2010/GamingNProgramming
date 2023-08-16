@@ -47,12 +47,12 @@ export class PlayComponent {
   done :  boolean = false
   points : number = 0
   executionTime : number = 0
-  alreadyPlayed : boolean = false;
 
   task! : Assignment;
   @Input() taskId! : string | null
   @Input() isLast! : boolean | false
   @Output() nextTaskEvent = new EventEmitter<number>();
+  @Output() endBattleEvent = new EventEmitter<number>();
 
   value: string = '';
   editorOptions = { theme: 'vs-dark', language: 'c' };
@@ -97,6 +97,7 @@ export class PlayComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.clear();
     if(changes['taskId'])
     {
       this.taskId = changes['taskId'].currentValue
@@ -148,6 +149,7 @@ export class PlayComponent {
     )}
     else {
       this.done = true;
+      this.loading = false;
     } 
   }
 
@@ -215,8 +217,29 @@ export class PlayComponent {
     this.nextTaskEvent.emit(this.points)
   }
 
+  end() {
+    this.endBattleEvent.emit(this.points)
+  }
+
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
+  }
+
+  clear() {
+    this.compileResult = null
+    this.submitCodeResult  = null;
+    this.error = true
+    this.args = null
+    this.loading = false;
+    this.loaded = false;
+    this.checkedAnswers  = [];
+    this.offeredAnswers  = [];
+    this.checkedAnswer  = null;
+    this.theoryResult = false
+    this.correctAnswer  = '';
+    this.correctAnswers = ''
+    this.done = false
+    this.points = 0
   }
 
 }

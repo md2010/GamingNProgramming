@@ -31,6 +31,7 @@ import { TaskViewComponent } from './Student/task-view/task-view.component';
 import { ReviewComponent } from './Professor/review/review.component';
 import { BattleComponent } from './Student/battle/battle.component';
 import { PlayComponent } from './Student/battle/play/play.component';
+import { MyBattlesComponent } from './Student/student-dashboard/my-battles/my-battles.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { PlayComponent } from './Student/battle/play/play.component';
     TaskViewComponent,
     ReviewComponent,
     BattleComponent,
-    PlayComponent
+    PlayComponent,
+    MyBattlesComponent
   ],
   exports: [
     MatSelectModule,
