@@ -27,7 +27,7 @@
         </div>              
         <div class="row">
             <div class="form-group spc-bottom">
-                <button class="btn btn-primary spc-right" (click)="addLevel()" [disabled]="title.length <= 2 && description.length <= 2  && mapPath.length <= 2 ">Dodaj razinu</button>
+                <button class="btn btn-primary spc-right" (click)="addLevel()" [disabled]="levels.length >= 11">Dodaj razinu</button>
             </div>
             <div class="col-sm" *ngFor="let l of levels; let i = index;">
                 <div class="card spc-top" style="width: 18rem; text-align: center;"> 
@@ -38,7 +38,7 @@
                     <h5 class="card-title">Razina {{i+1}}</h5>
                     <input type="text" class="form-control spc-bt" id="formGroupExampleInput2" placeholder="Naslov" [(ngModel)]="l.title" name="levelTitle{{i}}">
                     <input type="text" class="form-control spc-bt" id="formGroupExampleInput2" placeholder="Opis" [(ngModel)]="l.description" name="levelDescription{{i}}">
-                    <button class="btn btn-primary spc-right" (click)="addTask(i)">Dodaj zadatak</button>                
+                    <button class="btn btn-primary spc-right" (click)="addTask(i)" [disabled]="l.assignments.length >= 13">Dodaj zadatak</button>                
                     </div>
                     <ul class="list-group list-group-flush spc-tp spc-bt" *ngFor="let t of l.assignments; let ind = index;" style="text-align: left;">
                         <li class="list-group-item">
