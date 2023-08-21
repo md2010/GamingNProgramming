@@ -46,13 +46,12 @@ export class CreateTaskDialogComponent {
       }
       this.disableEdit = data.disableEdit;
 
-      this.task.initialCode = 
-    '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
-    'se zadaci pokreću preko komandne \n linije. Ukoliko zadatak zahtjeva ulaz\n'+
-    ' treba koristiti int main(int argc, char *argv[]). Ako su ulazni argumenti brojevi,' + 
-    '\n a ne tekstulani (string), potrebno je ' +
-    'ulaze pretvoriti \n u brojeve. Primjer:\n a = argv[1]; val = atoi(a);\n' +
-    '\nint main(int argc, char *argv[])\n{\n}\n\n*/';
+      if(this.task.initialCode === '') {
+        this.task.initialCode = '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
+        'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
+        '\n a ne tekstulani (string), potrebno je ' +
+        'ulaze pretvoriti \n u brojeve. Primjer: int value = atoi(argv[1]);\n*/';
+      }
   }
 
   @ViewChild('selectBadge', { static: true }) selectBadgeDialog!: TemplateRef<any>;
@@ -76,16 +75,16 @@ export class CreateTaskDialogComponent {
   }
 
   theory() {
-    this.task.initialCode = '';
     this.task.isCoding = false;
   }
 
   coding() {
-    this.task.initialCode = 
-    '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
-    'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
-    '\n a ne tekstulani (string), potrebno je ' +
-    'ulaze pretvoriti \n u brojeve. Primjer: int value = atoi(argv[1]);\n*/';
+    if(this.task.initialCode === '') {
+      this.task.initialCode = '/*\nOvdje unesi kod koji će se prikazati kao predložak. \n Važno je napomenuti da ' +
+      'se zadaci pokreću preko komandne \n linije te ukoliko su ulazni argumenti brojevi,' + 
+      '\n a ne tekstulani (string), potrebno je ' +
+      'ulaze pretvoriti \n u brojeve. Primjer: int value = atoi(argv[1]);\n*/';
+    }     
     this.task.isCoding = true;
   }
 
@@ -103,6 +102,9 @@ export class CreateTaskDialogComponent {
   onHasBadgeChanged(event: any) {
     if(!event.checked) {
       this.task.badgeId = ''
+    }
+    else {
+      this.task.badgeId = this.badges.find(a => a.name === 'Badge 1')!.id;
     }
   }
   onBadgeSelected(id : string) {

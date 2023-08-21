@@ -572,6 +572,7 @@ namespace GamingNProgramming.WebAPI.Controllers
                     assignment.IsCoding = task.IsCoding;
                     assignment.InitialCode = task.InitialCode;
                     assignment.Seconds = task.Seconds;
+                    assignment.IsTimeMeasured = task.IsTimeMeasured;
 
                     List<TestCase> testCases = new List<TestCase>();
                     foreach (var testCase in task.TestCases)

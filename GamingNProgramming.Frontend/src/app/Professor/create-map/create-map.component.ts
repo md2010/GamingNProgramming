@@ -99,7 +99,7 @@ export class CreateMapComponent {
     let dialogRef = this.dialog.open(CreateTaskDialogComponent, {
       width: '1500px',
       height: '900px', 
-      data: { task: this.levels[levelNumber].assignments[i], index : i, disableEdit : false },    
+      data: { task: this.levels[levelNumber].assignments[i], index : i, disableEdit : false, close : (() => dialogRef.close()) },    
     });
     dialogRef.afterClosed().subscribe(result => {
       this.levels[levelNumber].assignments[i] = result.task;

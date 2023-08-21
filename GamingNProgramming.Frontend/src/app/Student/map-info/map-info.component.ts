@@ -58,7 +58,7 @@ export class MapInfoComponent {
               level?.assignments.reverse();
               if(level) {
                 if(task.id === lastTask!.id) {
-                  this.userLevel = 1;
+                  this.userLevel = level!.number;
                   this.userTask = 0;
                 }
                 else {

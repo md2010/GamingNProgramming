@@ -80,6 +80,7 @@ export class Answer {
 export class Badge {
     path: string = ''
     id: string = ''
+    name: string = ''
 }
 
 export class Battle {

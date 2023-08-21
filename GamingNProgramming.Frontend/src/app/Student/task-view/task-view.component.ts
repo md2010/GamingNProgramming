@@ -62,6 +62,8 @@ export class TaskViewComponent {
   model: NuMonacoEditorModel = {
     language: "cpp"
   }; 
+  code = ''
+  description = ''
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
 
@@ -69,7 +71,7 @@ export class TaskViewComponent {
     this.mapId = this.router.getCurrentNavigation()!.extras!.state!['mapId'];
     this.playerId = this.router.getCurrentNavigation()!.extras!.state!['playerId'];
     if(!this.playerId) {
-      this.authService.getAuthorized().userId;
+      this.playerId = this.authService.getAuthorized().userId;
     }
     this.role = this.authService.getAuthorized().roleName;
    }
@@ -88,6 +90,13 @@ export class TaskViewComponent {
               this.value = this.task.initialCode;
             }  
             else {
+                if(this.task.description.includes('<code>')) {
+                  this.description = this.task.description.substring(0 , this.task.description.indexOf('<code>'));
+                  this.code = this.task.description.substring(this.task.description.indexOf('<code>')+6, this.task.description.indexOf('</code>'))
+                }
+                else {
+                  this.description = this.task.description;
+                }
               this.correctAnswer = this.task.answers.find((a) => a.isCorrect === true)?.offeredAnswer;
               if(this.task.isMultiSelect) {
                 this.task.answers.forEach(a => {

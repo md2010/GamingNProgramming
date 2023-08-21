@@ -59,15 +59,15 @@ export class StudentDashboardComponent {
           localStorage.setItem('username', this.user.username);
           this.usersPointsOnProfessorMaps = this.user.points;
           this.professorMapPoints = Response.body.sum;
-          if (this.professorMapPoints > 0 && this.usersPointsOnProfessorMaps) {
+          if (this.usersPointsOnProfessorMaps > 0 && this.usersPointsOnProfessorMaps) {
             this.userPercentage = Math.round((this.usersPointsOnProfessorMaps/this.professorMapPoints)*100)
-            this.calculateDegs();
+            this.calculateDegs(this.usersPointsOnProfessorMaps, this.professorMapPoints, false);
           }
           this.usersPointsOnMaps = this.user.defultPoints;
           this.mapsPoints = Response.body.sum;
           if (this.mapsPoints > 0 && this.usersPointsOnMaps) {
             this.userDefaultPercentage = Math.round((this.usersPointsOnMaps/this.mapsPoints)*100)
-            this.calculateDegs();
+            this.calculateDegs(this.usersPointsOnMaps, this.mapsPoints, true);
           }
           resolve('done');
         }
@@ -81,16 +81,25 @@ export class StudentDashboardComponent {
     return promise;
   }
 
-  calculateDegs() {
-    if(this.usersPointsOnProfessorMaps <= this.professorMapPoints/2) {
-      var deg1 = (this.usersPointsOnProfessorMaps / (this.professorMapPoints/2)) * 180;
-      this.professorMapPointsDeg1 = deg1 + 'deg';
-      this.professorMapPointsDeg2 = 0 + 'deg';
+  calculateDegs(userPoints : number, mapPoints : number, defaultMap : boolean) {
+    if(userPoints <= mapPoints/2) {
+      var deg1 = (userPoints / (mapPoints/2)) * 180;
+      if(!defaultMap) {
+        this.professorMapPointsDeg1 = deg1 + 'deg';
+        this.professorMapPointsDeg2 = 0 + 'deg';
+      }
+      else {
+        this.mapPointsDeg1 = deg1 + 'deg';
+        this.mapPointsDeg2 = 0 + 'deg';
+      }
     }
-    else if (this.usersPointsOnProfessorMaps >= this.professorMapPoints/2) {
+    else if (userPoints >= mapPoints/2) {
       this.professorMapPointsDeg1 = 180 + 'deg';
-      var deg2 = ((this.usersPointsOnProfessorMaps/2) / (this.professorMapPoints/2)) * 180;
-      this.professorMapPointsDeg2 = deg2 + 'deg';
+      var deg2 = (userPoints/2/mapPoints/2) * 180;
+      if(!defaultMap)
+        this.professorMapPointsDeg2 = deg2 + 'deg';
+      else 
+        this.mapPointsDeg2 = deg2 + 'deg';
     }
     
   }

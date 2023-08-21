@@ -64,6 +64,8 @@ export class TaskPlayComponent {
   model: NuMonacoEditorModel = {
     language: "c"
   }; 
+  description = ''
+  code = ''
 
   @ViewChild('notification', { static: true }) notification!: TemplateRef<any>;
   @ViewChild('badge', { static: true }) badge!: TemplateRef<any>;
@@ -90,6 +92,13 @@ export class TaskPlayComponent {
             if(Response) {
               this.task = Response.body;
               if (!this.task.isCoding) {
+                if(this.task.description.includes('<code>')) {
+                  this.description = this.task.description.substring(0 , this.task.description.indexOf('<code>'));
+                  this.code = this.task.description.substring(this.task.description.indexOf('<code>')+6, this.task.description.indexOf('</code>'))
+                }
+                else {
+                  this.description = this.task.description;
+                }                
                 this.correctAnswer = this.task.answers.find((a) => a.isCorrect === true)?.offeredAnswer;
                 if(this.task.isMultiSelect) {
                   this.task.answers.forEach(a => {
@@ -138,8 +147,10 @@ export class TaskPlayComponent {
 
   countDownDone(message: Date) {
     this.timerStarted = false;
-    this.timerDone = true;
-    this.dialog.open(this.notification, { data: "Vrijeme je isteklo." });
+    if(!this.timerDone) {
+      this.timerDone = true;
+      this.dialog.open(this.notification, { data: "Vrijeme je isteklo." });
+    }
   }
 
   checkBoxChanged(obj : OfferedAnswer) {
@@ -152,6 +163,8 @@ export class TaskPlayComponent {
   }
 
   checkCorrectAnswer() {
+    this.timerStarted = false;
+    this.timerDone = true;
     if(this.task.isMultiSelect) {
       var correct = 0;
       this.task.answers.forEach(answer => {
@@ -161,7 +174,8 @@ export class TaskPlayComponent {
           this.theoryResult = true;
         }
       })
-      this.points = Math.round(correct/this.task.points)
+      var percentage = correct/this.task.points;
+      this.points = Math.round(percentage * this.task.points)
     } 
     else {
       if(this.task.answers.some((a) => a.offeredAnswer === this.checkedAnswer && a.isCorrect)) {
@@ -175,6 +189,8 @@ export class TaskPlayComponent {
   }
 
   submit() {
+    this.timerDone = true;
+    this.timerStarted = false;
     this.loading = true;
     if(this.task.isCoding) {
       this.submitCode().then(() => {
