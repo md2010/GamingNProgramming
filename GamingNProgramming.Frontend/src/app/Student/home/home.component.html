@@ -1,21 +1,13 @@
 <div class="row spc-top">
-<div class="col-md-4 spc-bottom spc-top">
-    <div class="image-box-map">
-        <a href="javascript:void(0);"><img src="../assets/images/defaultMap.jpg" width="300px" height="280px"></a>
-        <p>Nauči osnove C programiranja!</p>
-    </div>
-</div>
-
-<div class="col-md-4 spc-bottom spc-top">
-    <div class="image-box-map">
-        <img src="../assets/images/defaultMap.jpg" width="300px" height="280px">
-        <p>Nauči osnove objektnog programiranja!</p>
-    </div>
+<div class="col-md-4 spc-bottom spc-top" *ngIf="map !== null">
+    <div (click)="mapInfo(map.id)" class="map-click">
+        <app-draw-map *ngIf="loaded" [imgSrc]="map.path" [writeText]="true" [mapTitle]="map.title"></app-draw-map>
+    </div> 
 </div>
 <hr>
 </div>
 
-<div class="row spc-bottom">
+<div class="row spc-bottom" *ngIf="user.professorId !== null">
     <h4>Mape profesora:</h4>
 </div>
 <div class="row">

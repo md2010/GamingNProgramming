@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { HttpHeaders } from "@angular/common/http";
 import { JwtHelperService, JWT_OPTIONS } from "@auth0/angular-jwt";
 import { Observable, BehaviorSubject } from "rxjs";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,12 @@ export class AuthService {
 
   apiUrl = 'https://localhost:44358/api';
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private activeRoute : ActivatedRoute) {
+    var route = ''
+    this.activeRoute.url.subscribe((event) => { 
+      route = event[0].path;      
+    })
+   
     var isExpired = this.checkExpiry();
     this.token = sessionStorage.getItem("token");
 
@@ -32,7 +37,9 @@ export class AuthService {
         roleName : null,
         token: null
       });
-      this.logout();
+      if (route !== 'register') {
+        this.logout();
+      }
     }
     this.authorized = this.authorizedSubject.asObservable();
   }
@@ -98,7 +105,7 @@ export class AuthService {
     this.token = null;
     sessionStorage.clear();
     localStorage.clear();
-    this.router.navigate(['login']);;
+    this.router.navigate(['login']);
   }
 
   register(newUser: any) {

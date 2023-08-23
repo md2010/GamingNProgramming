@@ -113,6 +113,13 @@ export class GameService {
   
       return this.http.get<any>(this.apiUrl + '/get-map/' + id, {headers: headersToSend, observe : 'response'});
   }
+  getDefaultMap() {
+    let headersToSend = new HttpHeaders();
+    headersToSend = headersToSend
+      .set( 'Authorization', `Bearer ${this.authService.token}`)
+  
+      return this.http.get<any>(this.apiUrl + '/default-map', {headers: headersToSend, observe : 'response'});
+  }
   getMap(id: string) {
     let headersToSend = new HttpHeaders();
     headersToSend = headersToSend

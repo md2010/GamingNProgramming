@@ -6,7 +6,6 @@ import {Router} from "@angular/router"
 import { CommonModule } from "@angular/common";
 import { AuthService } from "../services/AuthService";
 import {LookupService} from "../services/LookupService";
-import { ActivatedRoute } from "@angular/router";
 
 import { SelectAvatarComponent } from "./select-avatar/select-avatar.component";
 import { SpinnerComponentComponent } from "../spinner-component/spinner-component.component";
@@ -45,7 +44,7 @@ export class RegisterComponent {
     showToast = false;
     message = '';
 
-    constructor(private router: Router, private authService: AuthService, private lookupService: LookupService, private activeRoute: ActivatedRoute) { }
+    constructor(private router: Router, private authService: AuthService, private lookupService: LookupService) { }
 
     ngOnInit() {
         this.lookupService.getRoles().subscribe(response => {
@@ -84,12 +83,12 @@ export class RegisterComponent {
                 }
                 else if(Response.status == 409) {
                     this.loading = false;
-                    this.message = "already exists."
+                    this.message = "Korisničko ime već postoji."
                     this.showToast = true;
                 }
                 else {
                     this.loading = false;
-                    this.message = "Something went wrong with registration."
+                    this.message = "Nešto je pošlo po krivu tokom registracije."
                     this.showToast = true;
                 }
             },

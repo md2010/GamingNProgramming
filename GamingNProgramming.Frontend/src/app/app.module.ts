@@ -43,7 +43,6 @@ import { RulesComponent } from './rules/rules.component';
     MatSelectModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
     LoginComponent,
     MapInfoComponent,
     RegisterComponent,
@@ -68,7 +67,8 @@ import { RulesComponent } from './rules/rules.component';
     BattleComponent,
     PlayComponent,
     MyBattlesComponent,
-    RulesComponent
+    RulesComponent,
+    AppRoutingModule
   ],
   exports: [
     MatSelectModule,

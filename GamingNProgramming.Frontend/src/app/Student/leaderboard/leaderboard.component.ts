@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/UserService';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/AuthService';
 import { PlayerTask } from 'src/app/classes/Classes';
+import { GameService } from 'src/app/services/GameService';
 
 @Component({
   selector: 'app-leaderboard',
@@ -15,7 +16,7 @@ import { PlayerTask } from 'src/app/classes/Classes';
 })
 export class LeaderboardComponent {
 
-  constructor(private userService: UserService, private authService: AuthService) {}
+  constructor(private userService: UserService, private authService: AuthService, private gameService : GameService) {}
   role!: string | null
   friends: Player[] = [];
   playersAll: Player[] = [];
@@ -31,6 +32,16 @@ export class LeaderboardComponent {
 
   ngOnInit() { 
     this.defaultMapId = localStorage.getItem('defaultMapId')!
+    if(this.defaultMapId === null) {
+      this.gameService.getDefaultMap()
+      .subscribe(
+        (Response)=> {
+          if(Response.body) {
+            this.defaultMapId = Response.body.id
+          }
+        }
+      )
+    }
     this.role = this.authService.getAuthorized().roleName;
     this.userId = this.authService.getAuthorized().userId; 
     if(this.role === 'Student') {
@@ -41,7 +52,7 @@ export class LeaderboardComponent {
     } 
     else {
       var search = {
-        sortOrder: 'asc',
+        sortOrder: 'desc',
         professorId: this.userId,
         includeProperties: 'playerTasks,Avatar'
       };
@@ -89,7 +100,7 @@ export class LeaderboardComponent {
 
   getFriends() {
     var promise = new Promise((resolve, reject) => {
-      var search = {sortOrder: 'asc', includeUser : true};
+      var search = {sortOrder: 'desc', includeUser : true};
       this.userService.getPlayersFriends(search)
     .subscribe(
       (Response) => {
@@ -118,7 +129,7 @@ export class LeaderboardComponent {
 
   getAllPlayers() : boolean {
     var search = {
-      sortOrder: 'asc', includeProperties: 'playerTasks,Avatar'
+      sortOrder: 'desc', includeProperties: 'playerTasks,Avatar'
     };
     this.getPlayers(search, 'players').then(() => { 
       return true 
@@ -128,7 +139,7 @@ export class LeaderboardComponent {
 
   getAllStudents() : boolean {
     var search = {
-      sortOrder: 'asc',
+      sortOrder: 'desc',
       professorId: this.role === 'Student' ? localStorage.getItem('professorId') : this.userId,
       includeProperties: 'playerTasks,Avatar'
     };
@@ -153,7 +164,7 @@ export class LeaderboardComponent {
               p.badges = [];
               p.playerTasks.forEach(element => {
               if(element.badge) {
-                p.badges.push({path: element.badge?.path!, isDefaultMap: false});
+                p.badges.push({path: element.badge?.path!, isDefaultMap: element.mapId === this.defaultMapId ? true : false});
               }             
             })
             });
@@ -164,7 +175,7 @@ export class LeaderboardComponent {
             this.students.forEach(p => { 
               p.badges = [];
               p.playerTasks.forEach(element => {
-              if(element.badge) {
+              if(element.badge && element.mapId !== this.defaultMapId) {
                 p.badges.push({path: element.badge?.path!, isDefaultMap: false});
               }             
             })

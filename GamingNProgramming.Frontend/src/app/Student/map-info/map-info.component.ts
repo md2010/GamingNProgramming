@@ -134,11 +134,11 @@ export class MapInfoComponent {
   }
 
   taskPlay(taskId : string, levelId : string) {
-    this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id, levelId : levelId} });
+    this.router.navigate(['/task-play',  taskId], {state : { isDefaultMap : (this.map.professorId !== null ? false : true), mapId: this.map.id, levelId : levelId} });
   }
 
   taskView(taskId : string, levelId : string) {
-    this.router.navigate(['/task-view',  taskId], {state : { isDefaultMap : (this.map.professorId !== '' ? false : true), mapId: this.map.id} });
+    this.router.navigate(['/task-view',  taskId], {state : { isDefaultMap : (this.map.professorId !== null ? false : true), mapId: this.map.id} });
   }
 
   onBack(): void {

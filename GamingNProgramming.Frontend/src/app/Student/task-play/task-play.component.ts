@@ -125,11 +125,7 @@ export class TaskPlayComponent {
     var promise = new Promise((resolve,reject) => {
       this.gameService.getPlayerTask(this.authService.getAuthorized().userId!, this.mapId, this.taskId!)
       .subscribe(
-        (Response) => {
-          if(Response.body && Response.body.length > 0) {            
-            //this.alreadyPlayed = true;
-            //reject();
-          }           
+        (Response) => {                    
           resolve('done');                                                
         },
         (error: any) => {
@@ -174,8 +170,20 @@ export class TaskPlayComponent {
           this.theoryResult = true;
         }
       })
-      var percentage = correct/this.task.points;
-      this.points = Math.round(percentage * this.task.points)
+      this.task.answers.forEach(answer => {
+        if(this.checkedAnswers.some((a) => a === answer.offeredAnswer && !answer.isCorrect))
+        {
+          correct--;
+        }
+      })
+      if(correct <= 0) {
+        this.points = 0;
+        this.theoryResult = false;
+      }
+      else {
+        var percentage = correct/this.task.points;
+        this.points = Math.round(percentage * this.task.points)
+      }     
     } 
     else {
       if(this.task.answers.some((a) => a.offeredAnswer === this.checkedAnswer && a.isCorrect)) {
@@ -185,6 +193,10 @@ export class TaskPlayComponent {
     }
     this.submitTask().then(() => {
       this.done = true;
+      this.loading = false;
+          if (this.task.hasBadge && this.points === this.task.points) {
+            this.surprise();
+          }
     })
   }
 
@@ -217,7 +229,8 @@ export class TaskPlayComponent {
         playersCode : this.task.isCoding ? this.value : '',
         mapId : this.mapId,
         executionTime: this.executionTime,
-        badgeId : this.task.hasBadge ? this.task.badgeId : ''
+        badgeId : this.task.hasBadge ? this.task.badgeId : '',
+        isDefaultMap : this.isDefaultMap
       }
       this.gameService.insertPlayerTask(playerTask)
       .subscribe(

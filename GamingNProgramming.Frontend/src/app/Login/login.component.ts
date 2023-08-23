@@ -31,7 +31,7 @@ export class LoginComponent {
     }
 
     goToRegister() {
-        this.router.navigate(['/register']);      
+        this.router.navigate(['register']);      
     }
 
     public validateLogin() {
@@ -65,7 +65,7 @@ export class LoginComponent {
             (error: any) => {
                 console.log(error); 
                 this.loading = false;
-                this.message = "Wrong credentials."
+                this.message = "Neispravni podaci za prijavu."
                 this.showToast = true;
             }
         );

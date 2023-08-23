@@ -54,8 +54,8 @@ export class DrawMapComponent {
         this.image.height = 350;
         this.ctx.drawImage(img, 0, 0, img.width, img.height); 
         this.ctx.textAlign = "center";
-        this.ctx.font = "bold 20px Calibri";
-        this.ctx.fillStyle = "white";
+        this.ctx.font = "bold 22px Calibri";
+        this.ctx.fillStyle = "black";
         this.ctx.fillText(this.mapTitle, img.width/2, img.height/2); 
       }      
     }

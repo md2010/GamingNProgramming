@@ -78,7 +78,7 @@ constructor(private userService: UserService) {}
     this.userService.addFriend(id)
     .subscribe(
       (Response) => {
-        if(Response.body) {
+        if(Response) {
           this.getNotFriends();
         }
       },

@@ -1,6 +1,5 @@
-
 <div class="registerContainer">
-    <form id="login_form">
+    <form id="register_form">
     <div class="row">
         <div class="form_div col-3 form_class">
             <label>Korisničko ime:</label>
@@ -17,7 +16,7 @@
  
             <button class="submit_class" type="submit" [disabled]="!this.username.length || !this.email.length || this.selectedRole.id == undefined || (selectedRole.name == 'Student' ? !this.avatarId.length : '') || !this.password.length" (click)="onRegisterClick()">Registriraj se</button>
             <div class="info_div">
-                <p>Imaš račun? <a  href="javascript:void(0);" (click)="goToLogin()">Prijavi se!</a></p>
+                <p>Imaš račun? <a href="javascript:void(0);" (click)="goToLogin()">Prijavi se!</a></p>
             </div>
         </div>
         <div class="col-8" *ngIf="selectedRole.name == 'Student'">

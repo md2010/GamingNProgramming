@@ -59,13 +59,13 @@ export class StudentDashboardComponent {
           localStorage.setItem('username', this.user.username);
           this.usersPointsOnProfessorMaps = this.user.points;
           this.professorMapPoints = Response.body.sum;
-          if (this.usersPointsOnProfessorMaps > 0 && this.usersPointsOnProfessorMaps) {
+          if (this.usersPointsOnProfessorMaps > 0 && this.professorMapPoints > 0) {
             this.userPercentage = Math.round((this.usersPointsOnProfessorMaps/this.professorMapPoints)*100)
             this.calculateDegs(this.usersPointsOnProfessorMaps, this.professorMapPoints, false);
           }
-          this.usersPointsOnMaps = this.user.defultPoints;
-          this.mapsPoints = Response.body.sum;
-          if (this.mapsPoints > 0 && this.usersPointsOnMaps) {
+          this.usersPointsOnMaps = this.user.defaultPoints;
+          this.mapsPoints = 73
+          if (this.mapsPoints > 0 && this.usersPointsOnMaps > 0) {
             this.userDefaultPercentage = Math.round((this.usersPointsOnMaps/this.mapsPoints)*100)
             this.calculateDegs(this.usersPointsOnMaps, this.mapsPoints, true);
           }
