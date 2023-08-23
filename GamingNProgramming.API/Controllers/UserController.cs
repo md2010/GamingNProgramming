@@ -110,7 +110,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             List<Expression<Func<Player, bool>>> filters = new List<Expression<Func<Player, bool>>>();
             filters.Add(u => u.UserId == uuid);
 
-            var result = (await PlayerService.FindAsync(filters, "", "Avatar")).FirstOrDefault();
+            var result = (await PlayerService.FindAsync(filters, "", "Avatar,Professor")).FirstOrDefault();
             if (result.ProfessorId != null)
             {
                 var maps = await this.GameService.GetMapByProfessorIdAsync((Guid)result.ProfessorId);

@@ -48,7 +48,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Assignment", b =>
@@ -111,7 +111,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("Assignments");
+                    b.ToTable("Assignments", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Avatar", b =>
@@ -136,7 +136,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Avatars");
+                    b.ToTable("Avatars", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Badge", b =>
@@ -161,7 +161,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Badges");
+                    b.ToTable("Badges", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Battle", b =>
@@ -210,7 +210,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("Player2Id");
 
-                    b.ToTable("Battles");
+                    b.ToTable("Battles", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.CoreUser", b =>
@@ -244,7 +244,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("CoreUsers");
+                    b.ToTable("CoreUsers", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Friend", b =>
@@ -271,7 +271,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("Player2Id");
 
-                    b.ToTable("Friends");
+                    b.ToTable("Friends", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Level", b =>
@@ -307,7 +307,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("MapId");
 
-                    b.ToTable("Levels");
+                    b.ToTable("Levels", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Map", b =>
@@ -350,7 +350,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.ToTable("Maps");
+                    b.ToTable("Maps", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Player", b =>
@@ -395,7 +395,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.PlayerTask", b =>
@@ -447,7 +447,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("PlayersTasks");
+                    b.ToTable("PlayersTasks", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Professor", b =>
@@ -468,7 +468,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Professors");
+                    b.ToTable("Professors", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Role", b =>
@@ -489,7 +489,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.TestCase", b =>
@@ -519,7 +519,7 @@ namespace GamingNProgramming.DAL.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("TestCases");
+                    b.ToTable("TestCases", (string)null);
                 });
 
             modelBuilder.Entity("GamingNProgramming.Model.Answer", b =>
@@ -549,13 +549,13 @@ namespace GamingNProgramming.DAL.Migrations
                     b.HasOne("GamingNProgramming.Model.Player", "Player1")
                         .WithMany()
                         .HasForeignKey("Player1Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GamingNProgramming.Model.Player", "Player2")
                         .WithMany()
                         .HasForeignKey("Player2Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Player1");

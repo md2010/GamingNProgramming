@@ -24,6 +24,8 @@ namespace GamingNProgramming.Model
 
         [ForeignKey("Professor")]
         public Guid? ProfessorId { get; set; }
+        public virtual Professor Professor { get; set; }
+
         public virtual CoreUser CoreUser { get; set; }
 
         [ForeignKey("Avatar")]

@@ -17,8 +17,6 @@ namespace GamingNProgramming.Model
         public DateTime DateCreated { get; set; }
         public string Username { get; set; }
 
-        public virtual ICollection<Player> Students { get; set; }
-
         public virtual ICollection<Map> Maps { get; set; }
     }
 }

@@ -13,7 +13,7 @@
             <a class="nav-link mx-2 active" [class.active]="route == '/professor-dashboard'" *ngIf="authorized && role === 'Professor'" [routerLink]="['/professor-dashboard']">Početna</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link mx-2" [routerLink]="['/leaderboard']" *ngIf="authorized" [class.active]="route == '/leaderboard'">Ljestvica sa vodećim rezultatima</a>
+            <a class="nav-link mx-2" [routerLink]="['/leaderboard']" *ngIf="authorized" [class.active]="route == '/leaderboard'">Ljestvica s vodećim rezultatima</a>
           </li>
           <li class="nav-item">
             <a class="nav-link mx-2" [routerLink]="['/rules']" *ngIf="authorized" [class.active]="route == '/rules'">Pravila</a>

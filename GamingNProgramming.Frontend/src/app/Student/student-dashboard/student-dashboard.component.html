@@ -6,6 +6,7 @@
         <img src={{user!.avatar.path}} class="rounded-circle center" width="150px" height="130px">
     </div>
     <p class="text-white text-center">{{user!.username}}</p>
+    <p class="text-white text-center" *ngIf="user!.professorId !== null">Profesor: {{user!.professor.username}}</p>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">           
       <li class="nav-item">
