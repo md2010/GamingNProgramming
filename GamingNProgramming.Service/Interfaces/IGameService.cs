@@ -17,6 +17,8 @@ namespace GamingNProgramming.Service.Interfaces
 
         Task<List<Map>> GetMapByProfessorIdAsync(Guid id);
 
+        Task<Map> GetDefaultMapAsync();
+
         Task<bool> UpdateMapAsync(Guid professorId, Map map);
 
         Task<bool> InsertPlayerTask(PlayerTask playerTask, bool isDefaultMap, Guid levelId);

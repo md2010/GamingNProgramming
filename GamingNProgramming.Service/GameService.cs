@@ -168,6 +168,11 @@ namespace GamingNProgramming.Service
             return await this.Repository.GetAsync(id);
         }
 
+        public async Task<Map> GetDefaultMapAsync()
+        {
+            return await this.Repository.GetDefaultMapAsync();
+        }
+
         public async Task<Assignment> GetTaskAsync(Guid id)
         {
             return await this.Repository.GetTaskAsync(id);

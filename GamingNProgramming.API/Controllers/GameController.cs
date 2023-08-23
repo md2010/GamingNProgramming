@@ -36,9 +36,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             }
 
             var result = await this.GameService.GetAsync(Helper.TransformGuid(id));
-
             return Ok(result);
-
         }
 
         [Authorize]
@@ -52,9 +50,7 @@ namespace GamingNProgramming.WebAPI.Controllers
             }
 
             var result = await this.GameService.GetTaskAsync(Helper.TransformGuid(id));
-
             return Ok(result);
-
         }
 
         [Authorize]
@@ -68,25 +64,29 @@ namespace GamingNProgramming.WebAPI.Controllers
             }
 
             var result = await this.GameService.GetMapByProfessorIdForEditingAsync(Helper.TransformGuid(professorId));
-
             return Ok(result);
-
         }
 
         [Authorize]
         [HttpGet]
         [Route("get-map/{professorId}")]
         public async Task<IActionResult> GetMaps(string professorId)
-        {
-            if (professorId == null)
+        {            
+            if(professorId == null || String.IsNullOrEmpty(professorId))
             {
-                return BadRequest();
+                return BadRequest(); 
             }
-
             var result = await this.GameService.GetMapByProfessorIdAsync(Helper.TransformGuid(professorId));
-
             return Ok(result);
+        }
 
+        [Authorize]
+        [HttpGet]
+        [Route("default-map")]
+        public async Task<IActionResult> GetMap()
+        {            
+            var result = await this.GameService.GetDefaultMapAsync();
+            return Ok(result);
         }
 
         [Authorize]
@@ -103,7 +103,6 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.GameService.AddMapAsync(Helper.TransformGuid(id), map);
 
             return Ok();
-
         }
 
         [Authorize]
@@ -120,7 +119,6 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.GameService.UpdateMapAsync(Helper.TransformGuid(id), map);
 
             return Ok();
-
         }
 
 
@@ -175,7 +173,6 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.PlayerService.GetPlayerTask(Helper.TransformGuid(playerId), Helper.TransformGuid(mapId), String.IsNullOrEmpty(taskId) ? null : Helper.TransformGuid(taskId));
 
             return Ok(result);
-
         }
        
         [Authorize]
@@ -190,9 +187,7 @@ namespace GamingNProgramming.WebAPI.Controllers
 
             var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await this.GameService.InsertBattle(Helper.TransformGuid(id), Helper.TransformGuid(player2Id));
-
             return Ok(result);
-
         }
 
         [Authorize]
@@ -223,7 +218,6 @@ namespace GamingNProgramming.WebAPI.Controllers
             var result = await this.GameService.FindBattlesAsync(Helper.TransformGuid(id));
 
             return Ok(result);
-
         }
 
         [Authorize]
@@ -242,7 +236,6 @@ namespace GamingNProgramming.WebAPI.Controllers
             await GameService.UpdateBattleAsync(entity);
 
             return Ok();
-
         }
 
         [Authorize]
@@ -314,7 +307,6 @@ namespace GamingNProgramming.WebAPI.Controllers
                 scoredPoints = Helper.GetPoints(passedTestCases, model.TestCases.Count, model.Points);
                 return Ok(new SubmitCodeResultModel { Points = scoredPoints, ExecutionTime = bestTime, Results = results});
             }
-
         }
 
         [Authorize]

@@ -113,7 +113,7 @@ namespace GamingNProgramming.Service
             entity.DateCreated = DateTime.Now;
             entity.DateUpdated = DateTime.Now;
         }
-        public async Task<PagedList<Player>> GetPlayersFriendsAsync(
+        public async Task<List<Player>> GetPlayersFriendsAsync(
            Guid id,
            List<Expression<Func<Friend, bool>>> filter = null,
            string sortOrder = "",

@@ -45,7 +45,7 @@ namespace GamingNProgramming.Service
         Task AddFriendAsync(Guid uid, Guid pid);
 
         Task RemoveFriendAsync(Guid uid, Guid pid);
-        Task<PagedList<Player>> GetPlayersFriendsAsync(
+        Task<List<Player>> GetPlayersFriendsAsync(
            Guid id,
            List<Expression<Func<Friend, bool>>> filter = null,
            string sortOrder = "",

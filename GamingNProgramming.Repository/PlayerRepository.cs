@@ -186,7 +186,7 @@ namespace GamingNProgramming.Repository
             await DbContext.SaveChangesAsync();
             return true;
         }
-        public async Task<PagedList<Player>> FindAsync(
+        public async Task<List<Player>> FindAsync(
            List<Expression<Func<Player, bool>>> filter = null,
            string sortOrder = "",
            string includeProperties = "")
@@ -213,18 +213,20 @@ namespace GamingNProgramming.Repository
                 }
             }
 
-            var result = await query.ToPagedListAsync(1, 20);
-
-            if (!String.IsNullOrEmpty(sortOrder))
+            var result = await query.ToListAsync();
+            if(filter.Count == 1)
             {
-                if (sortOrder == "desc")
-                    result.OrderByDescending(p => p.Points)
-                        .OrderBy(p => p.TimeConsumed)
-                        .OrderByDescending(p => p.XPs);
-                else
-                    result.OrderBy(p => p.Points);
+                result = result.OrderByDescending(p => p.Points)
+                .ThenBy(p => p.TimeConsumed)
+                .ThenByDescending(p => p.XPs).ToList();
             }
-
+            else
+            {
+                result = result.OrderByDescending(p => p.DefaultPoints)
+                .ThenBy(p => p.TimeConsumed)
+                .ThenByDescending(p => p.XPs).ToList();
+            }
+                       
             return result;
         }   
         public async Task AddAsync(Player entity)
@@ -267,7 +269,7 @@ namespace GamingNProgramming.Repository
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task<PagedList<Player>> GetPlayersFriendsAsync(
+        public async Task<List<Player>> GetPlayersFriendsAsync(
            Guid id, 
            List<Expression<Func<Friend, bool>>> filter = null,
            string sortOrder = "",
@@ -303,24 +305,19 @@ namespace GamingNProgramming.Repository
                 .ThenInclude(a => a.PlayerTasks)
                 .ThenInclude(b => b.Badge);
 
-            var result = await query.ToPagedListAsync(1, 50);
+            var result = await query.ToListAsync();
             var playersFriends = await FilterPlayersFriends(id, result, includeUser);
             
-            if (!String.IsNullOrEmpty(sortOrder))
-            {
-                if(sortOrder == "desc")
-                    playersFriends
-                        .OrderByDescending(p => p.Points)
-                        .OrderBy(p => p.TimeConsumed)
-                        .OrderByDescending(p => p.XPs);
-                else
-                    playersFriends.OrderBy(p => p.Points);
-            }
+            
+            playersFriends = playersFriends
+                .OrderByDescending(p => p.DefaultPoints)
+                .ThenBy(p => p.TimeConsumed)
+                .ThenByDescending(p => p.XPs).ToList();                            
 
             return playersFriends;
         }
 
-        private async Task<PagedList<Player>> FilterPlayersFriends(Guid id, PagedList<Friend> friends, bool includeUser = false)
+        private async Task<List<Player>> FilterPlayersFriends(Guid id, List<Friend> friends, bool includeUser = false)
         {
             List<Player> players = new List<Player>();
 
@@ -347,7 +344,7 @@ namespace GamingNProgramming.Repository
                 players.Add(user);
             }
 
-            return await players.ToPagedListAsync(1, 20);
+            return players.ToList();
         }
         
         private IQueryable<Friend> ApplyFriendFilter(IQueryable<Friend> query, List<Expression<Func<Friend, bool>>> filter = null)

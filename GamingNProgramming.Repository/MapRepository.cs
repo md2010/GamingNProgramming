@@ -66,11 +66,14 @@ namespace GamingNProgramming.Repository
                 .ThenInclude(b => b.Assignments)
                 .FirstOrDefault();           
 
-            map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
-
-            foreach (var level in map.Levels)
+            if(map != null)
             {
-                level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
+
+                foreach (var level in map.Levels)
+                {
+                    level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                }
             }
 
             return map;
@@ -155,10 +158,13 @@ namespace GamingNProgramming.Repository
                         .ThenInclude(c => c.TestCases)
                 .ToList().FirstOrDefault();
 
-            map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
-            foreach (var level in map.Levels)
+            if(map != null)
             {
-                level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
+                foreach (var level in map.Levels)
+                {
+                    level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                }
             }
 
             return map;
@@ -177,15 +183,17 @@ namespace GamingNProgramming.Repository
                         .ThenInclude(c => c.TestCases)
                 .ToListAsync();
 
-            foreach(var map in maps)
+            if (maps != null && maps.Any())
             {
-                map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
-                foreach (var level in map.Levels)
+                foreach (var map in maps)
                 {
-                    level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                    map.Levels = map?.Levels.OrderBy(a => a.Number).ToList();
+                    foreach (var level in map.Levels)
+                    {
+                        level.Assignments = level.Assignments.OrderBy(a => a.Number).ToList();
+                    }
                 }
             }
-
             return maps;
         }
 

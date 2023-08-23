@@ -51,7 +51,7 @@ namespace GamingNProgramming.Repository
 
         Task<Player> GetByUsername(string username);
 
-        Task<PagedList<Player>> FindAsync(
+        Task<List<Player>> FindAsync(
            List<Expression<Func<Player, bool>>> filter = null,
            string sortOrder = "",
            string includeProperties = "");
@@ -66,7 +66,7 @@ namespace GamingNProgramming.Repository
         Task AddFriendAsync(Friend entity);
 
         Task RemoveFriendAsync(Friend entity);
-        Task<PagedList<Player>> GetPlayersFriendsAsync(
+        Task<List<Player>> GetPlayersFriendsAsync(
            Guid id,
            List<Expression<Func<Friend, bool>>> filter = null,
            string sortOrder = "",
